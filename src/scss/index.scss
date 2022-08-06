@@ -1,17 +1,48 @@
+@import "./fonts/index.scss";
+
 html {
     padding: 0;
     margin: 0;
     body {
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-            "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-            "Helvetica Neue", sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen",
+            "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+            sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 19px;
 
         #root {
             .App {
-                color: rgba($color: #000000, $alpha: 0.9);
+                // color: rgba($color: #000000, $alpha: 0.9);
+
+                .content {
+                    padding: 0;
+                    margin: 0;
+                    max-width: 1440px;
+                    width: 100%;
+                    margin: 0 auto;
+                    padding: 0 25px;
+                    //centered
+                    // display: flex;
+                    // flex-direction: column;
+                    // align-items: center;
+                    // justify-content: center;
+                    //css for big screen
+                    @media (min-width: 1441px) {
+                        padding: 0;
+                    }
+                }
+
+                @import "./layouts/header.scss";
+                @import "./layouts/footer.scss";
+
+                //MainPage
+                @import "./MainPage/intro.scss";
+                @import "./MainPage/info.scss";
+                @import "./MainPage/infoBlocks.scss";
             }
         }
     }
