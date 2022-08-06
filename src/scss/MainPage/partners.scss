@@ -1,0 +1,57 @@
+.main-partners {
+    margin: 50px 0;
+    .half {
+        .half-content {
+            position: relative;
+            .btn-more {
+                border: 1px solid #1e1b1b;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+                cursor: pointer;
+                transition: 0.25s;
+                padding: 12px;
+                font-weight: 200;
+                font-size: 24px;
+                line-height: 28px;
+                position: absolute;
+                bottom: 3px;
+                right: 20px;
+
+                transform: translate(0%, -50%);
+                svg {
+                    margin-left: 24px;
+                    transition: 0.25s;
+                    * {
+                        transition: 0.25s;
+                        fill: #1e1b1b;
+                    }
+                }
+            }
+        }
+        .partner-blocks {
+            width: 100%;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            .partner-block {
+                border: 1px solid #b4e4ac;
+                width: 30%;
+                max-width: 200px;
+                height: 200px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 30px;
+                box-sizing: border-box;
+                padding: 5px;
+                img {
+                    width: 100%;
+                    height: auto;
+                }
+            }
+        }
+    }
+}

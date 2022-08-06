@@ -38,26 +38,26 @@ export default function Footer(){
                 <div className="call-block">
                     <div className="call">
                         <div className="head">Оптова торгівля</div>
-                        <a href="#"><Phone/> Тетяна: +38 067 411 36 91</a>
+                        <a href="tel:"><Phone/> Тетяна: +38 067 411 36 91</a>
                     </div>
                     <div className="call">
                         <div className="head">Торгові мережі/ дрібний опт</div>
-                        <a href="#"><Phone/> Олег: +38 067 411 69 06</a>
+                        <a href="tel:"><Phone/> Олег: +38 067 411 69 06</a>
                     </div>
                 </div>
 
                 <div className="contact-block">
                     <ul>
-                        <li><a href="#"><Facebook/> Facebook</a></li>
-                        <li><a href="#"><Instagram/> Instagram</a></li>
-                        <li><a href="#"><Mail/> E-mail: brusvyana@ukr.net</a></li>
+                        <li><a href="tel:"><Facebook/> Facebook</a></li>
+                        <li><a href="tel:"><Instagram/> Instagram</a></li>
+                        <li><a href="tel:"><Mail/> E-mail: brusvyana@ukr.net</a></li>
                     </ul>
                 </div>
 
                 <div className="address-block call-block">
                     <div className="call">
                         <div className="head">Адреса</div>
-                        <a href="#">Житомирська обл., Брусилівський р-н, с. Костівці, вул. Польова 1</a>
+                        <a href="tel:">Житомирська обл., Брусилівський р-н, с. Костівці, вул. Польова 1</a>
                     </div>
                 </div>
             </div>

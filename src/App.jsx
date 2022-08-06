@@ -4,6 +4,7 @@ import {
   Route,
 } from "react-router-dom";
 import MainLayout from "./Components/layouts/MainLayout";
+import NotFound from './Components/NotFound';
 import MainPage from "./Pages/MainPages/MainPage";
 
 export default function App() {
@@ -18,12 +19,11 @@ export default function App() {
       <Routes>
         <Route path="/" element={<MainLayout/>}>
           <Route index element={<MainPage />} />
-          {/* <Route path="teams" element={<Teams />}>
-            <Route path=":teamId" element={<Team />} />
-            <Route path="new" element={<NewTeamForm />} />
-            <Route index element={<LeagueStandings />} />
-          </Route> */}
+
+          <Route path="*" element={<NotFound/>} />
         </Route> 
+        <Route path="*" element={<NotFound/>} />
+
       </Routes>
     </div>
   );

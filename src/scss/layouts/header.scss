@@ -1,7 +1,7 @@
 //header
 .header {
-    background: rgba(180, 228, 172, 0.1);
     padding: 5px 0;
+    transition: 0.25s;
     .content {
         display: flex;
         align-content: center;
@@ -25,17 +25,72 @@
                 align-items: center;
                 justify-content: flex-start;
 
+                &:last-child {
+                    margin-right: 0;
+                }
+
                 &.language {
+                    position: relative;
+                    margin-right: 0;
+                    // z-index: 3;
+                    ul {
+                        // z-index: 2;
+
+                        list-style: none;
+                        padding: 0;
+                        margin: 0;
+                        display: flex;
+                        align-items: flex-start;
+                        justify-content: flex-start;
+                        flex-direction: column;
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        // background: #000;
+                        left: 0;
+                        top: 0;
+                        overflow: hidden;
+                        opacity: 0;
+                        // padding-left: ;
+                        transition: 0.25s;
+                        li {
+                            box-sizing: border-box;
+                            // padding: 4px 5px 4px 25px;
+                            padding: 5px;
+                            padding-left: 20px;
+                            background: transparent;
+                            width: 100%;
+                            margin-right: 0;
+                            transition: 0.25s;
+                            justify-content: center;
+                            text-align: center;
+                        }
+                    }
                     svg {
                         margin-right: 5px;
                         margin-bottom: -3px;
+                    }
+
+                    &:hover {
+                        ul {
+                            padding-top: 26px;
+                            opacity: 1;
+                            height: auto;
+                            width: 110%;
+                            li {
+                                background: rgba(180, 228, 172, 0.3);
+                                &:hover {
+                                    background: rgba(180, 228, 172, 0.6);
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
         .logo {
             // flex: 1 1 190px;
-
+            cursor: pointer;
             width: 160px;
             height: auto;
             svg {
@@ -55,5 +110,30 @@
         top: 0;
         width: 100%;
         z-index: 10;
+        background: rgba(180, 228, 172, 0.1);
+    }
+
+    &.main-black-header {
+        background: rgba(180, 228, 172, 1);
+        .content {
+            .menu {
+                li {
+                    color: #1e1b1b;
+
+                    svg {
+                        * {
+                            fill: #1e1b1b;
+                        }
+                    }
+                }
+            }
+            .logo {
+                svg {
+                    * {
+                        fill: #1e1b1b;
+                    }
+                }
+            }
+        }
     }
 }
