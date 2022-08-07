@@ -17,20 +17,21 @@ export default function MainHeader() {
         <div className={`header ${pathname === '/' ? 'main-header':'main-black-header'}`}>
             <div className="content">
                 <ul className="menu main-menu">
-                    <li onClick={()=>{navigate('/ss')}}>Роздріб</li>
-                    <li onClick={()=>{navigate('/')}}>Опт</li>
-                    <li onClick={()=>{navigate('/')}}>Про нас</li>
-                    <li onClick={()=>{navigate('/')}}>Контакти</li>
+                    <li onClick={()=>{navigate('/retail')}}>Роздріб</li>
+                    <li onClick={()=>{navigate('/opt')}}>Опт</li>
+                    <li onClick={()=>{navigate('/about')}}>Про нас</li>
+                    <li onClick={()=>{navigate('/contacts')}}>Контакти</li>
                 </ul>
                 <div className="logo" onClick={()=>{navigate('/')}}>
                     {/* <img src="/src/img.jpg" alt="Logo" /> */}
                     <Logo className='header-logo'/>
                 </div>
                 <ul className="menu second-menu">
-                    <li>Проекти</li>
-                    <li>Досягнення</li>
-                    <li>База знань</li>
-                    <li>Загальна інформація</li>
+                
+                    <li onClick={()=>{navigate('/projects')}}>Проекти</li>
+                    <li onClick={()=>{navigate('/achievement')}}>Досягнення</li>
+                    <li onClick={()=>{navigate('/wiki')}}>База знань</li>
+                    <li onClick={()=>{navigate('/general-information')}}>Загальна інформація</li>
                     <li className='language'> 
                         <Lang/>
                         {renderMainLang()}

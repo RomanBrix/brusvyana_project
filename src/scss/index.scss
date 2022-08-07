@@ -39,12 +39,17 @@ html {
                 @import "./layouts/header.scss";
                 @import "./layouts/footer.scss";
 
+                @import "./inDevelop.scss";
+
                 //MainPage
                 @import "./MainPage/intro.scss";
                 @import "./MainPage/info.scss";
                 @import "./MainPage/infoBlocks.scss";
                 @import "./MainPage/bigButton.scss";
                 @import "./MainPage/partners.scss";
+
+                //ContactPage
+                @import "./ContactPage/index.scss";
             }
         }
     }
