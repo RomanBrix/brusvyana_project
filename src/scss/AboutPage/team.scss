@@ -1,0 +1,73 @@
+.about-main-team {
+    .content {
+        .text-content {
+            .team-blocks {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: flex-start;
+                justify-content: flex-start;
+                .block {
+                    margin-bottom: 30px;
+                    flex: 1 1 50%;
+                    box-sizing: border-box;
+                    padding: 15px 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: relative;
+                    // margin-right: 15px;
+                    // &:nth-child(odd) {
+                    //     margin-right: 0;
+                    // }
+                    &:after {
+                        content: "";
+                        position: absolute;
+                        bottom: -15px;
+                        left: 50%;
+                        transform: translate(-50%, 0);
+                        width: 90%;
+                        height: 1px;
+                        background: #b4e4ac;
+                        box-sizing: border-box;
+                        padding: 0 20px;
+                    }
+
+                    .img-block {
+                        //background image center
+                        margin-right: 20px;
+                        min-width: 200px;
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                        background-position: center;
+                        height: 200px;
+                        width: 200px;
+                    }
+                    .text-block {
+                        // background: #000;
+
+                        align-self: stretch;
+                        .name {
+                            font-weight: 300;
+                            font-size: 32px;
+                            line-height: 38px;
+                            margin-bottom: 10px;
+                        }
+                        .position {
+                            font-weight: 400;
+                            font-size: 16px;
+                            line-height: 19px;
+                            color: #b4e4ac;
+                            text-indent: 1.5em;
+                            margin-bottom: 20px;
+                        }
+                        .description {
+                            font-weight: 200;
+                            font-size: 16px;
+                            line-height: 21px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

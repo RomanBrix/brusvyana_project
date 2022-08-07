@@ -1,7 +1,9 @@
 import React from 'react'
+import { useEffect } from 'react';
 import {
   Routes,
   Route,
+  useLocation,
 } from "react-router-dom";
 import InDevelop from './Components/InDevelop';
 import MainLayout from "./Components/layouts/MainLayout";
@@ -15,8 +17,12 @@ export default function App() {
   
 
 
+  const { pathname } = useLocation();
+  useEffect(()=>{
+    window.scrollTo(0,0)
+  },[pathname]);
 
-  
+
   return (
     <div className="App">
       <Routes>

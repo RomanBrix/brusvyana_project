@@ -1,10 +1,14 @@
-// import ContactsBlock from "../../Components/MainSite/Contacts/ContactsBlock";
+import AboutText from "../../Components/MainSite/About/AboutText";
+import Team from "../../Components/MainSite/About/Team";
 
 
 
 
 export default function About() {
     return (
-        <h1>about</h1>
+        <>
+            <AboutText/>
+            <Team/>
+        </>
     )
 }

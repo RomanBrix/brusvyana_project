@@ -125,6 +125,26 @@
                             fill: #1e1b1b;
                         }
                     }
+
+                    &.language {
+                        &:hover {
+                            ul {
+                                li {
+                                    color: #fff;
+                                    background: rgba(
+                                        $color: #1e1b1b,
+                                        $alpha: 0.7
+                                    );
+                                    &:hover {
+                                        background: rgba(
+                                            $color: #1e1b1b,
+                                            $alpha: 1
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             .logo {
