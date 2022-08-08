@@ -38,11 +38,11 @@ export default function Footer(){
                 <div className="call-block">
                     <div className="call">
                         <div className="head">Оптова торгівля</div>
-                        <a href="tel:"><Phone/> Тетяна: +38 067 411 36 91</a>
+                        <a href="tel:"><Phone/>+38 067 411 36 91</a>
                     </div>
                     <div className="call">
                         <div className="head">Торгові мережі/ дрібний опт</div>
-                        <a href="tel:"><Phone/> Олег: +38 067 411 69 06</a>
+                        <a href="tel:"><Phone/>+38 067 411 69 06</a>
                     </div>
                 </div>
 
@@ -50,7 +50,7 @@ export default function Footer(){
                     <ul>
                         <li><a href="tel:"><Facebook/> Facebook</a></li>
                         <li><a href="tel:"><Instagram/> Instagram</a></li>
-                        <li><a href="tel:"><Mail/> E-mail: brusvyana@ukr.net</a></li>
+                        <li><a href="tel:"><Mail/>brusvyana@ukr.net</a></li>
                     </ul>
                 </div>
 

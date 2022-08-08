@@ -1,0 +1,63 @@
+//header
+.header {
+    .content {
+        .menu {
+            li {
+                margin-right: 10px;
+                &.language {
+                    ul {
+                        li {
+                        }
+                    }
+                    svg {
+                    }
+
+                    &:hover {
+                        ul {
+                            li {
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .logo {
+            width: 125px;
+            svg {
+                * {
+                }
+            }
+        }
+    }
+
+    &.main-header {
+    }
+
+    &.main-black-header {
+        .content {
+            .menu {
+                li {
+                    svg {
+                        * {
+                        }
+                    }
+
+                    &.language {
+                        &:hover {
+                            ul {
+                                li {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .logo {
+                svg {
+                    * {
+                    }
+                }
+            }
+        }
+    }
+}

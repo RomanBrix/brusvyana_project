@@ -1,12 +1,12 @@
 import {ReactComponent as Logo} from '../../../svg/Logo.svg';
 import {ReactComponent as Lang} from '../../../svg/Lang.svg';
-import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import useMainTranslate from '../../hook/useMainTranslate';
 
 
 export default function MainHeader() {
     
-    const [activeLanguage, setActiveLanguage] = useState('ua');
+    const {language, setLanguage} = useMainTranslate();
 
 
     const { pathname } = useLocation();
@@ -31,7 +31,7 @@ export default function MainHeader() {
                     <li onClick={()=>{navigate('/projects')}}>Проекти</li>
                     <li onClick={()=>{navigate('/achievement')}}>Досягнення</li>
                     <li onClick={()=>{navigate('/wiki')}}>База знань</li>
-                    <li onClick={()=>{navigate('/general-information')}}>Загальна інформація</li>
+                    <li onClick={()=>{navigate('/general-info')}}>Загальна інформація</li>
                     <li className='language'> 
                         <Lang/>
                         {renderMainLang()}
@@ -45,13 +45,13 @@ export default function MainHeader() {
     )
     
     function renderMainLang() {
-        let lang = languagesLabels.find(lang => lang.value === activeLanguage); 
+        let lang = languagesLabels.find(lang => lang.value === language); 
         return lang.label;
     }
     function renderLanguages() {
-        return languagesLabels.filter(item => item.value !== activeLanguage).map( (item, index) => {
+        return languagesLabels.filter(item => item.value !== language).map( (item, index) => {
             return (
-                <li key={index} onClick={()=>{setActiveLanguage(item.value)}}>{item.label}</li>
+                <li key={index} onClick={()=>{setLanguage(item.value)}}>{item.label}</li>
             )
         } )
     }

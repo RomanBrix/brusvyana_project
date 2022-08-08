@@ -1,9 +1,12 @@
+import PartnersBlock from "../../Components/MainSite/Partners/PartnersBlock";
 
 
 
 
 export default function Partners() {
     return(
-        <h1>Partners</h1>
+        <>
+            <PartnersBlock/>
+        </>
     )
 }

@@ -17,7 +17,7 @@
             justify-content: space-between;
             list-style: none;
             li {
-                margin-right: 2em;
+                margin-right: 1.5em;
                 cursor: pointer;
                 transition: 0.25s;
                 color: #fff;
@@ -78,6 +78,7 @@
                             height: auto;
                             width: 110%;
                             li {
+                                z-index: 100;
                                 background: rgba(180, 228, 172, 0.3);
                                 &:hover {
                                     background: rgba(180, 228, 172, 0.6);
@@ -140,6 +141,7 @@
                                             $color: #1e1b1b,
                                             $alpha: 1
                                         );
+                                        z-index: 100;
                                     }
                                 }
                             }

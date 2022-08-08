@@ -4,50 +4,51 @@ import {ReactComponent as Phone} from '../../../svg/socials/Phone.svg';
 import {ReactComponent as Instagram} from '../../../svg/socials/Instagram.svg';
 import {ReactComponent as Mail} from '../../../svg/socials/Mail.svg';
 import {ReactComponent as Facebook} from '../../../svg/socials/Facebook.svg';
+import { ContactsInfo } from '../../localData';
 
 
 
-export default function Intro() {
+export default function Intro({translate}) {
     
     return (
         <div className="main-intro">
             <div className="content">
                 <div className="center">
-                    <h1>Розсадник  ягідних культур Брусвяна</h1>
+                    <h1>{translate.title}</h1>
                     <div className="btns">
-                        <div className="btn">Роздріб <Arrow/></div>
-                        <div className="btn">Опт <Arrow/></div>
+                        <div className="btn">{translate.btnRetail} <Arrow/></div>
+                        <div className="btn">{translate.btnWholesale} <Arrow/></div>
                     </div>
                 </div>
                 <div className="bottom">
                     <div className="social-block">
-                        <a href="tel:">
+                        <a href={ContactsInfo.smallPhone}>
                             <Phone/>
-                            <span>Тетяна: +38 067 411 36 91</span>
+                            <span>{ContactsInfo.smallPhoneLabel}</span>
                         </a>
                     </div>
                     <div className="social-block">
-                        <a href="tel:">
+                        <a href={ContactsInfo.bigPhone}>
                             <Phone/>
-                            <span>Олег: +38 067 411 69 06</span>
+                            <span>{ContactsInfo.bigphoneLabel}</span>
                         </a>
                     </div>
                     <div className="social-block">
-                        <a href="tel:">
+                        <a href={ContactsInfo.facebook} target='_blank' rel="noreferrer">
                             <Instagram/>
                             <span>Facebook</span>
                         </a>
                     </div>
                     <div className="social-block">
-                        <a href="tel:">
+                        <a href={ContactsInfo.instagram} target='_blank' rel="noreferrer">
                             <Facebook/>
                             <span>Instagram</span>
                         </a>
                     </div>
                     <div className="social-block">
-                        <a href="tel:">
+                        <a href={`mailto:${ContactsInfo.mail}`}>
                             <Mail/>
-                            <span>E-mail: brusvyana@ukr.net</span>
+                            <span>{ContactsInfo.mail}</span>
                         </a>
                     </div>
                 </div>

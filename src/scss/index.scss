@@ -1,4 +1,6 @@
 @import "./fonts/index.scss";
+$mainColor: #1e1b1b;
+$secondaryColor: #b4e4ac;
 
 html {
     padding: 0;
@@ -25,6 +27,7 @@ html {
                     width: 100%;
                     margin: 0 auto;
                     padding: 0 25px;
+                    box-sizing: border-box;
                     //centered
                     // display: flex;
                     // flex-direction: column;
@@ -53,6 +56,15 @@ html {
 
                 //AboutPage
                 @import "./AboutPage/index.scss";
+
+                //PartnersPage
+                @import "./PartnersPage/index.scss";
+
+                //GeneralInfoPage
+                @import "./GeneralInfoPage/index.scss";
+
+                //Responsive Laptops
+                @import "./Responsive/Laptops/index.scss";
             }
         }
     }

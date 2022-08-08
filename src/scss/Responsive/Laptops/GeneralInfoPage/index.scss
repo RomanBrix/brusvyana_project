@@ -1,0 +1,123 @@
+.general-info {
+    .content {
+        display: flex;
+        align-items: stretch;
+        justify-content: space-between;
+        min-height: calc(100vh - 103px - 183px);
+        .general-info-header {
+            flex: 1 1 30%;
+            // background: green;
+            min-width: 230px;
+            position: relative;
+            box-sizing: border-box;
+            padding: 15px 10px;
+            // border-right: 1px solid $secondaryColor;
+            &::after {
+                position: absolute;
+                content: "";
+                width: 1px;
+                height: 95%;
+                background: rgba($color: $mainColor, $alpha: 0.5);
+                top: 15px;
+                right: 0;
+            }
+            .menu {
+                list-style: none;
+                padding: 0;
+                position: sticky;
+                top: 15px;
+                width: 100%;
+                li {
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    box-sizing: border-box;
+                    padding: 17px 10px;
+                    position: relative;
+                    border-bottom: 1px solid
+                        rgba($color: $mainColor, $alpha: 0.5);
+
+                    font-weight: 200;
+                    font-size: 16px;
+                    line-height: 19px;
+                    color: $mainColor;
+                    cursor: pointer;
+                    transition: 0.25s;
+                    overflow: hidden;
+                    span {
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-start;
+                        position: relative;
+                        z-index: 3;
+                        svg {
+                            margin-right: 20px;
+                        }
+                    }
+                    .bg {
+                        position: absolute;
+                        z-index: 1;
+                        width: 100%;
+                        left: 0;
+                        top: 50%;
+                        transform: translate(0, -50%);
+                        svg {
+                            width: 100%;
+                            height: auto;
+                            transition: 0.25s;
+                            opacity: 0;
+                            filter: blur(0);
+                        }
+                    }
+                    &:hover {
+                        background: rgba($color: $mainColor, $alpha: 0.13);
+                    }
+
+                    &.active {
+                        background: rgba($color: $mainColor, $alpha: 0.03);
+                        .bg {
+                            svg {
+                                opacity: 0.5;
+                                filter: blur(0.5px);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .content-bg {
+            flex: 1 1 100%;
+            position: relative;
+            box-sizing: border-box;
+            padding: 15px 10px;
+            .bg {
+                position: absolute;
+                z-index: 1;
+                width: 100%;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                svg {
+                    width: auto;
+                    height: auto;
+                    transition: 0.25s;
+                }
+            }
+            .general-info-text {
+                box-sizing: border-box;
+                padding-left: 10px;
+                position: relative;
+                z-index: 2;
+                h1 {
+                    width: 100%;
+                    text-align: center;
+                }
+                // background: red;
+            }
+        }
+    }
+}

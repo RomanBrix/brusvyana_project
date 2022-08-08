@@ -1,0 +1,23 @@
+@media (max-width: 1025px) {
+    @import "./layouts/header.scss";
+    @import "./layouts/footer.scss";
+
+    //MainPage
+    @import "./MainPage/intro.scss";
+    @import "./MainPage/info.scss";
+    @import "./MainPage/infoBlocks.scss";
+    @import "./MainPage/bigButton.scss";
+    @import "./MainPage/partners.scss";
+
+    //ContactPage
+    @import "./ContactPage/index.scss";
+
+    //AboutPage
+    @import "./AboutPage/index.scss";
+
+    //PartnersPage
+    @import "./PartnersPage/index.scss";
+
+    //GeneralInfoPage
+    @import "./GeneralInfoPage/index.scss";
+}

@@ -1,11 +1,15 @@
 import { ReactComponent as LeafPattern } from "../../../svg/LeafPattern.svg"
 import { ReactComponent as Deal } from "../../../svg/Deal.svg"
 import { ReactComponent as ArrowRight } from "../../../svg/ArrowRight.svg"
+import { partners } from "../../localData"
+import { useNavigate } from "react-router-dom"
 
 
 
 
 export default function Partners() {
+    const navigate = useNavigate();
+
     return(
         <div className="main-partners main-info">
             <div className="content">
@@ -25,25 +29,24 @@ export default function Partners() {
                             <Deal/>
                             <p>Текст Текст Текст Текст Текст Текст Текст Текст Текст </p>
                         </div>
-                        <div className="btn btn-more">Дізнатись більше <ArrowRight/> </div>
+                        <div className="btn btn-more" onClick={()=>{navigate('/partners')}}>Дізнатись більше <ArrowRight/> </div>
                     </div>
                 </div>
 
                 <div className="half">
                     <div className="partner-blocks">
-                        {renderBlocks()}
+                        {renderBlocks(partners)}
                     </div>
                 </div>
             </div>
         </div>
     )
 
-    function renderBlocks() {
-        //array of imgs
-        const blocks = ['1.png', '2.jpg', '3.jpg', '2.jpg', '3.jpg', '1.png', '3.jpg', '1.png', '3.jpg'];
+    function renderBlocks(blocks) {
+        
         return blocks.map((block, index) => {
             return <div className="partner-block" key={index}>
-                <img src={`/src/${block}`} alt={block}/>
+                <img src={`/src/${block.logo}`} alt={block}/>
             </div>
         })
     }

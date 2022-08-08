@@ -1,0 +1,41 @@
+.main-info {
+    .content {
+        padding: 0;
+        .half {
+            .bg {
+                &.bg-svg {
+                    svg {
+                        * {
+                        }
+                    }
+                }
+
+                &.bg-img {
+                    &::after {
+                    }
+                }
+            }
+
+            .half-content {
+                box-sizing: border-box;
+                padding: 10px 25px;
+                .head {
+                }
+                .text-blocks {
+                    p {
+                    }
+                    svg {
+                    }
+                }
+
+                .center-img {
+                }
+
+                &.sec-half-content {
+                    .head {
+                    }
+                }
+            }
+        }
+    }
+}
