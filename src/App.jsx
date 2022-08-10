@@ -1,14 +1,20 @@
 import React from 'react'
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Routes,
   Route,
   useLocation,
+  Navigate 
 } from "react-router-dom";
 import InDevelop from './Components/InDevelop';
+import AdminLayout from './Components/layouts/Admin';
 import GeneralInfoLayout from './Components/layouts/GeneralInfoLayout';
 import MainLayout from "./Components/layouts/MainLayout";
 import NotFound from './Components/NotFound';
+import Login from './Pages/Admin/Login';
+import StatPage from './Pages/Admin/StatPage';
+import Users from './Pages/Admin/Users';
 import About from './Pages/MainPages/About';
 import Contact from './Pages/MainPages/Contact';
 import Delivery from './Pages/MainPages/GeneralInfo/Delivery';
@@ -17,6 +23,7 @@ import Pay from './Pages/MainPages/GeneralInfo/Pay';
 import Policy from './Pages/MainPages/GeneralInfo/Policy';
 import MainPage from "./Pages/MainPages/MainPage";
 import Partners from './Pages/MainPages/Partners';
+
 
 export default function App() {
   
@@ -28,6 +35,9 @@ export default function App() {
     window.scrollTo(0,0)
   },[pathname]);
 
+  const user  = useSelector(state => state.user.currentUser);
+  console.log(user);
+  // console.log(user.isAdmin);
 
   return (
     <div className="App">
@@ -58,6 +68,15 @@ export default function App() {
             <Route path="*" element={<NotFound/>} />
           </Route> 
         
+
+        <Route path='/admin' element={<AdminLayout/> } >
+          <Route path='/admin/login' element={ user  ? user.isAdmin ? <Navigate to="/admin" replace /> : <Navigate to="/" replace /> : <Login/> }/>
+            
+          {/* <Route index element={<StatPage/>} /> */}
+
+          <Route index element={ !(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <StatPage/>} />
+          <Route path='/admin/users' element={!(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <Users/>} />
+        </Route>
 
 
         <Route path="/retail" element={<InDevelop/>}/>
