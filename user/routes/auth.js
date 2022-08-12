@@ -29,11 +29,13 @@ router.post('/login', async (req, res) => {
       console.log(req.body)
         const user = await User.findOne(
             {
-                username: req.body.login
+                username: req.body.login || req.body.username,
             }
         );
         console.log(user);
-        !user && res.status(401).json("Wrong User Name");
+        if(!user){
+          return res.status(401).json("Wrong User Name");
+        }
 
         const hashedPassword = CryptoJS.AES.decrypt(
             user.password,
