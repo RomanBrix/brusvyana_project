@@ -11,7 +11,7 @@ export default function AdminHeader() {
                     <ul>
                         <li onClick={()=>{goPage()}}>Statistic</li>
                         <li onClick={()=>{goPage('users')}}>Users</li>
-                        <li>Products</li>
+                        <li onClick={()=>{goPage('products')}}>Products</li>
                         <li>Settings</li>
                     </ul>
                 </div>

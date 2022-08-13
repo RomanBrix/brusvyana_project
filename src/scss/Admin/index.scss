@@ -1,0 +1,144 @@
+$grey: rgb(187, 186, 186);
+$darkGrey: #555;
+$lightBlue: rgb(240, 240, 255);
+$lightWhite: rgb(251, 251, 255);
+.admin {
+    background: $lightWhite;
+}
+.admin-header {
+    .content {
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 15px 0;
+            li {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+                padding: 15px 20px;
+                border: 1px solid $grey;
+                background: $lightBlue;
+                color: $darkGrey;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: 0.25s;
+                &:hover {
+                    border-color: $lightBlue;
+                }
+            }
+        }
+    }
+}
+
+.admin-products {
+    .content {
+        display: flex;
+        align-items: stretch;
+        justify-content: space-between;
+        border-top: 1px solid $darkGrey;
+        box-sizing: border-box;
+        padding-top: 10px;
+        .left {
+            flex: 1 1 25%;
+            border-right: 1px solid $darkGrey;
+            box-sizing: border-box;
+            padding: 0 20px;
+            .catalog-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+                padding: 7px 10px;
+                border: 1px solid $grey;
+                background: $lightBlue;
+                color: $darkGrey;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: 0.25s;
+            }
+        }
+        .right {
+            flex: 1 1 75%;
+            box-sizing: border-box;
+            padding: 0 20px;
+            .top {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                .btn {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-sizing: border-box;
+                    padding: 10px 15px;
+                    border: 1px solid $grey;
+                    background: $lightBlue;
+                    color: $darkGrey;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: 0.25s;
+                    margin-right: 20px;
+                }
+            }
+
+            table {
+                border: 1px solid #ccc;
+                border-collapse: collapse;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                table-layout: fixed;
+
+                tr {
+                    background-color: #f8f8f8;
+                    border: 1px solid #ddd;
+                    padding: 0.35em;
+                }
+                th,
+                td {
+                    padding: 0.625em;
+                    text-align: center;
+                }
+                th {
+                    font-size: 0.85em;
+                    letter-spacing: 0.1em;
+                    text-transform: uppercase;
+                }
+                thead {
+                    tr {
+                        th {
+                            border-bottom: 2px solid #ddd;
+                            font-weight: bold;
+                        }
+                    }
+                }
+                tbody {
+                    tr {
+                        td {
+                            img {
+                                width: 50px;
+                                height: 50px;
+                            }
+                            .btn {
+                                background: $lightBlue;
+                                box-sizing: border-box;
+                                padding: 4px 0;
+                                border: 1px solid $grey;
+                                border-radius: 4px;
+                                cursor: pointer;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
