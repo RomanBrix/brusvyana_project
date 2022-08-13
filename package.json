@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "userServer": "nodemon ./user/index.js",
-    "retailServer": "nodemon ./retail/index.js"
+    "user": "nodemon ./user/index.js",
+    "retail": "nodemon ./retail/index.js"
   },
   "keywords": [],
   "author": "",

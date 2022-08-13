@@ -21,6 +21,45 @@ router.get("/", async (req, res) => {
     }
 });
 
+//delete product
+router.delete("/:id", verifyAdmin, async (req, res) => {
+    const id = req.params.id;
+    try {
+        const category = await Category.find({'products' : {$in: [id]}}, 'products').lean();
+        
+        if(category.length > 0) {
+            category.forEach(async (cat) => {
+                cat.products = cat.products.filter(product => product != id);
+
+                await Category.findByIdAndUpdate(cat._id, cat);
+            });
+        }
+
+
+        
+        const product = await Product.findById(id);
+        if (!product) {
+            return res.status(404).json({msg: "Product not found"});
+        }
+        await product.remove();
+        res.status(200).json(true);
+    }
+    catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+
+router.get("/ids", async (req, res) => {
+    console.log(req.query.ids)
+    try {
+        const products = await Product.find({ '_id': { $in: req.query.ids } }, 'title description price image quantity isAvailable').sort({ createdAt: -1 }).lean();
+
+        res.status(200).json(products);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+})
 
 
 
@@ -49,7 +88,7 @@ async function addProduct(product, category) {
     let variantsIds = [];
     let price = product.price;
     let qnty = product.quantity || 0;
-    if(product.variants.length > 0) {
+    if(product?.variants && product?.variants.length > 0) {
         let ids = await Variant.insertMany(product.variants)
         let pr = 0;
         variantsIds = ids.map(variant => {

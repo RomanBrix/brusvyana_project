@@ -28,6 +28,19 @@ router.post("/", verifyAdmin, async (req, res) => {
     }
 } );
 
+//get categories by catalog id
+router.get("/", async (req, res) => {
+    console.log(req.query.catalog);
+        try {
+            const categories = await Category.find({
+                catalog: req.query.catalog
+            }, 'title products').lean();
+            res.status(200).json(categories);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+});
+
 
 
 

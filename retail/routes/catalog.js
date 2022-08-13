@@ -12,12 +12,23 @@ router.get("/", async (req, res) => {
     // console.log('get all catalogs');
 
     try {
-        const catalogs = await Catalog.find();
+        const catalogs = await Catalog.find({},'title').lean();
         res.status(200).json(catalogs);
     } catch (err) {
         res.status(500).json(err);
     }
   });
+
+  //get populet categories
+    router.get("/:id/categories", async (req, res) => {
+
+        try {
+            const catalogs = await Catalog.findById(req.params.id,'categories').populate({path: 'categories', select: 'title products'}).lean();
+            res.status(200).json(catalogs);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    })
 
   //Get catalog by id
     router.get("/:id", async (req, res) => {
