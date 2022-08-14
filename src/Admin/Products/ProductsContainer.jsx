@@ -1,26 +1,28 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom";
-import { checkAAA, userRequestRetail } from "../../requestMethods";
+import { useNavigate, useParams } from "react-router-dom";
+import {  userRequestRetail, publicRequestRetail } from "../../requestMethods";
 
 
 
-export default function ProductsContainer({productsIds}){
+export default function ProductsContainer({productsIds, getCategories}){
     const [products, setProducts] = useState([]);
     
     const params = useParams();
-    console.log(params)
+    const navigate = useNavigate();
+    
 
     useEffect(()=>{
         //get products
         getProductsData()
+        // eslint-disable-next-line
     },[productsIds])
     
 
     return(
         <>
             <div className="top">
-                <div className="btn add-product">Добавить</div>
+                <div className="btn add-product" onClick={()=>{navigate('/admin/product/new')}}>Добавить</div>
                 <div className="btn load-product">Загрузить товар</div>
             </div>
 
@@ -51,24 +53,28 @@ export default function ProductsContainer({productsIds}){
     )
 
     function getProductsData (){
-        axios.get('http://localhost:1338/api/products/ids', {params:{ids:productsIds}}).then(res=>{
+        console.log(productsIds)
+        // axios.get('http://localhost:1338/api/products/ids', {params:{ids:productsIds}}).then(res=>{
+        //     setProducts(res.data)
+        // }).catch(err=>{
+        //     console.log(err)
+        // })
+        publicRequestRetail.get('/products/ids', {params:{ids:productsIds}}).then(res=>{
             setProducts(res.data)
         }).catch(err=>{
             console.log(err)
         })
+
     }
     function deleteProduct(id){
-        // axios.delete('http://localhost:1338/api/products/'+id).then(res=>{
-        //     console.log(res)
-        //     getProductsData()
-        // }).catch(err=>{
-        //     console.log(err)
-        // })
+        
         if(window.confirm('Удалить?')){
-            checkAAA()
+            const catalogId = params["*"].split('/')[0] || params["*"];
+            
             userRequestRetail.delete('products/'+id).then(res=>{
-                console.log(res)
+                // console.log(res)
                 getProductsData()
+                getCategories(catalogId)
             }).catch(err=>{
                 console.log(err)
                 if(err.response.data === 'Token is not valid!'){
@@ -84,7 +90,7 @@ export default function ProductsContainer({productsIds}){
         return products.map(product=>{
             return(
                 <tr key={product._id}>
-                    <td>
+                    <td onClick={()=>{navigate('/admin/product/' + product._id)}}>
                         <img src={`/src/products/${product.image}`} alt={product.image}/>
                     </td>
                     <td>{product.title}</td>

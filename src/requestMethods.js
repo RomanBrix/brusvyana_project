@@ -11,12 +11,6 @@ const TOKEN = currentUser?.token;
 const USERNAME = currentUser?.username;
 
 
-
-export const checkAAA = () => {
-    // console.log(currentUser)
-    // console.log(TOKEN)
-    console.log(USERNAME+ " " +TOKEN)
-}
 export const publicRequestRetail = axios.create({
   baseURL: BASE_URL_RETAIL,
 });

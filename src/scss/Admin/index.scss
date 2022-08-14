@@ -62,6 +62,23 @@ $lightWhite: rgb(251, 251, 255);
                 border-radius: 4px;
                 cursor: pointer;
                 transition: 0.25s;
+                margin-bottom: 10px;
+                position: relative;
+                .delete {
+                    position: absolute;
+                    right: 5px;
+                    top: 5px;
+                    width: 20px;
+                    height: 20px;
+                    background: $grey;
+                    color: #f8f8f8;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: 0.25s;
+                    &:hover {
+                        background: red;
+                    }
+                }
             }
         }
         .right {

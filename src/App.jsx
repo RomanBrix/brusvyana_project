@@ -14,6 +14,7 @@ import MainLayout from "./Components/layouts/MainLayout";
 import NotFound from './Components/NotFound';
 import Login from './Pages/Admin/Login';
 import Products from './Pages/Admin/Products';
+import SingleProduct from './Pages/Admin/SingleProduct';
 import StatPage from './Pages/Admin/StatPage';
 import Users from './Pages/Admin/Users';
 import About from './Pages/MainPages/About';
@@ -78,6 +79,7 @@ export default function App() {
           <Route index element={ !(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <StatPage/>} />
           <Route path='/admin/users' element={!(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <Users/>} />
           <Route path='/admin/products/*' element={!(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <Products/>} />
+          <Route path='/admin/product/*' element={!(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <SingleProduct/>} />
         </Route>
 
 

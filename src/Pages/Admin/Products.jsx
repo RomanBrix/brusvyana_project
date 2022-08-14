@@ -6,6 +6,7 @@ import { Route, Routes, useParams,
 import Catalog from "../../Admin/Products/Catalog";
 import Categories from "../../Admin/Products/Categories";
 import ProductsContainer from "../../Admin/Products/ProductsContainer";
+import { publicRequestRetail } from "../../requestMethods";
 
 
 export default function Products() {
@@ -32,7 +33,6 @@ export default function Products() {
 
 
     useEffect(()=>{
-        
         if(selectedCategory){
             let idsArr = categories.filter((category)=> category._id === selectedCategory)[0]?.products
             setProductsIds(idsArr || []);
@@ -47,13 +47,15 @@ export default function Products() {
     }, [categories, selectedCategory])
     
 
+
+
     return(
         <div className="admin admin-products">
             <div className="content">
                 <div className="left">
                     <Routes>
-                        <Route index element={<Catalog  cataloges={cataloges} setCataloges={setCataloges}/>} />
-                        <Route path="/:catalog/*" element={<Categories  categories={categories} setCategories={setCategories} setSelectedCategory={setSelectedCategory}/>}/>
+                        <Route index element={<Catalog  cataloges={cataloges} getCatalogs={getCatalogs}/>} />
+                        <Route path="/:catalog/*" element={<Categories getCategories={getCategories} categories={categories} setSelectedCategory={setSelectedCategory}/>}/>
                     </Routes>
                     {/* пикаем каталог слева */}
                 </div>
@@ -62,10 +64,28 @@ export default function Products() {
                 <div className="right">
                     
                     <Routes>
-                        <Route path="*" element={productsIds.length > 0 ? <ProductsContainer productsIds={productsIds}/> : <h1>Выбери каталог</h1>} />
+                        <Route path="*" element={productsIds.length > 0 ? <ProductsContainer getCategories={getCategories} productsIds={productsIds}/> : <h1>{params["*"] ? 'Выбери категорию' : 'Выбери каталог'}</h1>} />
                     </Routes>
                 </div>
             </div>
         </div>
     )
+
+
+    function getCatalogs() {
+        publicRequestRetail.get('/catalog').then(res=>{
+            setCataloges(res.data)
+        }).catch(err=>{ 
+            console.log(err)
+        })
+    }
+
+    function getCategories(catalog) {
+        publicRequestRetail.get(`/category/?catalog=${catalog}`).then(res=>{
+                setCategories(res.data)
+                // console.log(res.data)
+            }).catch(err=>{ 
+                console.log(err)
+            })
+    }
 }
