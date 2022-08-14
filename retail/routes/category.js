@@ -1,5 +1,6 @@
 const Catalog = require("../models/Catalog");
 const Category = require("../models/Category");
+const { Product } = require("../models/Product");
 
 const { verifyUser, verifyAdmin } = require("./verifyToken");
 
@@ -40,6 +41,25 @@ router.get("/", async (req, res) => {
             res.status(500).json(err);
         }
 });
+
+
+//delete category and products by id
+router.delete("/:id", verifyAdmin, async (req, res) => {
+    try {
+        const category = await Category.findById(req.params.id, 'products').lean();
+
+        // console.log(category);
+        // console.log(Product.deleteMany);
+        // DELETE PRODUCTS THEN DELETE CATEGORY
+        await Product.deleteMany({ _id: { $in: category.products } });
+        await Category.findByIdAndDelete(req.params.id);
+
+        res.status(200).json(true);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+} );
 
 
 

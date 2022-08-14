@@ -53,8 +53,7 @@ const verifyUser = (req, res, next) => {
 
 
   const verifyAdmin = (req, res, next) => {
-    console.log('go check admin')
-    console.log(req.headers.token)
+ 
 
     const authHeader = req.headers.token;
 

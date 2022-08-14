@@ -21,6 +21,28 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/ids", async (req, res) => {
+    console.log("req.query.ids: " + req.query.ids);
+    // console.log(req.query.ids)
+    try {
+        const products = await Product.find({ '_id': { $in: req.query.ids } }, 'title description price image quantity isAvailable').sort({ createdAt: -1 }).lean();
+
+        res.status(200).json(products);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+})
+//get product by id
+router.get("/:id", async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id).populate({path: 'variants', select: ['title', "price", "image", "quantity", "isAvailable"]}).lean();
+        res.status(200).json(product);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+} );
+
 //delete product
 router.delete("/:id", verifyAdmin, async (req, res) => {
     const id = req.params.id;
@@ -50,16 +72,7 @@ router.delete("/:id", verifyAdmin, async (req, res) => {
 });
 
 
-router.get("/ids", async (req, res) => {
-    console.log(req.query.ids)
-    try {
-        const products = await Product.find({ '_id': { $in: req.query.ids } }, 'title description price image quantity isAvailable').sort({ createdAt: -1 }).lean();
 
-        res.status(200).json(products);
-    } catch (err) {
-        res.status(500).json(err);
-    }
-})
 
 
 

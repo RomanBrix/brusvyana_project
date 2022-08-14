@@ -1,4 +1,5 @@
 const Catalog = require("../models/Catalog");
+const Category = require("../models/Category");
 
 const { verifyUser, verifyAdmin } = require("./verifyToken");
 
@@ -70,6 +71,33 @@ router.get("/", async (req, res) => {
             res.status(500).json(err);
         }
     } );
+
+
+    //delete catalog
+    router.delete("/:id", verifyAdmin, async (req, res) => {
+        try {
+            const category = await Category.find({'catalog' : {$in: req.params.id}}, 'products').lean();
+            //get length of all products
+            const productsLength = category.reduce((acc, curr) => {
+                return acc + curr.products.length;
+            }, 0);
+
+            if(productsLength > 0){
+                return res.status(400).json("Catalog has products");
+            }else{
+                //delete category
+                console.log(Category)
+                await Category.deleteMany({'catalog' : {$in: req.params.id}});
+                await Catalog.findByIdAndDelete(req.params.id);
+                return res.status(200).json(true);
+            }
+            // const catalog = await Catalog.findByIdAndDelete(req.params.id).lean();
+            
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    } );
+
 
 
 
