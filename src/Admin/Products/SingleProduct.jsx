@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { ReactComponent as Uah } from "../../svg/Uah.svg";
 
 
 
@@ -10,6 +10,8 @@ export default function SingleProductRender({id, goSetProductId, getProduct, pro
     const params = useParams();
     
     const [selectedVariant, setSelectedVariant] = useState(null);
+    const navigate = useNavigate();
+
     
     
     useEffect(()=>{
@@ -20,6 +22,7 @@ export default function SingleProductRender({id, goSetProductId, getProduct, pro
     },[])
     useEffect(()=>{
         if(id !== product._id){
+            
             console.log('go load');
             getProduct(id);
         }
@@ -35,11 +38,11 @@ export default function SingleProductRender({id, goSetProductId, getProduct, pro
                     <img src={`/src/products/${product.image}`} alt={ product.image }/>
                 </div>
                 <div className="right">
-                    <div className="btn">Изменить Товар</div>
+                    <div className="btn" onClick={()=>{navigate('./edit', {replace: true})}}>Изменить Товар</div>
                     <div className="title">{ product.title }</div>
                     <div className="variant-title">{ selectedVariant ? selectedVariant.title : '' }</div>
-                    <div className="price">{ selectedVariant ? selectedVariant.price : product.price } $</div>
-                    <div className="variants">{ product.variants.length > 1 ? renderVariants() : '' }</div>
+                    <div className="price"> <Uah/>{ selectedVariant ? selectedVariant.price : product.price }</div>
+                    <div className="variants">{ product.variants.length > 0 ? renderVariants() : '' }</div>
                     <div className="quantity">В наличии: {selectedVariant ? selectedVariant.quantity : product.quantity}</div>
                     <div className="description">{ product.description }</div>
                 </div>
@@ -51,7 +54,7 @@ export default function SingleProductRender({id, goSetProductId, getProduct, pro
     function renderVariants(){
         return product.variants.map((variant, index)=>{
             return (
-                <div className="variant" onClick={()=>{setSelectedVariant(variant)}} key={index}>
+                <div className={`variant ${selectedVariant?._id === variant._id && "variant-active"}`} onClick={()=>{setSelectedVariant(variant)}} key={index}>
                     <div className="variant-sub-title">Вариант {index + 1}</div>
                 </div>
             )

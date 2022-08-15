@@ -12,6 +12,12 @@ export default function Intro({translate}) {
     
     return (
         <div className="main-intro">
+            <div className="bgvideo">
+                <video autoPlay muted loop id="bgVideo">
+                    <source src="/src/bg.mp4" type="video/mp4"/>
+                </video>
+            </div>
+            
             <div className="content">
                 <div className="center">
                     <h1>{translate.title}</h1>
