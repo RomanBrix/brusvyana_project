@@ -42,6 +42,26 @@ router.get("/", async (req, res) => {
         }
 });
 
+//get all categorys and find products by category id
+router.get("/:product", async (req, res) => {
+    const productId = req.params.product;
+    // console.log('go')
+
+    try {
+        const category = await Category.find({}, 'title products').lean();
+        const selectedCategory = category.find(cat => cat.products.toString().includes(productId));
+        // console.log(category);
+        // console.log('selectedCategory: ', selectedCategory);
+        // const allCategory = retrunNeededInfo(category);
+        const allCategory = category.map(cat => retrunNeededInfo(cat));
+        const sCategory = retrunNeededInfo(selectedCategory) || null;
+        
+        res.status(200).json({all: allCategory, selected: sCategory});
+    } catch (err) {
+        res.status(500).json(err);
+    }
+} );
+
 
 //delete category and products by id
 router.delete("/:id", verifyAdmin, async (req, res) => {
@@ -63,7 +83,11 @@ router.delete("/:id", verifyAdmin, async (req, res) => {
 
 
 
-
+function retrunNeededInfo(obj){
+    const {products, ...rest} = obj;
+    
+    return  {...rest};
+}
 
 
 

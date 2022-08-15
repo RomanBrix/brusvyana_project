@@ -72,7 +72,93 @@ router.delete("/:id", verifyAdmin, async (req, res) => {
 });
 
 
+//update product
+router.put("/:id", verifyAdmin, async (req, res) => {
+    const productId = req.params.id;
+    const categoryId = req.body.category;
+    const {product} = req.body;
+    // console.log(product)
+    const {variants} = product;
+    const variantsToDelete = variants.filter(variant => variant.flag === 'delete').map(variant => { delete variant.flag; return variant; });
+    const variantsToUpdate = variants.filter(variant => variant.flag === 'update').map(variant => { delete variant.flag; return variant; });
+    const variantsToAdd    = variants.filter(variant => variant.flag === 'add').map(variant => {
+        delete variant.flag;
+        variant.quantity = +variant.quantity;
+        variant.price = +variant.price;
+        variant.isAvailable = variant.quantity > 0;
+        if(!variant.image) {
+            return {
+                ...variant,
+                image: product.image
+            }
+        }
+        return variant;
+    });
+    const mainProduct = {
+        _id: productId,
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        image: product.image || "",
+        quantity: product.quantity || 0,
+        isAvailable: product.quantity > 0,
+    }
 
+    // console.log('variantsToDelete', variantsToDelete);
+    // console.log('variantsToUpdate', variantsToUpdate);
+    // console.log('variantsToAdd', variantsToAdd);
+    console.log('mainProduct', mainProduct);
+    if(variantsToDelete.length > 0) {
+        deleteVariantsPerUpdate(variantsToDelete);
+        console.log('Variants deleted...');
+
+    }
+    if(variantsToUpdate.length > 0) {
+        updateVariantsPerUpdate(variantsToUpdate)
+        console.log('Variants updated...');
+
+    }
+
+    
+    let variantsToDeleteIds = [];
+
+    if(variantsToAdd.length > 0) {
+
+        const newIds = await addVariantsPerUpdate(variantsToAdd);
+        
+        if(variantsToDelete.length > 0){
+            variantsToDeleteIds = variantsToDelete.map(variant => variant._id);
+        }
+        await Product.findByIdAndUpdate(productId, {$set: mainProduct, $push: {variants: {$each: newIds}}});
+        
+        
+        console.log('Product Saved');
+
+    }else{
+
+        if(variantsToDelete.length > 0){
+            variantsToDeleteIds = variantsToDelete.map(variant => variant._id);
+        }
+        await Product.findByIdAndUpdate(productId, {$set: mainProduct});
+        
+        
+
+        console.log('Product Saved');
+    }
+    if(variantsToDelete.length > 0){
+        await Product.updateMany({'variants': {$in: variantsToDeleteIds}}, {$pull: {variants: {$in: variantsToDeleteIds}}});
+    }
+
+    if(categoryId) {
+        await Category.findOneAndUpdate({'products': productId}, {$pull: {products: productId}});
+        await Category.findByIdAndUpdate(categoryId, {$push: {products: productId}});
+    }
+
+    
+    // console.log(ok)
+    res.status(200).json(true)
+})
+    // try {
 
 
 
@@ -91,7 +177,21 @@ router.post("/", verifyAdmin, async (req, res) => {
 
 
 
-
+async function deleteVariantsPerUpdate(products) {
+    await Variant.deleteMany({_id: {$in: products}});
+}
+async function updateVariantsPerUpdate(products) {
+    for(let i = 0; i < products.length; i++) {
+        await Variant.findByIdAndUpdate(products[i]._id, {$set: products[i]});
+    }
+    return true;
+    // return await Variant.updateMany({_id: {$in: products}}, {$set: products});
+}
+async function addVariantsPerUpdate (products) {
+    const newVariants = await Variant.insertMany(products);
+    const ids = newVariants.map(variant => variant._id);
+    return ids
+}
 
 
 
