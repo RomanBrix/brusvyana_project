@@ -110,12 +110,10 @@ router.put("/:id", verifyAdmin, async (req, res) => {
     console.log('mainProduct', mainProduct);
     if(variantsToDelete.length > 0) {
         deleteVariantsPerUpdate(variantsToDelete);
-        console.log('Variants deleted...');
 
     }
     if(variantsToUpdate.length > 0) {
         updateVariantsPerUpdate(variantsToUpdate)
-        console.log('Variants updated...');
 
     }
 
@@ -131,8 +129,6 @@ router.put("/:id", verifyAdmin, async (req, res) => {
         }
         await Product.findByIdAndUpdate(productId, {$set: mainProduct, $push: {variants: {$each: newIds}}});
         
-        
-        console.log('Product Saved');
 
     }else{
 
@@ -143,10 +139,11 @@ router.put("/:id", verifyAdmin, async (req, res) => {
         
         
 
-        console.log('Product Saved');
+        
     }
+    
     if(variantsToDelete.length > 0){
-        await Product.updateMany({'variants': {$in: variantsToDeleteIds}}, {$pull: {variants: {$in: variantsToDeleteIds}}});
+       await Product.updateMany({'variants': {$in: variantsToDeleteIds}}, {$pull: {variants: {$in: variantsToDeleteIds}}});
     }
 
     if(categoryId) {

@@ -10,12 +10,13 @@ const router = require("express").Router();
 
 //Get all catalogs
 router.get("/", async (req, res) => {
-    // console.log('get all catalogs');
+    console.log('get all catalogs');
 
     try {
         const catalogs = await Catalog.find({},'title').lean();
         res.status(200).json(catalogs);
     } catch (err) {
+        console.log(err);
         res.status(500).json(err);
     }
   });
@@ -27,6 +28,11 @@ router.get("/", async (req, res) => {
             const catalogs = await Catalog.findById(req.params.id,'categories').populate({path: 'categories', select: 'title products'}).lean();
             res.status(200).json(catalogs);
         } catch (err) {
+            console.log(err.kind);
+            if(err.kind === 'ObjectId') {
+                return res.status(404).json({message: "Catalog not found"});
+            }
+
             res.status(500).json(err);
         }
     })
