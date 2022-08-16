@@ -11,6 +11,7 @@ import InDevelop from './Components/InDevelop';
 import AdminLayout from './Components/layouts/Admin';
 import GeneralInfoLayout from './Components/layouts/GeneralInfoLayout';
 import MainLayout from "./Components/layouts/MainLayout";
+import RetailLayout from './Components/layouts/Retail/RetailLayout';
 import NotFound from './Components/NotFound';
 import Login from './Pages/Admin/Login';
 import Products from './Pages/Admin/Products';
@@ -25,6 +26,8 @@ import Pay from './Pages/MainPages/GeneralInfo/Pay';
 import Policy from './Pages/MainPages/GeneralInfo/Policy';
 import MainPage from "./Pages/MainPages/MainPage";
 import Partners from './Pages/MainPages/Partners';
+import RetailCatalog from './Pages/RetailPages/Catalog';
+import Product from './Pages/RetailPages/Product';
 
 
 export default function App() {
@@ -83,7 +86,12 @@ export default function App() {
         </Route>
 
 
-        <Route path="/retail" element={<InDevelop/>}/>
+        <Route path="/retail" element={<RetailLayout/>}>
+
+          <Route index element={<Navigate to="/retail/search" replace />} />
+          <Route path="product/:id" element={<Product/>} />
+          <Route path=":catalog" element={<RetailCatalog/>} />
+        </Route>
 
 
         <Route path="*" element={<NotFound/>} />

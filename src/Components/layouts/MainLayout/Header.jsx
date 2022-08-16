@@ -2,6 +2,7 @@ import {ReactComponent as Logo} from '../../../svg/Logo.svg';
 import {ReactComponent as Lang} from '../../../svg/Lang.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useMainTranslate from '../../hook/useMainTranslate';
+import { ReactComponent as LeafPattern } from "../../../svg/LeafPattern.svg"
 
 
 export default function MainHeader() {
@@ -15,6 +16,7 @@ export default function MainHeader() {
     const languagesLabels = [{label: 'Укр',value: 'ua'}, {label: 'Рус',value: 'ru'},{label: 'Eng',value: 'en'}];
     return (
         <div className={`header ${pathname === '/' ? 'main-header':'main-black-header'}`}>
+            <div className="head-bg"><LeafPattern/></div>
             <div className="content">
                 <ul className="menu main-menu">
                     <li onClick={()=>{navigate('/retail')}}>Роздріб</li>
@@ -26,8 +28,8 @@ export default function MainHeader() {
                     {/* <img src="/src/img.jpg" alt="Logo" /> */}
                     <Logo className='header-logo'/>
                 </div>
-                <ul className="menu second-menu">
                 
+                <ul className="menu second-menu">
                     <li onClick={()=>{navigate('/projects')}}>Проекти</li>
                     <li onClick={()=>{navigate('/achievement')}}>Досягнення</li>
                     <li onClick={()=>{navigate('/wiki')}}>База знань</li>

@@ -47,6 +47,7 @@ export default function EditSingleProduct({id, goSetProductId, getProduct, produ
 
     useEffect(()=>{
         setNewProduct({...product, category: categories.selected._id})
+        // eslint-disable-next-line
     },[product])
 
 
@@ -214,8 +215,8 @@ export default function EditSingleProduct({id, goSetProductId, getProduct, produ
         const {category, ...rest} = newProduct;
         userRequestRetail.put('/products/' + product._id, { product: {...rest}, category })
             .then(res => {
-                // navigate('../' + product._id, {replace: true})
                 getProduct(id);
+                navigate('../' + product._id, {replace: true})
                 console.log(res)
             }).catch(err => {
                 console.log(err)
