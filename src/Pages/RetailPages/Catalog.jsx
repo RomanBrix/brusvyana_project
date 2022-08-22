@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import CatalogItem from "../../Components/Retail/CatalogItem";
 import Filters from "../../Components/Retail/Filters";
 import ProductsContainer from "../../Components/Retail/Products";
-import { getAllCataloges, getCategoriesOfCatalog, fetchProducts, thereIsNoProducts } from "../../Redux/retailApi";
+import { getAllCataloges, getCategoriesOfCatalog, fetchProducts } from "../../Redux/retailApi";
 
 
 
@@ -24,7 +24,7 @@ export default function RetailCatalog(){
     const dispatch = useDispatch();
     
     // console.log(params.catalog)
-    console.log(retailStore)
+    // console.log(retailStore)
 
     // initial page load
     useEffect(()=>{
@@ -42,6 +42,7 @@ export default function RetailCatalog(){
                     navigate('../search', {replace: true});
                 }
             });
+            
         }
         setActiveCategory(null)
         // eslint-disable-next-line
@@ -50,12 +51,15 @@ export default function RetailCatalog(){
 
     //load products
     useEffect(()=>{
-        if(retailStore.countAllProducts != null){
-            if(retailStore.countAllProducts.length > 0){
+        if(retailStore.countAllProducts !== null){
+            // if(retailStore.categories.length < 1){
+            //     thereIsNoProducts(dispatch)
+            // }
+            if(retailStore.countAllProducts?.length > 0){
                 console.log('go load');
                 fetchProducts(dispatch, retailStore.countAllProducts);
             }else{
-                thereIsNoProducts(dispatch)
+                // thereIsNoProducts(dispatch)
             }
         }
         // eslint-disable-next-line
@@ -67,7 +71,7 @@ export default function RetailCatalog(){
         if(activeCategory != null){
             fetchProducts(dispatch, activeCategory.products);
         }else{
-            if(retailStore.countAllProducts.length > 0){
+            if(retailStore.countAllProducts?.length > 0){
                 fetchProducts(dispatch, retailStore.countAllProducts);
             }
         }
@@ -84,7 +88,7 @@ export default function RetailCatalog(){
                 </div>
                 <div className="retail-content">
                     <Filters categories={retailStore.categories} activeCategory={activeCategory} setActiveCategory={setActiveCategory}/>
-                    <ProductsContainer products={retailStore.products} setActiveCategory={setActiveCategory} activeCategory={activeCategory}/>
+                    <ProductsContainer products={retailStore.products} setActiveCategory={setActiveCategory} activeCategory={activeCategory} categories={retailStore.categories}/>
                 </div>
             </div>
         </div>

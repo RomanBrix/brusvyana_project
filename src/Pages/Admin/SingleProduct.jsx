@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Route, Routes, useParams } from "react-router-dom";
 import EditSingleProduct from "../../Admin/Products/EditProduct";
+import NewSingleProduct from "../../Admin/Products/NewProduct";
 import SingleProductRender from "../../Admin/Products/SingleProduct";
 import { publicRequestRetail } from "../../requestMethods";
 
@@ -22,7 +23,7 @@ export default function SingleProduct() {
 
     return (
                 <Routes>
-                        <Route path="/new" element={ <>NEW</>}/>
+                        <Route path="/:catalog/new" element={ <NewSingleProduct/> }/>
                         <Route path="/:id/edit" element={ <EditSingleProduct goSetProductId={ goSetProductId } id={ productId } getProduct={ getProduct } product={product}/> }/>
                         <Route path=':id' element={<SingleProductRender goSetProductId={ goSetProductId } id={ productId } getProduct={ getProduct } product={product}/> } />
                         <Route path="*" element={ <h1>Продукт не найден</h1>}/>

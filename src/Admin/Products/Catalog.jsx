@@ -1,14 +1,14 @@
 // import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { userRequestRetail } from "../../requestMethods";
+import { createUserAxiosRequest } from "../../requestMethods";
 
 
 
 
 export default function Catalog({cataloges,  getCatalogs}){
     const navigate = useNavigate();
-    
+    const userRequestRetail = createUserAxiosRequest();
     useEffect(()=>{
         getCatalogs();
         // eslint-disable-next-line

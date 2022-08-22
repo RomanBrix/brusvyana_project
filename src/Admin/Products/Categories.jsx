@@ -1,14 +1,14 @@
 // import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { userRequestRetail } from "../../requestMethods";
+import { createUserAxiosRequest } from "../../requestMethods";
 
 
 
 export default function Categories({categories, setSelectedCategory, getCategories}) {
     const params = useParams();
     const navigate = useNavigate();
-
+    const userRequestRetail = createUserAxiosRequest();
 
     useEffect(()=>{
         getCategories(params.catalog)

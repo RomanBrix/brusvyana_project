@@ -32,6 +32,7 @@ const retailSlice = createSlice({
     getProducts: (state, action) => {
       // console.log(action.payload);
       state.products = action.payload;
+      // state.countAllProducts = []
       state.loading = false;
     },
     errorGo: (state)=>{

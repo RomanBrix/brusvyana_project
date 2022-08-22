@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
-import {  userRequestRetail, publicRequestRetail } from "../../requestMethods";
+import {  createUserAxiosRequest, publicRequestRetail } from "../../requestMethods";
 
 
 
 export default function ProductsContainer({productsIds, getCategories}){
     const [products, setProducts] = useState([]);
+
+    
+    const userRequestRetail = createUserAxiosRequest();
     
     const params = useParams();
     const navigate = useNavigate();
     
-
+    console.log(params);
     useEffect(()=>{
         //get products
         getProductsData()
@@ -20,10 +23,7 @@ export default function ProductsContainer({productsIds, getCategories}){
 
     return(
         <>
-            <div className="top">
-                <div className="btn add-product" onClick={()=>{navigate('/admin/product/new')}}>Добавить</div>
-                <div className="btn load-product">Загрузить товар</div>
-            </div>
+            
 
 
             <div className="admin admin-products">
@@ -50,6 +50,7 @@ export default function ProductsContainer({productsIds, getCategories}){
         </>
         
     )
+
 
     function getProductsData (){
         console.log(productsIds)
@@ -93,7 +94,7 @@ export default function ProductsContainer({productsIds, getCategories}){
                         <img src={`/src/products/${product.image}`} alt={product.image}/>
                     </td>
                     <td>{product.title}</td>
-                    <td>{product.description}</td>
+                    <td>{cutDescription(product.description, 25)}</td>
                     <td>{product.price}</td>
                     <td>{product.quantity}</td>
                     <td>{product.isAvailable ? 'Да' : 'Нет'}</td>
@@ -105,5 +106,12 @@ export default function ProductsContainer({productsIds, getCategories}){
 
             )
         } )
+    }
+    //cut description to n symbols
+    function cutDescription(description, n= 30){
+        if(description.length > n){
+            return description.slice(0, n) + '...'
+        }
+        return description
     }
 }

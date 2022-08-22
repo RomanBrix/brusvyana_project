@@ -2,7 +2,9 @@
 
 
 
+
 export default function Users() {
+    // const loactaion = useNavigation()
     
     return(
         <div className="admin admin-users">

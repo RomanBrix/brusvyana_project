@@ -10,7 +10,7 @@ export default function Login() {
             login:'',
             password:''
         })
-        const {loading, error, currentUser} = useSelector(state => state.user);
+        const {loading, error, currentUser} = useSelector(state => state.persistedReducer.user);
         const dispatch = useDispatch();
 
         return(
@@ -34,7 +34,7 @@ export default function Login() {
             </div>
         )
         function goEnter(){
-            login(dispatch, inputs.login, inputs.password)
+            login(dispatch, inputs.login, inputs.password);
         }
         function handleChangeValue (e) {
             setInputs({

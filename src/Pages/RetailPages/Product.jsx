@@ -33,6 +33,7 @@ export default function Product(){
         }else{
             setProduct(null);
         }
+        // eslint-disable-next-line
     },[])
 
     if(product === null){

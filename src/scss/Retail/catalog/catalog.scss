@@ -297,6 +297,8 @@
                         }
                         .description {
                             text-align: center;
+                            box-sizing: border-box;
+                            padding: 0 10px;
                         }
                         // background: #fff;
                     }

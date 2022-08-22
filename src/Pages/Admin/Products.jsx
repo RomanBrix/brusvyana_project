@@ -5,6 +5,7 @@ import { Route, Routes, useParams,
     } from "react-router-dom"
 import Catalog from "../../Admin/Products/Catalog";
 import Categories from "../../Admin/Products/Categories";
+import ImportProducts from "../../Admin/Products/ImportProducts";
 import ProductsContainer from "../../Admin/Products/ProductsContainer";
 import { publicRequestRetail } from "../../requestMethods";
 
@@ -62,9 +63,13 @@ export default function Products() {
 
 
                 <div className="right">
-                    
+                        {
+                            params["*"] ? <ImportProducts/> : ''
+                        }
                     <Routes>
-                        <Route path="*" element={productsIds.length > 0 ? <ProductsContainer getCategories={getCategories} productsIds={productsIds}/> : <h1>{params["*"] ? 'Выбери категорию' : 'Выбери каталог'}</h1>} />
+                        {/* <Route path="*" element={<h1>{ }</h1>} /> */}
+                        
+                        <Route path="*" element={productsIds.length > 0 || selectedCategory ? <ProductsContainer getCategories={getCategories} productsIds={productsIds}/> : <h1>{params["*"] ? 'Выбери категорию' : 'Выбери каталог'}</h1>} />
                     </Routes>
                 </div>
             </div>

@@ -3,7 +3,7 @@ import { ReactComponent as Approx} from "../../svg/approx.svg"
 import {  useNavigate } from "react-router-dom";
 
 
-export default function ProductsContainer({products, setActiveCategory, activeCategory}){
+export default function ProductsContainer({products, setActiveCategory, activeCategory, categories}){
     const navigate = useNavigate();
 
 
@@ -15,8 +15,8 @@ export default function ProductsContainer({products, setActiveCategory, activeCa
         )
     }
 
-    console.log(activeCategory);
-    if (products.length === 0){
+    // console.log(activeCategory);
+    if (categories.length === 0 || products.length === 0){
         return (
             <div className="retail-products retail-products-empty">
                 <h2>Немає продуктів</h2>
@@ -57,7 +57,7 @@ export default function ProductsContainer({products, setActiveCategory, activeCa
                         <Approx/> { item.price }  <Uah/>
                     </div>
                     <div className="description">
-                        {cutDescription(item.description, 35)}
+                        {cutDescription(item.description, 55)}
                     </div>
                 </div>
             </div>

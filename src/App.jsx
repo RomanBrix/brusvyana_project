@@ -40,9 +40,7 @@ export default function App() {
     window.scrollTo(0,0)
   },[pathname]);
 
-  const user  = useSelector(state => state.user.currentUser);
-  // console.log(user);
-  // console.log(user.isAdmin);
+  const user  = useSelector(state =>  state.persistedReducer.user.currentUser);
 
   return (
     <div className="App">
