@@ -11,8 +11,9 @@ var productSchema = new Schema({
     price: { type: Number, required: true },
     image: { type: String, required: true },
     quantity: { type: Number, required: true },
-    isAvailable: { type: Boolean, required: true },
-    variants: [{ type: Schema.Types.ObjectId, ref: 'Variant' }]
+    isAvailable: { type: Boolean, default: true },
+    variants: [{ type: Schema.Types.ObjectId, ref: 'Variant' }],
+    category: { type: Schema.Types.ObjectId, ref: 'Category' }
 }, { timestamps: true });
 
 
@@ -20,9 +21,9 @@ var productSchema = new Schema({
 var variantSchema = new Schema({
     title: { type: String, required: true },
     price: { type: Number, required: true },
-    image: { type: String, required: true },
+    image: { type: String, default: null },
     quantity: { type: Number, required: true },
-    isAvailable: { type: Boolean, required: true }
+    isAvailable: { type: Boolean, default: true }
 }, { timestamps: true });
 
 

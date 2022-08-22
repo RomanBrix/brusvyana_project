@@ -1,8 +1,14 @@
+const { deleteFile } = require("../doFileMagick");
 const Catalog = require("../models/Catalog");
 const Category = require("../models/Category");
-const { Product } = require("../models/Product");
+const { Product, Variant } = require("../models/Product");
 
 const { verifyUser, verifyAdmin } = require("./verifyToken");
+
+
+const pathToPublicProducts = __dirname + '/../../../front/public/src/products/';
+
+
 
 const router = require("express").Router();
 
@@ -63,16 +69,41 @@ router.get("/:product", async (req, res) => {
 } );
 
 
+router.get('/catalog/:id', async(req, res)=>{
+    const catalogId = req.params.id;
+
+    try {
+        const categories = await Category.find({catalog: catalogId}, 'title').lean();
+        res.status(200).json(categories);
+    } catch (error) {
+        res.status(500).json(err);
+    }
+})
+
+
 //delete category and products by id
 router.delete("/:id", verifyAdmin, async (req, res) => {
     try {
-        const category = await Category.findById(req.params.id, 'products').lean();
+        const category = await Category.findById(req.params.id, 'products catalog').lean();
 
-        // console.log(category);
-        // console.log(Product.deleteMany);
+        // console.log(category);x
         // DELETE PRODUCTS THEN DELETE CATEGORY
+        const products = await Product.find({_id: {$in: category.products}});
+        for (let i = 0; i < products.length; i++) {
+            if(products[i].image.length > 0){
+                deleteFile(pathToPublicProducts + products[i].image);
+            }
+            if(products[i].variants.length > 0){
+                await Variant.deleteMany({_id: { $in: products[i].variants}});
+            }
+        }
         await Product.deleteMany({ _id: { $in: category.products } });
+        await Catalog.findByIdAndUpdate(category.catalog, {$pull: {categories: category._id}});
         await Category.findByIdAndDelete(req.params.id);
+        
+
+        //remove category from catalog
+
 
         res.status(200).json(true);
     } catch (err) {

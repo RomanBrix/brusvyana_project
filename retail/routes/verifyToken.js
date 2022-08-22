@@ -1,6 +1,7 @@
 var request = require("request");
 //"+ process.env.USER_PORT +"
 const userUrlServer = "http://localhost:1337/api/verify";
+// const userUrlServer = "https://black-work.site:1337/api/verify";
 
 
 
@@ -61,6 +62,7 @@ const verifyUser = (req, res, next) => {
     const options = {
         url: userUrlServer  + '/admin',
         method: "GET",
+        rejectUnauthorized: false,
         headers: {
             "token": authHeader
         }

@@ -4,6 +4,10 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+
+const fs = require('fs')
+const https = require('https');
+
 const userRoute = require("./routes/user");
 const authRoute = require("./routes/auth");
 const verify = require("./routes/verify");
@@ -27,6 +31,22 @@ app.use("/api/users", userRoute);
 
 app.use("/api/verify", verify);
 
-app.listen(PORT, () => {
+
+
+if(process.env.DEVELOP === 'develop'){
+  app.listen(PORT, () => {
     console.log("Backend server is running! port:  " + PORT);
 });
+}
+else{
+  console.log('HELLO')
+  console.log(PORT)
+  console.log(process.env.USER_MONGO_URL)
+  var privateKey = fs.readFileSync( '../cert/key.pem' );
+  var certificate = fs.readFileSync( '../cert/cert.pem' );
+
+  https.createServer({
+      key: privateKey,
+      cert: certificate
+  }, app).listen(PORT);
+}
