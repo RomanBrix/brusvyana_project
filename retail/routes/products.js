@@ -6,6 +6,7 @@ const {Product, Variant} = require("../models/Product");
 
 
 const pathToPublicProducts = __dirname + '/../../../front/public/src/products/';
+const LIMIT = 10; // FOR PAGINATION
 
 const { verifyUser, verifyAdmin } = require("./verifyToken");
 
@@ -31,7 +32,7 @@ router.get("/ids", async (req, res) => {
     console.log("req.query.ids: " + req.query.ids);
     // console.log(req.query.ids)
     try {
-        const products = await Product.find({ '_id': { $in: req.query.ids } }, 'title description price image quantity isAvailable').sort({ createdAt: -1 }).lean();
+        const products = await Product.find({ 'category': { $in: req.query.ids } }, 'title description price image quantity isAvailable').sort({ createdAt: -1 }).limit(LIMIT).lean();
 
         res.status(200).json(products);
     } catch (err) {
@@ -39,6 +40,69 @@ router.get("/ids", async (req, res) => {
         res.status(500).json(err);
     }
 })
+
+
+//QUERY LOAD
+router.get("/query", async (req, res) => {
+    console.log('QUER____');
+    // console.log(req.query);
+    const {options, limit} = req.query;
+    const {category, catalog, page} = JSON.parse(options);
+    const activeLimit = limit || LIMIT;
+    console.log(category, catalog, page, activeLimit);
+
+    if( category){
+        try{
+            const products = await Product.find({ 'category': { $in: category } }, 'title description price image quantity isAvailable').sort({ createdAt: -1 }).skip((page - 1) * activeLimit).limit(activeLimit).lean();
+            console.log('ok by category');
+            return res.status(200).json(products);
+        }catch(err){
+            console.log(err);
+            return res.status(500).json(err);
+        }
+    }else{
+        try{
+            const catalogs = await Catalog.findById(catalog,'categories').populate({path: 'categories', select: 'products'}).lean()
+                //count products
+            let productsIds = catalogs.categories.reduce((acc, curr) => { return acc.concat(curr.products) }, []);
+
+            const products = await Product.find({ '_id': { $in: productsIds } }, 'title description price image quantity isAvailable').sort({ createdAt: -1 }).skip((page - 1) * activeLimit).limit(activeLimit).lean();
+            // console.log(productsIds)
+            return res.status(200).json(products);
+        }catch(err){
+            console.log(err);
+            return res.status(500).json(err);
+        }
+
+    }
+
+})
+//category LOAD
+router.get("/category", async (req, res) => {
+    console.log('params');
+    // console.log(req.params);
+    // console.log(req.query);
+
+    const { category } = req.query
+
+    // res.status(200).json(true);
+    // console.log(req.query.ids)
+    try {
+        //get products by catalog
+        const count = await Product.countDocuments({category: category});
+
+
+        const products = await Product.find({ 'category': category }, 'title description price image quantity isAvailable').sort({ createdAt: -1 }).limit(LIMIT).lean();
+        // const products = await Product.find({ '_id': { $in: req.query.ids } }, 'title description price image quantity isAvailable').sort({ createdAt: -1 }).lean();
+
+        res.status(200).json({products, count});
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+})
+
+
 //get product by id
 router.get("/:id", async (req, res) => {
     try {

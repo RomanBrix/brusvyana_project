@@ -51,7 +51,6 @@ router.get("/", async (req, res) => {
 //get all categorys and find products by category id
 router.get("/:product", async (req, res) => {
     const productId = req.params.product;
-    // console.log('go')
 
     try {
         const category = await Category.find({}, 'title products').lean();

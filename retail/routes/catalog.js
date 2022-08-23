@@ -37,6 +37,28 @@ router.get("/", async (req, res) => {
         }
     })
 
+    router.get('/catalogProducts', async (req,res)=>{
+
+        try {
+            
+            const catalogs = await Catalog.findById(req.query.id,'categories').populate({path: 'categories', select: 'products'}).lean()
+            //count products
+            let count = catalogs.categories.reduce((acc, curr) => { return acc + curr.products.length }, 0);
+
+
+            res.status(200).json(count);
+            
+        } catch (error) {
+
+            console.log(error.kind);
+            if(error.kind === 'ObjectId') {
+                return res.status(404).json({message: "Catalog not found"});
+            }
+
+            res.status(500).json(error);
+        }
+    })
+
   //Get catalog by id
     router.get("/:id", async (req, res) => {
         try {
