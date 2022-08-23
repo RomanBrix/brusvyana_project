@@ -86,9 +86,10 @@ export default function App() {
 
         <Route path="/retail" element={<RetailLayout/>}>
 
-          <Route index element={<Navigate to="/retail/search" replace />} />
+          <Route index element={<Navigate to="/retail/products" replace />} />
           <Route path="product/:id" element={<Product/>} />
-          <Route path=":catalog" element={<RetailCatalog/>} />
+          {/* <Route path=":catalog" element={<RetailCatalog/>} /> */}
+          <Route path="products/*" element={<RetailCatalog/>} />
         </Route>
 
 

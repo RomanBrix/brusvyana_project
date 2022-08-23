@@ -55,15 +55,15 @@ export default function Product(){
                 <div className="info-container">
                     
                     <div className="title">{ product.title }</div>
-                    {
+                    { /*
                         product.variants.length > 0 ? 
                         <div className="variant-title">{ selectedVariant ? selectedVariant.title : '' }</div>
                         : null
-                    }
+                    */ }
                     
                     <div className="price"> <Uah/>{ selectedVariant ? selectedVariant.price : product.price }</div>
                     <div className="variants">{ product.variants.length > 0 ? renderVariants() : '' }</div>
-                    <div className="quantity">В наличии: {selectedVariant ? selectedVariant.quantity : product.quantity}</div>
+                    {/* <div className="quantity">В наличии: {selectedVariant ? selectedVariant.quantity : product.quantity}</div> */}
                     <div className="description">{ product.description }</div>
 
                     <div className="guar">
@@ -99,7 +99,7 @@ export default function Product(){
         return product.variants.map((variant, index)=>{
             return (
                 <div className={`variant ${selectedVariant?._id === variant._id && "variant-active"}`} onClick={()=>{setSelectedVariant(variant)}} key={index}>
-                    <div className="variant-sub-title">Вариант {index + 1}</div>
+                    <div className="variant-sub-title">{variant.title}</div>
                 </div>
             )
         }

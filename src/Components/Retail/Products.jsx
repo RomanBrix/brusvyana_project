@@ -1,13 +1,42 @@
 import { ReactComponent as Uah} from "../../svg/Uah.svg";
 import { ReactComponent as Approx} from "../../svg/approx.svg"
 import {  useNavigate } from "react-router-dom";
+import ProductPagination from "./ProductPagination";
+import useQuery from "./QueryHook";
+import { useEffect } from "react";
+import { changePageQuery } from "../../Redux/retailApi";
+import { useDispatch } from "react-redux";
 
 
-export default function ProductsContainer({products, setActiveCategory, activeCategory, categories}){
+export default function ProductsContainer({products,  categories, productsCount, fetchLoading}){
     const navigate = useNavigate();
 
+    const queryUrl = useQuery();
+    const dispatch = useDispatch();
+    // console.log(productsCount)
 
-    if(products === null){
+    const initActivePage = queryUrl.get("page");
+    const activePage = queryUrl.get("page") || 1;
+    const catalog = queryUrl.get("catalog");
+    const activeCategory = queryUrl.get("category");
+
+    useEffect(()=>{
+        
+        if(initActivePage && catalog && categories && productsCount && !fetchLoading){
+            console.log('go');
+            let options ={
+                catalog: catalog,
+                category: activeCategory,
+                page: activePage
+            }
+
+            changePageQuery(dispatch, options)
+            
+        }
+    },[activePage, categories, productsCount, fetchLoading])
+    // console.log(activePage);
+
+    if(products === null || fetchLoading){
         return (
             <div className="retail-products retail-products-loading">
                 <h2>Loading</h2>
@@ -16,12 +45,12 @@ export default function ProductsContainer({products, setActiveCategory, activeCa
     }
 
     // console.log(activeCategory);
-    if (categories.length === 0 || products.length === 0){
+    if (categories?.length === 0 || products?.length === 0){
         return (
             <div className="retail-products retail-products-empty">
                 <h2>Немає продуктів</h2>
                 {
-                    activeCategory === null ? <h3>Виберіть другий каталог</h3> : <div className="btn" onClick={()=>{setActiveCategory(null)}}>Показати всі продукти каталога </div>
+                    activeCategory === null ? <h3>Виберіть другий каталог</h3> : <div className="btn" onClick={()=>{}}>Показати всі продукти каталога </div>
                 }
                 
             </div>
@@ -30,6 +59,7 @@ export default function ProductsContainer({products, setActiveCategory, activeCa
     return(
         <div className="retail-products">
             {renderProduct(products)}
+            <ProductPagination countAllProducts={productsCount} activePage={activePage} setActivePage={setActivePage}/>
         </div>
     )
 
@@ -54,7 +84,7 @@ export default function ProductsContainer({products, setActiveCategory, activeCa
                 </div>
                 <div className="product-info">
                     <div className="product-price">
-                        <Approx/> { item.price }  <Uah/>
+                        Від { item.price }  <Uah/>
                     </div>
                     <div className="description">
                         {cutDescription(item.description, 55)}
@@ -65,6 +95,17 @@ export default function ProductsContainer({products, setActiveCategory, activeCa
     } )
  }
 
+    function setActivePage(page){
+
+        if(!initActivePage){
+            queryUrl.append("page", page);
+            console.log(queryUrl.toString());
+            navigate('./?' + queryUrl.toString());
+        }else{
+            queryUrl.set("page", page);
+            navigate('./?' + queryUrl.toString());
+        }
+    }
  //cut description text to n symbols
     function cutDescription(description, n = 20 ){
         if(description.length > n){

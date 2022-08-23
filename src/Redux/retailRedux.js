@@ -9,12 +9,19 @@ const retailSlice = createSlice({
     countAllProducts: null,
 
     loading: false,
+    fetchLoading: false,
     error: false,
   },
   reducers: {
     loadinGo: (state) => {
        state.loading = true;
     }, 
+    fetchLoadingGo: (state) => {
+       state.fetchLoading = true;
+    }, 
+    fetchLoadingStop: (state) => {
+      state.fetchLoading = false;
+   }, 
     getCatalogs: (state, action) => {
       // console.log(state);
       // console.log(action.payload);
@@ -38,10 +45,15 @@ const retailSlice = createSlice({
     errorGo: (state)=>{
         state.error = true;
         state.loading = false;
+    },
+    clearCatalogGo: (state)=>{
+        state.products = null;
+        state.categories = null;
+        state.catalogs = [];
+        state.countAllProducts = null;
     }
-    
   },
 });
 
-export const { loadinGo, getCatalogs, getCategories, getAllProducts, getProducts, errorGo } = retailSlice.actions;
+export const { loadinGo, getCatalogs, getCategories, getAllProducts, getProducts, errorGo, clearCatalogGo, fetchLoadingGo, fetchLoadingStop } = retailSlice.actions;
 export default retailSlice.reducer;
