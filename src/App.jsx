@@ -18,6 +18,7 @@ import Products from './Pages/Admin/Products';
 import SingleProduct from './Pages/Admin/SingleProduct';
 import StatPage from './Pages/Admin/StatPage';
 import Users from './Pages/Admin/Users';
+import Cart from './Pages/RetailPages/Cart';
 import About from './Pages/MainPages/About';
 import Contact from './Pages/MainPages/Contact';
 import Delivery from './Pages/MainPages/GeneralInfo/Delivery';
@@ -90,7 +91,10 @@ export default function App() {
           <Route path="product/:id" element={<Product/>} />
           {/* <Route path=":catalog" element={<RetailCatalog/>} /> */}
           <Route path="products/*" element={<RetailCatalog/>} />
+          <Route path="cart" element={<Cart/>} />
         </Route>
+        
+        
 
 
         <Route path="*" element={<NotFound/>} />

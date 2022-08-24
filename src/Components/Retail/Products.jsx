@@ -1,5 +1,5 @@
 import { ReactComponent as Uah} from "../../svg/Uah.svg";
-import { ReactComponent as Approx} from "../../svg/approx.svg"
+// import { ReactComponent as Approx} from "../../svg/approx.svg"
 import {  useNavigate } from "react-router-dom";
 import ProductPagination from "./ProductPagination";
 import useQuery from "./QueryHook";
@@ -33,6 +33,7 @@ export default function ProductsContainer({products,  categories, productsCount,
             changePageQuery(dispatch, options)
             
         }
+        // eslint-disable-next-line
     },[activePage, categories, productsCount, fetchLoading])
     // console.log(activePage);
 

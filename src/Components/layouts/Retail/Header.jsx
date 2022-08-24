@@ -2,12 +2,15 @@ import {ReactComponent as Logo} from '../../../svg/Logo.svg';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as LeafPattern } from "../../../svg/LeafPattern.svg"
 import { ReactComponent as Cart } from "../../../svg/Cart.svg"
+import { useSelector } from 'react-redux';
 
 
 
 export default function RetailHeader() {
     
 
+    const cartStore = useSelector(state => state.persistedReducer.cart);
+    const productCount = cartStore.products.length > 0 ? cartStore.products.reduce((acc, curr)=>{ return acc += +curr.quantity}, 0) : 0;
     const navigate = useNavigate();
     
     return (
@@ -26,7 +29,7 @@ export default function RetailHeader() {
                 </div>
                 <ul className="menu second-menu">
                     <li onClick={()=>{navigate('/general-info')}}>Загальна інформація</li>
-                    <li> <Cart/> </li>
+                    <li className='cart' onClick={()=>{navigate('/retail/cart')}}> <Cart/> <div className="count">{ productCount }</div> </li>
                 </ul>
             </div>
         </div>

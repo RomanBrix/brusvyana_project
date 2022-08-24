@@ -19,7 +19,7 @@ html {
         #root {
             .App {
                 // color: rgba($color: #000000, $alpha: 0.9);
-
+                user-select: none;
                 .content {
                     padding: 0;
                     margin: 0;

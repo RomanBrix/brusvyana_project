@@ -33,6 +33,7 @@ export default function Filters ({categories }){
         } else{
             console.log('tyt')
         } 
+        // eslint-disable-next-line
     }, [activeCategory])
                     
     if(categories === null){

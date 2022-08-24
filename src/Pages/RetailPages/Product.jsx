@@ -1,10 +1,12 @@
-// import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { publicRequestRetail } from "../../requestMethods";
 import { ReactComponent as Uah} from "../../svg/Uah.svg";
 import { ReactComponent as Guar} from "../../svg/Guar.svg";
+import { goSetProducts } from "../../Redux/cartApi";
+
 // import { ReactComponent as Approx} from "../../svg/approx.svg"
 
 
@@ -14,18 +16,19 @@ export default function Product(){
     const [product, setProduct] = useState(null);
     const [selectedVariant, setSelectedVariant] = useState(null);
 
-    // const retailStore = useSelector(state => state.retail);
-    // const dispatch = useDispatch();
+    const cartStore = useSelector(state => state.persistedReducer.cart);
+    const dispatch = useDispatch();
     
     const navigate = useNavigate();
-    
     const params = useParams();
+
+    console.log(cartStore.products);
     
     useEffect(()=>{
         if(params.id){
             publicRequestRetail.get('/products/' + params.id)
             .then(res => {
-                console.log(res.data);
+                // console.log(res.data);
                 setProduct(res.data);
             }).catch(err => {
                 console.log(err);
@@ -80,18 +83,61 @@ export default function Product(){
 
 
     function addToCart(){
+        // console.log(cartStore.loading);
+        if(cartStore.loading){
+            return;
+        }
+        let prod = {
+            id: product._id,
+            variant: null,
+            quantity: 1
+        }
         if(product.variants.length > 0){
             if(selectedVariant){
                 // addToCart(dispatch, selectedVariant._id, 1);
-                alert('Варіант добавлений');
-                return;
+                // alert('Варіант добавлений');
+                prod.variant = selectedVariant._id;
             }else{
                 alert('Виберіть варіант');
                 return ;
             }
         }
+        const allProdutcsToDispatch = cartStore.products.map(item => item);
+        // console.log(allProdutcsToDispatch);
+        let chekedElement = null;
+        allProdutcsToDispatch.map((item, index)=>{
+            console.log('selected var: ', selectedVariant._id)
+            console.log('item.variant: ', item.variant)
+            console.log(item.variant === selectedVariant._id)
 
-        alert('Товар добавлений')
+
+            if(selectedVariant){
+                if(item.variant === selectedVariant._id){
+                    chekedElement = index    
+                }
+            }else{
+                if(item.id === prod.id){
+                    chekedElement = index    
+                }
+            }
+            return item
+        })
+        
+        console.log("index: ", chekedElement);
+        if(chekedElement !== null){
+            allProdutcsToDispatch[chekedElement] = {
+                ...prod,
+                quantity: allProdutcsToDispatch[chekedElement].quantity + 1
+            }
+            // prod.quantity = cartStore.products[chekedElement].quantity + 1;
+            // cartStore.products[chekedElement].quantity += 1;
+            // dispatch(setProducts(cartStore.products));
+        }else{
+            allProdutcsToDispatch.push(prod);
+            // cartStore.products.push(prod);
+        }
+
+        goSetProducts(dispatch, allProdutcsToDispatch);
     }
 
 

@@ -33,6 +33,7 @@ useEffect(()=>{
         // console.log('clear');
         clearCatalog(dispatch)
     }
+    // eslint-disable-next-line
 },[location.pathname]);
     //get catalogs
     useEffect(()=>{
