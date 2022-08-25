@@ -28,8 +28,22 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/idsAdmin", async (req, res) => {
+    // console.log("req.query.ids: " + req.query.ids);
+    // console.log(req.query.ids)
+    try {
+        const products = await Product.find({ '_id': { $in: req.query.ids } }, 'title description price image quantity isAvailable').sort({ createdAt: -1 }).lean();
+
+        res.status(200).json(products);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+})
+
+
 router.get("/ids", async (req, res) => {
-    console.log("req.query.ids: " + req.query.ids);
+    // console.log("req.query.ids: " + req.query.ids);
     // console.log(req.query.ids)
     try {
         const products = await Product.find({ 'category': { $in: req.query.ids } }, 'title description price image quantity isAvailable').sort({ createdAt: -1 }).limit(LIMIT).lean();
@@ -41,6 +55,18 @@ router.get("/ids", async (req, res) => {
     }
 })
 
+router.get("/cart", async (req, res) => {
+    const { ids } = req.query;
+    
+    try {
+        const products = await Product.find({ '_id': { $in: ids } }, 'title price image variants').populate({path: 'variants', select: 'title price'}).lean();
+        res.status(200).json(products);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+})
 
 //QUERY LOAD
 router.get("/query", async (req, res) => {

@@ -12,6 +12,7 @@ const fileUpload = require('express-fileupload');
 const catalogRoute = require("./routes/catalog");
 const categoryRoute = require("./routes/category");
 const productsRoute = require("./routes/products");
+const orders = require("./routes/order");
 
 dotenv.config();
 const PORT = process.env.RETAIL_PORT || 5000;
@@ -35,6 +36,7 @@ app.use(fileUpload());
 app.use("/api/catalog", catalogRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/products", productsRoute);
+app.use("/api/orders", orders);
 
 
 
