@@ -54,12 +54,8 @@ export default function ProductsContainer({productsIds, getCategories}){
 
     function getProductsData (){
         console.log(productsIds)
-        // axios.get('http://localhost:1338/api/products/ids', {params:{ids:productsIds}}).then(res=>{
-        //     setProducts(res.data)
-        // }).catch(err=>{
-        //     console.log(err)
-        // })
-        publicRequestRetail.get('/products/ids', {params:{ids:productsIds}}).then(res=>{
+        
+        publicRequestRetail.get('/products/idsAdmin', {params:{ids:productsIds}}).then(res=>{
             setProducts(res.data)
         }).catch(err=>{
             console.log(err)

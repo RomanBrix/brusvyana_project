@@ -15,12 +15,12 @@ export default function Cart(){
     const [products, setProducts] = useState([]);
 
     
-    const cartStore = useSelector(state => state.persistedReducer.cart);
+    const cartStore = useSelector(state => state.persistedReducer.cart );
     const dispatch = useDispatch();
     const navigate = useNavigate();
     
-console.log(cartStore.products);
-console.log(products);
+console.log(cartStore);
+// console.log(products);
 
     useEffect(()=>{
         if(cartStore.products.length > 0){
@@ -48,6 +48,8 @@ console.log(products);
                 return acc += +cur.price
             } ,0);
             setTotalPrice(price);
+        }else{
+            setTotalPrice(0);
         }
         // eslint-disable-next-line
     },[products])
@@ -76,7 +78,15 @@ console.log(products);
 
                 </div>
                 <div className="paying-form">
-                    <PayForm products={products} totalPrice={totalPrice}/>
+                    <PayForm 
+                        products={products} 
+                        totalPrice={totalPrice} 
+                        user={{
+                            user: cartStore.guestUser, 
+                            payment: cartStore.prefferedPaymentMethod,
+                            delivery: cartStore.prefferedDeliveryMethod
+                        }}
+                    />
                 </div>
             </div>
         </div>

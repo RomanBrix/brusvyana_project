@@ -1,25 +1,35 @@
 // import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { sendAceptedOrder } from "../../Redux/botApi";
+import { __AcceptOrder } from "../../Redux/cartApi";
 
 
 
-export default function PayForm({totalPrice, products}) {
+export default function PayForm({totalPrice, products, user}) {
 
-    const [deliveryOption, setDeliveryOption] = useState('');
-    const [payOption, setPayOption] = useState(null);
+    const [deliveryOption, setDeliveryOption] = useState(user.delivery || '');
+    const [payOption, setPayOption] = useState(user.payment || null);
+    const [orderId] = useState(generateId());
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    
+    // console.log(user)
 
     const [userFields, setUserFields] = useState({
-        name: '',
-        secondName:'',
-        phone: '',
+        name: user.user?.name ||'',
+        secondName: user.user?.secondName || '',
+        phone: user.user?.phone || '',
         
     });
     const [courierFields, setCourierFields] = useState({
-        town: '',
-        address: '',
+        town: user.user?.town || '',
+        address: user.user?.address || '',
     })
-    console.log(courierFields)
+    console.log(products)
     // const novaApi = '1760ffa76a05a6350af1012644c044f6'
     // const novaUrl = 'https://api.novaposhta.ua/v2.0/json/'
 
@@ -58,18 +68,18 @@ export default function PayForm({totalPrice, products}) {
                 <div className="select-form select-delivery" onChange={changeDeliveryOption}>
                     <div className="del box">
                         <label htmlFor="novaPochta">Нова Пошта</label>
-                        <input type="radio" value="novaPochta" id="novaPochta" name="delivery" /> 
+                        <input type="radio" value="novaPochta" defaultChecked={deliveryOption === 'novaPochta'} id="novaPochta" name="delivery" /> 
                     </div>
 
                     <div className="del box">
-                        <label htmlFor="toUs">Самовивіз</label>
-                        <input type="radio" value="toUs" id="toUs" name="delivery" /> 
+                        <label htmlFor="self">Самовивіз</label>
+                        <input type="radio" value="self" defaultChecked={deliveryOption === 'self'} id="self" name="delivery" /> 
                     </div>
                     {
                         +totalPrice > 5000 ? 
                         <div className="del box">
                             <label htmlFor="courier">Кур'єрська доставка</label>
-                            <input type="radio" value="courier" id="courier" name="delivery" /> 
+                            <input type="radio" value="courier" defaultChecked={deliveryOption === 'courier'} id="courier" name="delivery" /> 
                         </div>
                         : ''
                     }
@@ -84,11 +94,11 @@ export default function PayForm({totalPrice, products}) {
                 <div className="select-pay select-form" onChange={changePayOption}>
                     <div className="pay box">
                         <label htmlFor="cash">Готівкою</label>
-                        <input type="radio" value="cash" id="cash" name="pay" />
+                        <input type="radio" defaultChecked={payOption === 'cash' } value="cash" id="cash" name="pay" />
                     </div>
                     <div className="pay box">
                         <label htmlFor="card">Карткою</label>
-                        <input type="radio" value="card" id="card" name="pay" />
+                        <input type="radio" defaultChecked={payOption === 'card' } value="card" id="card" name="pay" />
                     </div>
                     
                 </div>
@@ -102,9 +112,59 @@ export default function PayForm({totalPrice, products}) {
 
     
     function acceptOrder(){
-        alert('Ваше замовлення прийнято')
+        if(totalPrice < 1) return;
+        // alert('Ваше замовлення прийнято');
+
+        const address = {
+            town: null,
+            address: null,
+        }
+        if(deliveryOption === 'courier'){
+            address.town = courierFields.town;
+            address.address = courierFields.address;
+        }else if(deliveryOption === 'novaPochta'){
+            address.town = 'Nova';
+            address.address = 'Pochta';
+        }
+        const productsIds = products.map(product => product._id);
+        const variantsIds = products.map(product => product.variants);
+
+        const newOrder = {
+            id: orderId,
+            user: null,
+            guestUser: {
+                ...userFields,
+                ...address,
+            },
+            productsWhenBuy: products,
+            products:productsIds,
+            variants:variantsIds,
+            totalPrice: totalPrice,
+            paymanetMethod: payOption,
+            deliveryMethod: deliveryOption,
+        }
+
+        __AcceptOrder(dispatch, newOrder, (orderId)=>{
+            console.log(orderId);
+            sendAceptedOrder({
+                ...newOrder,
+                products: products,
+            }, status=>{
+                console.log(status);
+                if(status && status.status !== 'OK'){
+                    // alert('Ваше замовлення прийнято');
+                    navigate('../order-success');
+                    // history.push('/');
+                }else if(status === "OK"){
+                    alert('Помилка, замовлення прийнято, але не відправлено на модерацію');
+                }else{
+                    alert('Помилка, замовлення не прийнято');
+                }
+            });
+        })
     }
     function goPayCard(){
+        if(totalPrice < 1) return;
         alert("Оплата замовлення проведена успішно")
 
         acceptOrder();
@@ -141,7 +201,7 @@ export default function PayForm({totalPrice, products}) {
         switch(deliveryOption){
             case 'novaPochta':
                 return true;
-            case 'toUs':
+            case 'self':
                 return true;
             case 'courier':
                 if(!courierFields.town || !courierFields.address){
@@ -200,7 +260,7 @@ export default function PayForm({totalPrice, products}) {
             <>novaPochta</>
         )
     }
-    function toUsDelivery(){
+    function selfDelivery(){
     const mapLink = 'https://www.google.com/maps?ll=50.326674,29.543087&z=16&t=m&hl=ru&gl=UA&mapclient=embed&q=%D0%B2%D1%83%D0%BB%D0%B8%D1%86%D1%8F+%D0%9F%D0%BE%D0%BB%D1%8C%D0%BE%D0%B2%D0%B0,+1+%D0%9A%D0%BE%D1%81%D1%82%D1%96%D0%B2%D1%86%D1%96+%D0%96%D0%B8%D1%82%D0%BE%D0%BC%D0%B8%D1%80%D1%81%D1%8C%D0%BA%D0%B0+%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C+12613'
 
         return (
@@ -219,8 +279,8 @@ export default function PayForm({totalPrice, products}) {
                 return courierDelivery()
             case 'novaPochta':
                 return novaPochtaDelivery()
-            case 'toUs':
-                return toUsDelivery()
+            case 'self':
+                return selfDelivery()
             default:
                 return ''
         
@@ -235,5 +295,19 @@ export default function PayForm({totalPrice, products}) {
     function changeDeliveryOption(e){
         // console.log(e.target.value);
         setDeliveryOption(e.target.value);
+    }
+
+
+    function generateId(length = 5){
+        let result           = '';
+        let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let numbers          = '0123456789';
+        let charactersLength = characters.length;
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+
+        for ( let i = 0; i < length; i++ ) {
+           result += numbers.charAt(Math.floor(Math.random() * (numbers.length)));
+        }
+        return result;
     }
 }

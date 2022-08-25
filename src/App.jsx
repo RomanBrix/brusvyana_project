@@ -29,6 +29,8 @@ import MainPage from "./Pages/MainPages/MainPage";
 import Partners from './Pages/MainPages/Partners';
 import RetailCatalog from './Pages/RetailPages/Catalog';
 import Product from './Pages/RetailPages/Product';
+import OrderSuccess from './Pages/RetailPages/OrderSuccess';
+import OrderError from './Pages/RetailPages/OrderError';
 
 
 export default function App() {
@@ -92,6 +94,9 @@ export default function App() {
           {/* <Route path=":catalog" element={<RetailCatalog/>} /> */}
           <Route path="products/*" element={<RetailCatalog/>} />
           <Route path="cart" element={<Cart/>} />
+          
+          <Route path="order-success" element={<OrderSuccess />} />
+          <Route path="order-error" element={<OrderError />} />
         </Route>
         
         
