@@ -31,7 +31,7 @@ export default function Filters ({categories }){
 
             
         } else{
-            console.log('tyt')
+            // console.log('tyt')
         } 
         // eslint-disable-next-line
     }, [activeCategory])

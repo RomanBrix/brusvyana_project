@@ -1,0 +1,112 @@
+.cart-page {
+    .content {
+        flex-direction: column;
+        .products {
+            order: 2;
+            width: 100%;
+            max-width: 100%;
+
+            .btns {
+                .btn {
+                    padding: 8px 4px;
+                }
+                .total {
+                    svg {
+                    }
+                }
+            }
+            .products-container {
+                overflow-x: scroll;
+
+                .product {
+                    width: 600px;
+                    .img {
+                        img {
+                        }
+                    }
+                    .title {
+                        text-align: center;
+                        .sub {
+                        }
+                    }
+                    .count {
+                        .man-count {
+                        }
+                        svg {
+                            * {
+                            }
+
+                            &:hover {
+                                * {
+                                }
+                            }
+                        }
+                    }
+                    .price {
+                        svg {
+                        }
+                    }
+                    .delete {
+                        svg {
+                            * {
+                            }
+                        }
+                        .delete-func {
+                            flex-direction: column;
+                            svg {
+                                margin-right: 0;
+                            }
+                        }
+                    }
+
+                    &:first-child {
+                        .img {
+                        }
+                    }
+                }
+            }
+        }
+        .paying-form {
+            order: 1;
+            width: 100%;
+            max-width: 100%;
+            .block-form {
+                .title {
+                }
+
+                input {
+                    &:focus {
+                    }
+                }
+
+                .form-group {
+                    input {
+                    }
+                }
+
+                .one-input {
+                    label {
+                    }
+                }
+
+                .select-form {
+                    .box {
+                        input {
+                        }
+                    }
+                }
+
+                .address {
+                    a {
+                    }
+                }
+
+                .hint {
+                }
+            }
+            // background: yellow;
+            .btn-pay {
+            }
+        }
+    }
+}

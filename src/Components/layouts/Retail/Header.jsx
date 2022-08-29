@@ -18,20 +18,34 @@ export default function RetailHeader() {
             <div className="head-bg"><LeafPattern/></div>
             <div className="content">
                 <ul className="menu main-menu">
-                    <li onClick={()=>{navigate('/retail')}}>Роздріб</li>
-                    <li onClick={()=>{navigate('/opt')}}>Опт</li>
-                    <li onClick={()=>{navigate('/about')}}>Про нас</li>
-                    <li onClick={()=>{navigate('/contacts')}}>Контакти</li>
+                    <li onClick={()=>{changePage('/retail')}}>Роздріб</li>
+                    <li onClick={()=>{changePage('/opt')}}>Опт</li>
+                    <li onClick={()=>{changePage('/about')}}>Про нас</li>
+                    <li onClick={()=>{changePage('/contacts')}}>Контакти</li>
                 </ul>
-                <div className="logo" onClick={()=>{navigate('/')}}>
+                <div className="logo" onClick={()=>{changePage('/')}}>
                     {/* <img src="/src/img.jpg" alt="Logo" /> */}
                     <Logo className='header-logo'/>
                 </div>
                 <ul className="menu second-menu">
-                    <li onClick={()=>{navigate('/general-info')}}>Загальна інформація</li>
-                    <li className='cart' onClick={()=>{navigate('/retail/cart')}}> <Cart/> <div className="count">{ productCount }</div> </li>
+                    <li onClick={()=>{changePage('/general-info')}}>Загальна інформація</li>
+                    <li className='cart' onClick={()=>{changePage('/retail/cart')}}> <Cart/> <div className="count">{ productCount }</div> </li>
                 </ul>
             </div>
         </div>
     )
+
+    function changePage(url){
+        checkOnMobile();
+        navigate(url);
+    }
+    function checkOnMobile() {
+        const header = document.querySelector('.header');
+        const btn = document.querySelector('.mobile-header-btn');
+        console.log(header);
+        if(header.classList.contains('open-mobile-header')){
+            header.classList.remove('open-mobile-header');
+            btn.classList.remove('open-mobile-btn');
+        }
+    }
 }

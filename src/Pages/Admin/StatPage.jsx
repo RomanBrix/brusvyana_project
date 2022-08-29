@@ -64,7 +64,6 @@ export default function StatPage() {
         const dateObj = new Date(date);
         const hours = dateObj.getHours();
         const minutes = dateObj.getMinutes();
-        const seconds = dateObj.getSeconds();
         const prettyDate = `${dateObj.getDate()}.${dateObj.getMonth()}.${dateObj.getFullYear()} ${hours}:${minutes}`;
         return prettyDate;
     }

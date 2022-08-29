@@ -20,6 +20,9 @@ html {
             .App {
                 // color: rgba($color: #000000, $alpha: 0.9);
                 user-select: none;
+                .mobile-header-btn {
+                    display: none;
+                }
                 .content {
                     padding: 0;
                     margin: 0;
@@ -71,6 +74,8 @@ html {
 
                 //Retail
                 @import "./Retail/index.scss";
+
+                @import "./Responsive/Mobile/index.scss";
 
                 .notFound {
                     .content {

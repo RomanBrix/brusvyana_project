@@ -6,6 +6,7 @@ import { publicRequestRetail } from "../../requestMethods";
 import { ReactComponent as Uah} from "../../svg/Uah.svg";
 import { ReactComponent as Guar} from "../../svg/Guar.svg";
 import { goSetProducts } from "../../Redux/cartApi";
+import { ReactComponent as Cart } from "../../svg/Cart.svg"
 
 // import { ReactComponent as Approx} from "../../svg/approx.svg"
 
@@ -22,7 +23,10 @@ export default function Product(){
     const navigate = useNavigate();
     const params = useParams();
 
-    console.log(cartStore.products);
+    const {cart: {products}} = useSelector(state => state.persistedReducer);
+    const productCount = products.length > 0 ? products.reduce((acc, curr)=>{ return acc += +curr.quantity}, 0) : 0;
+
+    // console.log(cartStore.products);
     
     useEffect(()=>{
         if(params.id){
@@ -50,6 +54,9 @@ export default function Product(){
     return (
         <div className="product-page">
             <div className="content">
+                    <div className="mobile-cart" onClick={()=>{navigate('/retail/cart')}}>
+                        <Cart /> <div className="count">{ productCount }</div> 
+                    </div>
                 <div className="img-container">
                     <div className="img-main">
                         <img src={'/src/products/' + product.image} alt={product.name} />

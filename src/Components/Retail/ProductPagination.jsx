@@ -18,7 +18,14 @@ export default function ProductPagination({ activePage, countAllProducts, setAct
                 {
                     pages.map((item, index) => {
                         return (
-                            <div className={`product-pagination-item ${+activePage === item + 1 && "product-pagination-item-active"}`} key={index} onClick={() => { if(!(+activePage === item + 1)) setActivePage(item + 1) }}>
+                            <div className={`product-pagination-item ${+activePage === item + 1 && "product-pagination-item-active"}`} key={index} onClick={() => { 
+
+                                if(!(+activePage === item + 1)) {
+                                    // scroll to top
+                                    window.scrollTo(0, 0);
+                                    setActivePage(item + 1) 
+                                }
+                                }}>
                                 {item + 1}
                             </div>
                         )})

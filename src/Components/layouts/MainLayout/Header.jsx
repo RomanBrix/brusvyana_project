@@ -19,21 +19,21 @@ export default function MainHeader() {
             <div className="head-bg"><LeafPattern/></div>
             <div className="content">
                 <ul className="menu main-menu">
-                    <li onClick={()=>{navigate('/retail')}}>Роздріб</li>
-                    <li onClick={()=>{navigate('/opt')}}>Опт</li>
-                    <li onClick={()=>{navigate('/about')}}>Про нас</li>
-                    <li onClick={()=>{navigate('/contacts')}}>Контакти</li>
+                    <li onClick={()=>{changePage('/retail')}}>Роздріб</li>
+                    <li onClick={()=>{changePage('/opt')}}>Опт</li>
+                    <li onClick={()=>{changePage('/about')}}>Про нас</li>
+                    <li onClick={()=>{changePage('/contacts')}}>Контакти</li>
                 </ul>
-                <div className="logo" onClick={()=>{navigate('/')}}>
+                <div className="logo" onClick={()=>{changePage('/')}}>
                     {/* <img src="/src/img.jpg" alt="Logo" /> */}
                     <Logo className='header-logo'/>
                 </div>
                 
                 <ul className="menu second-menu">
-                    <li onClick={()=>{navigate('/projects')}}>Проекти</li>
-                    <li onClick={()=>{navigate('/achievement')}}>Досягнення</li>
-                    <li onClick={()=>{navigate('/wiki')}}>База знань</li>
-                    <li onClick={()=>{navigate('/general-info')}}>Загальна інформація</li>
+                    <li onClick={()=>{changePage('/projects')}}>Проекти</li>
+                    <li onClick={()=>{changePage('/achievement')}}>Досягнення</li>
+                    <li onClick={()=>{changePage('/wiki')}}>База знань</li>
+                    <li onClick={()=>{changePage('/general-info')}}>Загальна інформація</li>
                     <li className='language'> 
                         <Lang/>
                         {renderMainLang()}
@@ -45,6 +45,22 @@ export default function MainHeader() {
             </div>
         </div>
     )
+
+    function changePage(url){
+        checkOnMobile();
+        navigate(url);
+    }
+
+
+    function checkOnMobile() {
+        const header = document.querySelector('.header');
+        const btn = document.querySelector('.mobile-header-btn');
+        console.log(header);
+        if(header.classList.contains('open-mobile-header')){
+            header.classList.remove('open-mobile-header');
+            btn.classList.remove('open-mobile-btn');
+        }
+    }
     
     function renderMainLang() {
         let lang = languagesLabels.find(lang => lang.value === language); 

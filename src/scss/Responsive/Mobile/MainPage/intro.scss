@@ -1,0 +1,57 @@
+.main-intro {
+    .bgvideo {
+        &::after {
+        }
+        #bgVideo {
+        }
+    }
+    .content {
+        justify-content: space-between;
+        .center {
+            justify-self: flex-start;
+            margin: 20px auto;
+            h1 {
+                font-size: 40px;
+                text-align: center;
+            }
+            .btns {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                .btn {
+                    margin-bottom: 25px;
+                    min-width: 221px;
+                    box-sizing: border-box;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    align-content: center;
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                    svg {
+                    }
+                }
+            }
+        }
+
+        .bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            .social-block {
+                // margin: 0 auto;
+                margin-bottom: 10px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+            a {
+                svg {
+                }
+            }
+        }
+    }
+}

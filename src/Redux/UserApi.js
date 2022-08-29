@@ -2,8 +2,8 @@ import axios from "axios";
 import { loginFailure, loginStart, loginSuccess, logut } from "./userRedux";
 import Cookie from "js-cookie";
 import { changeToken } from "../requestMethods";
-axios.defaults.baseURL = 'http://localhost:1337/api';
-// axios.defaults.baseURL = 'https://black-work.site:1337/api';
+// axios.defaults.baseURL = 'http://localhost:1337/api';
+axios.defaults.baseURL = 'https://black-work.site:1337/api';
 // https://black-work.site:1338/
 // axios.defaults.headers.common['token'] = state.user.token;
 

@@ -8,6 +8,8 @@ import ProductsContainer from "../../Components/Retail/Products";
 import useQuery from "../../Components/Retail/QueryHook";
 import { getAllCataloges, getCategoriesOfCatalog, fetchProducts, clearCatalog, lengthOfAllCatalogProducts } from "../../Redux/retailApi";
 
+import { ReactComponent as Cart } from "../../svg/Cart.svg"
+
 
 
 
@@ -23,6 +25,12 @@ export default function RetailCatalog(){
 
     const activeCatalog = queryUrl.get("catalog");
     const activeCategory = queryUrl.get("category");
+
+    /*
+    for mobile cart
+    */
+    const {cart: {products}} = useSelector(state => state.persistedReducer);
+    const productCount = products.length > 0 ? products.reduce((acc, curr)=>{ return acc += +curr.quantity}, 0) : 0;
     
 
 
@@ -122,6 +130,9 @@ useEffect(()=>{
                     </Routes>
                 </div>
                 <div className="retail-content">
+                    <div className="mobile-cart" onClick={()=>{navigate('/retail/cart')}}>
+                        <Cart /> <div className="count">{ productCount }</div> 
+                    </div>
 
                 <Routes>
                         

@@ -1,0 +1,44 @@
+.general-info {
+    .content {
+        flex-direction: column;
+        .general-info-header {
+            flex: 1 1 100%;
+
+            &::after {
+                display: none;
+            }
+            .menu {
+                li {
+                    span {
+                        svg {
+                        }
+                    }
+                    .bg {
+                        svg {
+                        }
+                    }
+                    &:hover {
+                    }
+
+                    &.active {
+                        .bg {
+                            svg {
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .content-bg {
+            .bg {
+                svg {
+                }
+            }
+            .general-info-text {
+                h1 {
+                }
+                // background: red;
+            }
+        }
+    }
+}

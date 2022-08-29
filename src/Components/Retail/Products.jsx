@@ -59,12 +59,35 @@ export default function ProductsContainer({products,  categories, productsCount,
     }
     return(
         <div className="retail-products">
+            <div className="filter-btn" onClick={(e)=>{toggleFilters(e)}}>
+                <div className="line"/>
+                <div className="line"/>
+                <div className="line"/>
+            </div>
             {renderProduct(products)}
             <ProductPagination countAllProducts={productsCount} activePage={activePage} setActivePage={setActivePage}/>
         </div>
     )
 
     
+    function toggleFilters({target}){
+        if(!target.classList.contains("filter-btn")){
+            document.querySelector(".filter-btn").click()
+            return
+        }
+
+        const filtersBlock = document.querySelector(".retail-filters");
+
+        if(filtersBlock.classList.contains("active-filters")){
+            filtersBlock.classList.remove("active-filters");
+            target.classList.remove("active-filters-btn");
+        }else{
+            filtersBlock.classList.add("active-filters");
+            target.classList.add("active-filters-btn");
+
+        }
+
+    }
     
 
  function renderProduct(products){

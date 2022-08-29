@@ -83,8 +83,9 @@ export default function ImportProducts(){
 
         const formData = new FormData();
         formData.append('csv', csv);
+        formData.append('catalogId', catalogId);
 
-        userRequestRetail.post('/products/fileMagick/' + catalogId, formData)
+        userRequestRetail.post('/products/fileMagick', formData)
         .then(res=>{
             console.log(res.data)
             if(res.data.status){

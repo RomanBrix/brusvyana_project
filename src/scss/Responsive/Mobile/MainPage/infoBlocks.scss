@@ -1,0 +1,32 @@
+.main-info-blocks {
+    .content {
+        display: flex;
+        flex-direction: column;
+        .block {
+            margin-bottom: 25px;
+            &:last-child {
+                margin-bottom: 0;
+            }
+            .bg {
+                svg {
+                    g {
+                    }
+                    * {
+                    }
+                }
+            }
+            .block-content {
+                .logo {
+                    svg {
+                    }
+                }
+                .text {
+                    .head {
+                    }
+                    .add {
+                    }
+                }
+            }
+        }
+    }
+}

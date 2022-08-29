@@ -47,6 +47,11 @@ export default function App() {
 
   return (
     <div className="App">
+      <div className="mobile-header-btn" onClick={(e)=>{openMobileHeader(e)}}>
+        <div className="line"/>
+        <div className="line"/>
+        <div className="line"/>
+      </div>
       <Routes>
           <Route path="/" element={<MainLayout/>}>
             <Route index element={<MainPage />} />
@@ -107,4 +112,23 @@ export default function App() {
       </Routes>
     </div>
   );
+
+
+
+  function openMobileHeader({target}){
+    if(!target.classList.contains("mobile-header-btn")){
+
+      document.getElementsByClassName('mobile-header-btn')[0].click();
+      return
+    }
+
+    const header = document.getElementsByClassName('header')[0]
+    if(header && header.classList.contains('open-mobile-header')){
+      header.classList.remove('open-mobile-header')
+      target.classList.remove('open-mobile-btn')
+    }else{
+      header.classList.add('open-mobile-header')
+      target.classList.add('open-mobile-btn')
+    }
+  }
 }

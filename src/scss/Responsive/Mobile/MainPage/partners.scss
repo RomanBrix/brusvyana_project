@@ -1,0 +1,32 @@
+.main-partners {
+    .half {
+        .half-content {
+            .text-blocks {
+                margin-bottom: 20px;
+            }
+            .btn-more {
+                position: initial;
+                bottom: auto;
+                right: auto;
+                transform: none;
+                svg {
+                    * {
+                    }
+                }
+            }
+        }
+        .partner-blocks {
+            padding: 10px 20px;
+            align-items: stretch;
+            .partner-block {
+                height: auto;
+                img {
+                }
+
+                //last 3 blocks
+                &:nth-last-child(-n + 3) {
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,40 @@
+.main-big-button {
+    .content {
+        display: flex;
+        flex-direction: column;
+        .half {
+            max-height: 50vh;
+            min-height: 50vh;
+            &:first-child {
+                border-right: none;
+                border-bottom: 2px solid #b4e4ac;
+            }
+            .bg {
+                .big {
+                }
+                .small {
+                    // display: none;
+                    * {
+                    }
+                }
+            }
+            .half-content {
+                position: absolute;
+                box-sizing: border-box;
+                padding: 30px;
+                .head {
+                    box-sizing: border-box;
+                    width: 100%;
+                    padding: 30px;
+                }
+                .btn {
+                    width: 100%;
+                    svg {
+                        * {
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

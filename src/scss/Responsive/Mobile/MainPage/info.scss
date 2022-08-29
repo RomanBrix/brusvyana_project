@@ -1,0 +1,45 @@
+.main-info {
+    .content {
+        flex-direction: column;
+
+        .half {
+            .bg {
+                &.bg-svg {
+                    svg {
+                        * {
+                        }
+                    }
+                }
+
+                &.bg-img {
+                    &::after {
+                    }
+                }
+            }
+
+            .half-content {
+                padding: 10px 20px;
+                .head {
+                    text-align: center;
+                }
+                .text-blocks {
+                    p {
+                    }
+                    svg {
+                    }
+                }
+
+                .center-img {
+                    width: 100%;
+                }
+
+                &.sec-half-content {
+                    padding: 10px 20px;
+
+                    .head {
+                    }
+                }
+            }
+        }
+    }
+}
