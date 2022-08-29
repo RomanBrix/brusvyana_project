@@ -5,7 +5,9 @@ const {Product, Variant} = require("../models/Product");
 
 
 
-const pathToPublicProducts = __dirname + '/../../../front/public/src/products/';
+// const pathToPublicProducts = __dirname + '/../../../front/public/src/products/';
+const pathToPublicProducts = __dirname + '/../../../black-work.site/public_html/src/products/';
+
 const LIMIT = 10; // FOR PAGINATION
 
 const { verifyUser, verifyAdmin } = require("./verifyToken");
@@ -300,23 +302,28 @@ router.post("/new", verifyAdmin, async (req, res) => {
 
 
 // LOAD CSV AND ADD DATA
-router.post('/fileMagick/:catalogId', verifyAdmin, async (req, res) => {
-    console.log(req.files);
+router.post('/fileMagick', verifyAdmin, async (req, res) => {
+    console.log('GO LOAD');
+    // console.log(req.files);
+    // console.log(req.body);
     const  { csv } = req.files;
+
     if( csv ){
-        const path = __dirname + '/' + csv.name;
+        const path = __dirname + '/../../' + csv.name;
+        console.log(path)
         csv.mv(path,(err)=>{
             if(err) { return res.status(500).json(err)}
 
 
 
-            doFileMagick(path, async (err, out)=>{
-                // console.log(out)
+           doFileMagick(path, async (err, out)=>{
+                console.log(err)
                 deleteFile(path);
-        
+
+                console.log(out);
         
                 try{
-                const catalog = req.params.catalogId;
+                const catalog = req.body.catalogId;
                 console.log(catalog)
         
         
@@ -368,7 +375,13 @@ router.post('/fileMagick/:catalogId', verifyAdmin, async (req, res) => {
         
                 
                 // ADD VARIANTS _______________________________________________________________
-        
+                let minPrice = vatiants.map(item => {
+                    if(item.length > 0){
+                        return item.map(variant => variant.price).sort((a,b) => a - b)[0]
+                    }else{
+                        return null
+                    }
+                })
                 let adedVariants = [];
                 for(let i = 0; i < vatiants.length; i++){
                     if(vatiants[i].length > 0){
@@ -425,17 +438,19 @@ router.post('/fileMagick/:catalogId', verifyAdmin, async (req, res) => {
         
                 // MAKE PRODUCTS_______________________________________________________________
         
-                const products = out.map((item, index)=> {
+                let products = out.map((item, index)=> {
                     return {
                         title: item.title,
                         description: item.description,
                         image: item.image,
-                        price: +item.price,
+                        price: minPrice[index] === null ?  +item.price : minPrice[index],
                         quantity: +item.quantity,
                         category: allCategories[index],
                         variants: adedVariants[index]
                     }
                 })
+
+                // products = pro
                 // console.log(products);
         
                 const pr = await Product.insertMany(products);
@@ -489,8 +504,8 @@ router.post('/fileMagick/:catalogId', verifyAdmin, async (req, res) => {
 
 
 // LOAD ZIP OF IMGS
-router.post('/productMagick', verifyUser, async (req, res)=>{
-    // console.log(req.files);
+router.post('/productMagick', verifyAdmin, async (req, res)=>{
+    console.log('go');
     const  { zip } = req.files;
 
     // front/public/src/prdoucts/

@@ -48,8 +48,8 @@ if(process.env.DEVELOP === 'develop'){
   });
 }
 else{
-  console.log('HELLO')
-  console.log(process.env.USER)
+  console.log('HELLO: ' + PORT)
+  // console.log(process.env.USER)
   var privateKey = fs.readFileSync( '../cert/key.pem' );
   var certificate = fs.readFileSync( '../cert/cert.pem' );
 

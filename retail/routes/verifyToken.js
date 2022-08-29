@@ -1,7 +1,9 @@
 var request = require("request");
+const dotenv = require("dotenv");
 //"+ process.env.USER_PORT +"
-const userUrlServer = "http://localhost:1337/api/verify";
-// const userUrlServer = "https://black-work.site:1337/api/verify";
+// const userUrlServer = "http://localhost:1337/api/verify";
+dotenv.config();
+const userUrlServer = process.env.USER_URL_SERVER;
 
 
 
@@ -10,7 +12,7 @@ const verifyUser = (req, res, next) => {
     // console.log('go check user')
 
     const authHeader = req.headers.token;
-    console.log("authHeader: " + authHeader);
+    // console.log("authHeader: " + authHeader);
 
     //set request header
     const options = {
@@ -54,9 +56,11 @@ const verifyUser = (req, res, next) => {
 
 
   const verifyAdmin = (req, res, next) => {
- 
+
+    console.log('VERIFY ADMIN')
 
     const authHeader = req.headers.token;
+    console.log(authHeader)
 
     //set request header
     const options = {
@@ -70,6 +74,8 @@ const verifyUser = (req, res, next) => {
     //send request
     request(options, function (error, response, body) {
         if (error) {
+            console.log("error");
+            console.log(error);
             return res.status(500).json(error);
         }
 
