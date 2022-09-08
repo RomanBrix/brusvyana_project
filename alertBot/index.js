@@ -35,7 +35,7 @@ app.post("/bot/newOrder", (req, res)=>{
     const delivery = getDeliveryName(deliveryMethod);
     const pay = getPayName(paymanetMethod);
     const msgProducts = products.map(product => {
-        const str =`${product.title} ${product.variants ? `\\[ ${product.varTitle} \\]` : ''} \\- ${product.quantity} шт. \\(${product.price} грн.\\)`
+        const str =`${product.title} ${product.variants ? `[ ${product.varTitle} ]` : ''} - ${product.quantity} шт. (${product.price} грн.)`
         return  replaceDots(str);
     }).join('\n');
 
@@ -59,6 +59,8 @@ app.post("/bot/newOrder", (req, res)=>{
 ${msgProducts}
 `
 
+console.log(msg);
+
     try{
         for(let i = 0; i < alertsId.length; i++){
             BOT.telegram.sendMessage(alertsId[i], msg, {parse_mode: 'MarkdownV2'});
@@ -73,9 +75,19 @@ ${msgProducts}
 
 //function to replace all dots in string with underscore
 function replaceDots(str){
-    return str.replace(/\./g, '\\.');
-}
+    let withoutDots =  str.replace(/\./g, '\\.');
+    let withoutUnderscore = withoutDots.replace(/\_/g, '\\_');
+    let withoutAsterisk = withoutUnderscore.replace(/\*/g, '\\*');
+    let withoutDash = withoutAsterisk.replace(/\-/g, '\\-');
+    let withoutOpenBracket = withoutDash.replace(/\(/g, '\\(');
+    let withoutCloseBracket = withoutOpenBracket.replace(/\)/g, '\\)');
+    let withoutOpenSquareBracket = withoutCloseBracket.replace(/\[/g, '\\[');
+    let withoutCloseSquareBracket = withoutOpenSquareBracket.replace(/\]/g, '\\]');
+    // console.log(withoutCloseSquareBracket);
+    return withoutCloseSquareBracket;
 
+
+}
 
 
 function getDeliveryName(delivery){

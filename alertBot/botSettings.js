@@ -36,7 +36,9 @@ bot.help((ctx) => {
   })
   bot.command('all', (ctx)=>{
     const answer = alertsId.join('\n');
-    ctx.reply(answer)
+    if(alertsId.includes(ctx.message.chat.id + '')){
+        ctx.reply(answer)
+    }
   })
 bot.command('add', (ctx)=>{
     const addId = ctx.message.text.split(' ')[1] 

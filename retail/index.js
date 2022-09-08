@@ -13,6 +13,7 @@ const catalogRoute = require("./routes/catalog");
 const categoryRoute = require("./routes/category");
 const productsRoute = require("./routes/products");
 const orders = require("./routes/order");
+const np = require("./routes/np");
 
 dotenv.config();
 const PORT = process.env.RETAIL_PORT || 5000;
@@ -26,7 +27,8 @@ mongoose
 
 
 app.use(cors());
-app.use(express.json());
+
+app.use(express.json({limit: '90mb'}));
 app.use(fileUpload());
 
 
@@ -37,6 +39,7 @@ app.use("/api/catalog", catalogRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/products", productsRoute);
 app.use("/api/orders", orders);
+app.use("/api/np", np);
 
 
 
