@@ -16,9 +16,8 @@ export default function StatPage() {
 
     console.log(orders);
     return(
-        <div className="admin admin-stat">
+        <div className="admin admin-stat admin-right-content">
             <div className="content">
-                <h1>Statistic</h1>
                 <div className="tableOfOrders">
                     <table>
                         <thead>

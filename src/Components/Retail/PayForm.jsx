@@ -5,7 +5,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { sendAceptedOrder } from "../../Redux/botApi";
 import { __AcceptOrder } from "../../Redux/cartApi";
-
+import Select from 'react-select';
+import { publicRequestRetail } from "../../requestMethods";
 
 
 export default function PayForm({totalPrice, products, user}) {
@@ -13,6 +14,21 @@ export default function PayForm({totalPrice, products, user}) {
     const [deliveryOption, setDeliveryOption] = useState(user.delivery || '');
     const [payOption, setPayOption] = useState(user.payment || null);
     const [orderId] = useState(generateId());
+
+    //NOVA POCHTA STATE
+    const [novaPochtaValues, setNovaPochtaValue] = useState({
+        cities: window.localStorage.getItem('npCities') ? JSON.parse(window.localStorage.getItem('npCities')) : null,
+        warehouses: []
+    });
+    const [novaPochtaOptions, setNovaPochtaOptions] = useState({
+        city: [],
+        warehouse: []
+    });
+    const [novaPochtaSelected, setNovaPochtaSelected] = useState({
+        city: null,
+        warehouse: null
+    });
+    //NOVA POCHTA STATE END
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -29,26 +45,33 @@ export default function PayForm({totalPrice, products, user}) {
         town: user.user?.town || '',
         address: user.user?.address || '',
     })
-    console.log(products)
-    // const novaApi = '1760ffa76a05a6350af1012644c044f6'
-    // const novaUrl = 'https://api.novaposhta.ua/v2.0/json/'
+    
 
     useEffect(()=>{
-        // var data = JSON.stringify({
-        //     "apiKey": novaApi,
-        //     "modelName": "Address",
-        //     "calledMethod": "getAreas",
-        //     "methodProperties": {}
-        // });
-        // axios.post(novaUrl,data)
-        // .then(res => {
-        //     console.log(res.data);
-        // }).catch(err => {
-        //     console.log(err);
-        // })
-    }, [])
+        if(!novaPochtaValues.cities){
+            console.log('Empty cities');
+            publicRequestRetail.get('/np/cities').then(({data})=>{
+                setNovaPochtaValue(prev=>({...prev, cities: data}))
+                window.localStorage.setItem('npCities', JSON.stringify(data))
+            })
+        }
 
-    
+    }, [novaPochtaValues.cities])
+    useEffect(()=>{
+        if(novaPochtaSelected.city){
+            console.log('Load warehouses');
+            publicRequestRetail.get('/np/cities', {params: {warehouse: novaPochtaSelected.city.value}}).then(({data})=>{
+                console.log(data);
+                setNovaPochtaOptions(prev=>({...prev, warehouse: data.map(warehouse=>({value: warehouse.city, label: warehouse.warehouse}))}))
+                // setNovaPochtaValue(prev=>({...prev, cities: data}))
+                // window.localStorage.setItem('npCities', JSON.stringify(data))
+            })
+        }
+
+    }, [novaPochtaSelected.city])
+
+    // console.log(novaPochtaValues);
+    console.log(novaPochtaValues.cities)
     return(
         <div className="payform">
             <div className="user-form block-form">
@@ -123,8 +146,8 @@ export default function PayForm({totalPrice, products, user}) {
             address.town = courierFields.town;
             address.address = courierFields.address;
         }else if(deliveryOption === 'novaPochta'){
-            address.town = 'Nova';
-            address.address = 'Pochta';
+            address.town = novaPochtaSelected.city.label;
+            address.address = novaPochtaSelected.warehouse.label;
         }
         const productsIds = products.map(product => product._id);
         const variantsIds = products.map(product => product.variants);
@@ -165,9 +188,9 @@ export default function PayForm({totalPrice, products, user}) {
     }
     function goPayCard(){
         if(totalPrice < 1) return;
-        alert("Оплата замовлення проведена успішно")
+        alert("Оплата замовлення поки не доступна, оплатіть замовлення готівкою при отриманні");
 
-        acceptOrder();
+        // acceptOrder();
     }
     function tryPay(){
         //validate user fields
@@ -200,7 +223,12 @@ export default function PayForm({totalPrice, products, user}) {
     function validateDeliveryOption(){
         switch(deliveryOption){
             case 'novaPochta':
-                return true;
+                if(novaPochtaSelected.city && novaPochtaSelected.warehouse){
+                    return true;
+                }else{
+                    return false;
+                }
+                
             case 'self':
                 return true;
             case 'courier':
@@ -256,10 +284,105 @@ export default function PayForm({totalPrice, products, user}) {
         )
     }
     function novaPochtaDelivery(){
+        // const cityOptions = citiesRetrurn();
+        const style = {   
+            control: () => ({
+                // none of react-select's styles are passed to <Control />
+                padding: 0,
+                backgroundColor: 'transparent',
+                border: 'none',
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+
+              }),
+            
+          }
+
         return (
-            <>novaPochta</>
+            <>
+                {/* <div className="hint"></div> */}
+                <div className="one-input">
+                    <label htmlFor="town" id="town">Ваше місто</label>
+                    {/* <input type="text" className="text-input" id="town" placeholder="Ваше місто" value={courierFields.town} onChange={changeCourierFieldsData}/> */}
+                    <Select
+                        aria-labelledby="town"
+                        inputId="town"
+                        name="aria-town"
+                        isSearchable={true}
+                        loadingMessage={() => "Завантаження..."}
+                        noOptionsMessage={() => "Нічого не знайдено"}
+                        onInputChange={changeNovaPochtaCity}
+                        onChange={selectCity}
+                        placeholder={'Будь ласка, введіть 3 або більше символів'}
+                        options={novaPochtaOptions.city}
+                        className='text-input nonPadding'
+                        styles={style}
+                    />
+                    {/* <select name="cars" id="cars">
+                        {citiesRetrurn()}
+                    </select> */}
+                </div>
+                <div className="one-input">
+                    <label htmlFor="adress">Відділення </label>
+                    <Select
+                        aria-labelledby="adress"
+                        inputId="adress"
+                        name="aria-adress"
+                        isSearchable={true}
+                        loadingMessage={() => "Завантаження..."}
+                        noOptionsMessage={() => "Спочатку виберіть місто"}
+                        onChange={selectWarehouse}
+                        placeholder={'Виберіть пункт відділення'}
+                        options={novaPochtaOptions.warehouse}
+                        className='text-input nonPadding'
+                        styles={style}
+                    />
+                </div>
+            </>
         )
+
+        function selectWarehouse(warehouse){
+
+            setNovaPochtaSelected((prev)=>{
+                return {
+                    ...prev,
+                    warehouse: warehouse
+                }
+            })
+        }
+        function selectCity(city){
+
+            setNovaPochtaSelected({
+                ...novaPochtaSelected,
+                city
+            })
+        }
+        function changeNovaPochtaCity(city){
+            // let ind = 0;
+            if(!novaPochtaValues.cities) return;
+            if(city.length >3){
+                const filtered = novaPochtaValues.cities.filter((item) => {
+                    // console.log(item.city, city);
+                    // ind = index;
+                    return item.city.toLowerCase().includes(city.toLowerCase());
+                })
+                console.log(filtered);
+                setNovaPochtaOptions((prevState) => {
+                    return {
+                        ...prevState,
+                        city: filtered.map((item) => {
+                            return {
+                                value: item.cityRef,
+                                label: item.city
+                            }
+                        })
+                    }
+                });
+            }
+        }
     }
+
     function selfDelivery(){
     const mapLink = 'https://www.google.com/maps?ll=50.326674,29.543087&z=16&t=m&hl=ru&gl=UA&mapclient=embed&q=%D0%B2%D1%83%D0%BB%D0%B8%D1%86%D1%8F+%D0%9F%D0%BE%D0%BB%D1%8C%D0%BE%D0%B2%D0%B0,+1+%D0%9A%D0%BE%D1%81%D1%82%D1%96%D0%B2%D1%86%D1%96+%D0%96%D0%B8%D1%82%D0%BE%D0%BC%D0%B8%D1%80%D1%81%D1%8C%D0%BA%D0%B0+%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C+12613'
 

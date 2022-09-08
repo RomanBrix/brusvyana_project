@@ -7,7 +7,7 @@ import { logoutUser } from "../../../Redux/UserApi";
 import { useDispatch } from "react-redux";
 
 
-export default function AdminLayout() {
+export default function AdminLayout({user}) {
     
     const dispatch = useDispatch();
     
@@ -23,7 +23,8 @@ export default function AdminLayout() {
     
     return(
         <>
-            <AdminHeader/>
+        {user ? <AdminHeader/> : null}
+            {/* <AdminHeader/> */}
             <Outlet/>
         </>
     )

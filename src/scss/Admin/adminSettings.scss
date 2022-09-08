@@ -1,0 +1,22 @@
+.admin-settings {
+    .content {
+        h1 {
+        }
+        .novapochta-block {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            .btn {
+                //best color
+                box-sizing: border-box;
+                padding: 5px 20px;
+                background: #f0ad4e;
+                border: 1px solid #eea236;
+                border-radius: 4px;
+                color: #fff;
+                cursor: pointer;
+            }
+        }
+    }
+}

@@ -186,7 +186,8 @@
                     padding-bottom: 5px;
                 }
 
-                input {
+                input,
+                .text-input {
                     background: #e7e7e7;
                     border: 1px solid #b4e4ac;
                     box-sizing: border-box;
@@ -199,6 +200,9 @@
                         border: 1px solid #b4e4ac;
                         background: #fff;
                     }
+                }
+                .nonPadding {
+                    padding: 0 !important;
                 }
 
                 .form-group {

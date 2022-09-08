@@ -31,6 +31,7 @@ import RetailCatalog from './Pages/RetailPages/Catalog';
 import Product from './Pages/RetailPages/Product';
 import OrderSuccess from './Pages/RetailPages/OrderSuccess';
 import OrderError from './Pages/RetailPages/OrderError';
+import Settings from './Pages/Admin/Settings';
 
 
 export default function App() {
@@ -80,12 +81,13 @@ export default function App() {
           </Route> 
         
 
-        <Route path='/admin' element={<AdminLayout/> } >
+        <Route path='/admin' element={<AdminLayout user={ user }/> } >
           <Route path='/admin/login' element={ user  ? user.isAdmin ? <Navigate to="/admin" replace /> : <Navigate to="/" replace /> : <Login/> }/>
             
           {/* <Route index element={<StatPage/>} /> */}
 
           <Route index element={ !(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <StatPage/>} />
+          <Route path='settings' element={ !(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <Settings/>} />
           <Route path='/admin/users' element={!(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <Users/>} />
           <Route path='/admin/products/*' element={!(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <Products/>} />
           <Route path='/admin/product/*' element={!(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <SingleProduct/>} />

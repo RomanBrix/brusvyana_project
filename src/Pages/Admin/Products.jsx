@@ -51,7 +51,7 @@ export default function Products() {
 
 
     return(
-        <div className="admin admin-products">
+        <div className="admin admin-products admin-right-content">
             <div className="content">
                 <div className="left">
                     <Routes>

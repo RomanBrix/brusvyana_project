@@ -5,37 +5,10 @@ $lightWhite: rgb(251, 251, 255);
 .admin {
     background: $lightWhite;
 }
-.admin-header {
-    .content {
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            box-sizing: border-box;
-            padding: 15px 0;
-            li {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-sizing: border-box;
-                padding: 15px 20px;
-                border: 1px solid $grey;
-                background: $lightBlue;
-                color: $darkGrey;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: 0.25s;
-                &:hover {
-                    border-color: $lightBlue;
-                }
-            }
-        }
-    }
-}
+@import "./login.scss";
+@import "./adminHeader.scss";
+@import "./adminRightContent.scss";
+@import "./adminSettings.scss";
 
 .admin-products {
     .content {
@@ -103,57 +76,6 @@ $lightWhite: rgb(251, 251, 255);
                     cursor: pointer;
                     transition: 0.25s;
                     margin-right: 20px;
-                }
-            }
-
-            table {
-                border: 1px solid #ccc;
-                border-collapse: collapse;
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                table-layout: fixed;
-
-                tr {
-                    background-color: #f8f8f8;
-                    border: 1px solid #ddd;
-                    padding: 0.35em;
-                }
-                th,
-                td {
-                    padding: 0.625em;
-                    text-align: center;
-                }
-                th {
-                    font-size: 0.85em;
-                    letter-spacing: 0.1em;
-                    text-transform: uppercase;
-                }
-                thead {
-                    tr {
-                        th {
-                            border-bottom: 2px solid #ddd;
-                            font-weight: bold;
-                        }
-                    }
-                }
-                tbody {
-                    tr {
-                        td {
-                            img {
-                                width: 50px;
-                                height: 50px;
-                            }
-                            .btn {
-                                background: $lightBlue;
-                                box-sizing: border-box;
-                                padding: 4px 0;
-                                border: 1px solid $grey;
-                                border-radius: 4px;
-                                cursor: pointer;
-                            }
-                        }
-                    }
                 }
             }
         }
