@@ -36,7 +36,7 @@ export default function AdminHeader() {
 
 
         function goPage({target}, url = '', ) {
-            console.log(target.tagName );
+            // console.log(target.tagName );
             let addClass = target;
             if(addClass.tagName !== 'LI'){
                 

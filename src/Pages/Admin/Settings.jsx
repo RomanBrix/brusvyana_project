@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
+import { PrettyDate } from "../../helpers";
 import { createUserAxiosRequest } from "../../requestMethods";
 
 
@@ -16,11 +17,13 @@ export default function Settings() {
         userRequest.get('/np/updTime').then(({data})=>{
             if(data.time){
                 setPochtaUpdateTime(PrettyDate(data.time));
+                
             }else{
                 setPochtaUpdateTime(null)
             }
             
         })
+         // eslint-disable-next-line
     },[pochtaUpdate])
         
         return (
@@ -123,26 +126,4 @@ export default function Settings() {
 
 
 
-    function PrettyDate(date){
-        let time = new Date(date);
-            let hours = time.getHours();
-            let minutes = time.getMinutes();
-            let day = time.getDate();
-            let month = time.getMonth()+1;
-            let year = time.getFullYear();
-
-            if(hours < 10){
-                hours = '0'+hours;
-            }
-            if(minutes < 10){
-                minutes = '0'+minutes;
-            }
-            if(day < 10){
-                day = '0'+day;
-            }
-            if(month < 10){
-                month = '0'+month;
-            }
-
-            return `${day}.${month}.${year} ${hours}:${minutes}`;
-    }
+    

@@ -9,22 +9,42 @@
     .content {
         width: 100% !important;
 
+        .whiteBg {
+            background: #fff;
+            box-sizing: border-box;
+            padding: 10px 25px;
+            border-radius: 10px;
+        }
+        #search {
+            background: #f8f8f8;
+            border-radius: 20px;
+            border: 1px solid transparent;
+            user-select: none;
+            padding: 10px 20px;
+            outline: none;
+            min-width: 200px;
+            transition: 0.25s;
+            &:focus {
+                border: 1px solid #c3f0bb;
+            }
+        }
         table {
-            border: 1px solid #ccc;
-            border-collapse: collapse;
+            // border: 1px solid #ccc;
+            border-collapse: initial;
             margin: 0;
             padding: 0;
             width: 100%;
             table-layout: fixed;
+            border-spacing: 0 1em;
 
             tr {
-                background-color: #f8f8f8;
+                // background-color: #f8f8f8;
                 border: 1px solid #ddd;
                 padding: 0.35em;
             }
             th,
             td {
-                padding: 0.625em;
+                padding: 25px 0.625em;
                 text-align: center;
             }
             th {
@@ -35,14 +55,23 @@
             thead {
                 tr {
                     th {
-                        border-bottom: 2px solid #ddd;
+                        // border-bottom: 2px solid #ddd;
                         font-weight: bold;
                     }
                 }
             }
             tbody {
                 tr {
+                    // border-bottom: 1px solid #f3f3f3;
+                    transition: 0.25s;
+                    &.clickable {
+                        cursor: pointer;
+                    }
+                    &:hover {
+                        background-color: #f3f3f3;
+                    }
                     td {
+                        border-bottom: 2px solid #f3f3f3;
                         img {
                             width: 50px;
                             height: 50px;
@@ -54,6 +83,34 @@
                             border: 1px solid $grey;
                             border-radius: 4px;
                             cursor: pointer;
+                        }
+                        .tag {
+                            background: #e8f8f9;
+                            color: #00aeb8;
+                            border-radius: 11px;
+                            box-sizing: border-box;
+                            padding: 4px 10px;
+
+                            &.-blue {
+                                background: #e8f8f9;
+                                color: #00aeb8;
+                            }
+                            &.-orange {
+                                background: #e4a65f;
+                                color: #ff8700;
+                            }
+                            &.-green {
+                                background: #b4e4ac;
+                                color: #169300;
+                            }
+                        }
+                        &.small {
+                            font-weight: 400;
+                            font-size: 14px;
+                            line-height: 22px;
+                            letter-spacing: 0.875px;
+
+                            color: #9ca7c4;
                         }
                     }
                 }

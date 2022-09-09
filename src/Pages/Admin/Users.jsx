@@ -1,3 +1,6 @@
+import { Route, Routes } from "react-router-dom";
+import AllUser from "../../Admin/Users/AllUsers";
+import OneUser from "../../Admin/Users/OneUser";
 
 
 
@@ -9,7 +12,10 @@ export default function Users() {
     return(
         <div className="admin admin-users admin-right-content">
             <div className="content">
-                <h1>Users</h1>
+                <Routes>
+                    <Route index element={<AllUser/> } />
+                    <Route path=":id" element={ <OneUser/> }/>
+                </Routes>
             </div>
         </div>
     )
