@@ -7,18 +7,6 @@ const {
 
 const router = require("express").Router();
 
-// //register user
-// router.post("/register", async (req, res) => {
-//   const user = new User(req.body);
-//   try {
-//     const newUser = await user.save();
-//     res.status(201).send(newUser);
-//   } catch (error) {
-//     res.status(400).send(error);
-//   }
-// });
-
-
 //UPDATE
 router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
   if (req.body.password) {
@@ -92,8 +80,8 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
   const query = req.query.new;
   try {
     const users = query
-      ? await User.find().sort({ _id: -1 }).limit(5)
-      : await User.find();
+      ? await User.find({}, 'createdAt email isAdmin username').sort({ _id: -1 }).limit(5)
+      : await User.find({}, 'createdAt email isAdmin username').sort({createdAt: -1});
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);
