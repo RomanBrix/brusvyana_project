@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const CryptoJS = require("crypto-js");
+
 const {
   verifyToken,
   verifyTokenAndAuthorization,
@@ -48,7 +50,8 @@ router.put("/admin/:id", verifyTokenAndAdmin, async (req, res) => {
       },
       { new: true }
     );
-    res.status(200).json(updatedUser);
+    const { password, ...others } = updatedUser._doc;
+    res.status(200).json(others);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -66,12 +69,13 @@ router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
 
 //GET USER
 router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
+  // console.log('asdasd');
   try {
     const user = await User.findById(req.params.id);
     const { password, ...others } = user._doc;
     res.status(200).json(others);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(200).json({ message: "User not found" });
   }
 });
 
