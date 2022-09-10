@@ -1,7 +1,7 @@
 
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../Redux/UserApi";
+import { adminLogin } from "../../Redux/UserApi";
 
 
 
@@ -41,7 +41,8 @@ export default function Login() {
         )
         function goEnter(){
             if(inputs.login.length > 3 && inputs.password.length > 3){
-                login(dispatch, inputs.login, inputs.password);
+                adminLogin(dispatch, inputs.login, inputs.password);
+
             }
             
         }
