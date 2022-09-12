@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/idsAdmin", async (req, res) => {
+router.get("/idsAdmin",verifyAdmin,  async (req, res) => {
     // console.log("req.query.ids: " + req.query.ids);
     // console.log(req.query.ids)
     try {

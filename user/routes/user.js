@@ -119,4 +119,23 @@ router.get("/stats", verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
+
+//get username
+router.get("/usernames", verifyTokenAndAdmin, async (req, res) => {
+  const ids = req.query.ids;
+  console.log(ids);
+  try {
+    const users = await User.find({ _id: { $in: ids } }, 'username');
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+  // try {
+  //   const user = await User.findOne({ _id: id }, 'username');
+  //   res.status(200).json({username: user.username});
+  // } catch (err) {
+  //   res.status(200).json({ message: "User not found" });
+  // }
+});
+
 module.exports = router;

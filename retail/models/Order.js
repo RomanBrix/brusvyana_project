@@ -12,6 +12,13 @@ var orderSchema = new Schema({
     status: { type: String, default: 'bought' },
     paymanetMethod: { type: String, default: 'cash' },
     deliveryMethod: { type: String, default: 'self' },
+    // notes: [{ type: Schema.Types.Mixed, default: null, timestamps: true } ],
+    notes: [ {
+        text: { type: String, default: null },
+        author: { type: String, default: null },
+        date: { type: Date, default: Date.now },
+        // default: null
+    }, {default: []} ],
 }, { timestamps: true });
 
 module.exports = mongoose.model('Order', orderSchema);
