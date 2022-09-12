@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { PrettyDate, ShowFirstAndLast } from "../../helpers"
 import { createUserAxiosRequest } from "../../requestMethods"
+import Pagination from "../Pagination"
+import {changeSortRule, renderArrow, sortFunction } from "../tableSort"
 import UserModal from "./userModal"
 
 
@@ -11,6 +13,7 @@ import UserModal from "./userModal"
 
 export default function AllUser() {
     const [users, setUsers] = useState([])
+    
 
     const [addUserModal, setAddUserModal] = useState(false)
 
@@ -29,6 +32,13 @@ export default function AllUser() {
         type: ''
     })
     const [search, setSearch] = useState('')
+    let manipulatedUsers = users
+    .filter(user=>user.username.toLowerCase().includes(search.toLowerCase()))
+    .sort((a,b)=>{ return sortFunction(a,b, sortRule)});
+    //pagination
+    const [page, setPage] = useState(1);
+    const [perPage] = useState(10);
+
 
     const navigate = useNavigate();
     const userRequest = createUserAxiosRequest('user')
@@ -36,9 +46,7 @@ export default function AllUser() {
         loadUsers()
         // eslint-disable-next-line
     }, [])
-    // useEffect(()=>{
-    //     // setUsers(users.filter(user=>user.username.toLowerCase().includes(search.toLowerCase())))
-    // }, [search])
+    
     return(
         <div className="all-users whiteBg">
             {
@@ -57,53 +65,69 @@ export default function AllUser() {
                 <table>
                     <thead>
                         <tr>
-                            <th data-name={'_id'} data-type={'string'} onClick={changeSortRule}> {renderArrow('_id')} id</th>
-                            <th data-name={'username'} data-type={'string'} onClick={changeSortRule}> {renderArrow('username')} Username</th>
-                            <th data-name={'email'} data-type={'string'} onClick={changeSortRule}> {renderArrow('email')} email</th>
-                            <th data-name={'isAdmin'} data-type={'boolean'} onClick={changeSortRule}> {renderArrow('isAdmin')} Role</th>
-                            <th data-name={'createdAt'} data-type={'date'} onClick={changeSortRule}> {renderArrow('createdAt')} Дата рег.</th>
+                            
+                            <th 
+                                data-name={'_id'} 
+                                data-type={'string'} 
+                                onClick={(e)=>{changeSortRule(e, setSortRule, sortRule)}}
+                            > 
+                                {renderArrow('_id', sortRule)} 
+                                id
+                            </th>
+                            <th 
+                                data-name={'username'} 
+                                data-type={'string'} 
+                                onClick={(e)=>{changeSortRule(e, setSortRule, sortRule)}}
+                            >
+                                {renderArrow('username',sortRule)}
+                                 Username
+                            </th>
+                            <th 
+                                data-name={'email'} 
+                                data-type={'string'} 
+                                onClick={(e)=>{changeSortRule(e, setSortRule, sortRule)}}
+                            >
+                                {renderArrow('email',sortRule)}
+                                 email
+                            </th>
+                            <th 
+                                data-name={'isAdmin'} 
+                                data-type={'boolean'} 
+                                onClick={(e)=>{changeSortRule(e, setSortRule, sortRule)}}
+                            >
+                                {renderArrow('isAdmin',sortRule)}
+                                 Role
+                            </th>
+                            <th 
+                                data-name={'createdAt'} 
+                                data-type={'date'} 
+                                onClick={(e)=>{changeSortRule(e, setSortRule, sortRule)}}
+                            >
+                                {renderArrow('createdAt', sortRule)}
+                                 Дата рег.
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <RenderUsers/>
+                        <RenderUsers users={manipulatedUsers}/>
                     </tbody>
                 </table>
+                <Pagination page={page} setPage={setPage} total={manipulatedUsers.length} productsPerPage={perPage}/>
+                <>
+                Total users : {users.length}
+                </>
+                <br />
+                <>
+                Filtered users : {manipulatedUsers.length}
+                </>
         </div>
     )
 
-    function renderArrow(name){
-        if(sortRule.name === name){
-            if(sortRule.order === 'asc'){
-                return <span>&#9650;</span>
-            }else{
-                return <span>&#9660;</span>
-            }
-        }
-    }
-
-    function changeSortRule({target}){
-        const {name, type} = target.dataset
-        // console.log(sortRule.name, name)
-        if(name === sortRule.name){
-            setSortRule({
-                name,
-                order: sortRule.order === 'asc' ? 'desc' : 'asc',
-                type
-            })
-        }else{
-            setSortRule({
-                name,
-                order: 'asc',
-                type
-            })
-
-        }
-        // console.log(target.dataset);
-    }
 
     function changeSearchValue(e){
         const {value} = e.target;
         setSearch(value)
+        setPage(1)
     }
 
     function addUser(data){
@@ -134,10 +158,12 @@ export default function AllUser() {
         })
     }
 
-    function RenderUsers() {
+    function RenderUsers({users}) {
         return users
-        .filter(user=>user.username.toLowerCase().includes(search.toLowerCase()))
-        .sort((a,b)=>{ return sortFunction(a,b)})
+        
+        // .filter(user=>user.username.toLowerCase().includes(search.toLowerCase()))
+        .slice((page-1)*perPage, page*perPage)
+        // .sort((a,b)=>{ return sortFunction(a,b, sortRule)})
         .map(user=>{
             const date = PrettyDate(user.createdAt, 'dd/mm/yyyy');
             const smallId = ShowFirstAndLast(user._id)
@@ -155,27 +181,7 @@ export default function AllUser() {
     }
 
 
-    function sortFunction(a,b){
-        switch(sortRule.type){
-            case 'string':
-                if(sortRule.order === 'asc'){
-                    return a[sortRule.name].localeCompare(b[sortRule.name])
-                }
-                return b[sortRule.name].localeCompare(a[sortRule.name])
-            case 'boolean':
-                if(sortRule.order === 'asc'){
-                    return a[sortRule.name] - b[sortRule.name]
-                }
-                return b[sortRule.name] - a[sortRule.name]
-            case 'date':
-                if(sortRule.order === 'asc'){
-                    return new Date(a[sortRule.name]) - new Date(b[sortRule.name])
-                }
-                return new Date(b[sortRule.name]) - new Date(a[sortRule.name])
-            default:
-                return 0
-            }
-    }
+    
 }
 
 

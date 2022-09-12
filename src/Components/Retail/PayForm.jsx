@@ -95,7 +95,7 @@ export default function PayForm({totalPrice, products, user}) {
     )
 
     
-    function acceptOrder(){
+    function acceptOrder(status = 'new'){
         if(totalPrice < 1) return;
         // alert('Ваше замовлення прийнято');
 
@@ -120,6 +120,7 @@ export default function PayForm({totalPrice, products, user}) {
                 ...userFields,
                 ...address,
             },
+            status,
             productsWhenBuy: products,
             products:productsIds,
             variants:variantsIds,

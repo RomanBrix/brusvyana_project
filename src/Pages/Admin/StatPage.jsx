@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import StatPageOrders from "../../Admin/Stats/orders";
+import SingleOrder from "../../Admin/Stats/SingleOrder";
 import { createUserAxiosRequest } from "../../requestMethods";
 
 
@@ -9,17 +11,15 @@ export default function StatPage() {
     const [orders, setOrders] = useState([]);
     const userRequestRetail = createUserAxiosRequest();
     
-    
-    useEffect(()=>{
-        getOrdersData()
-        // eslint-disable-next-line
-    },[])
-
-    console.log(orders);
+    // console.log(orders);
     return(
         <div className="admin admin-stat admin-right-content">
             <div className="content">
-                <StatPageOrders  orders={orders}/>
+                <Routes>
+                    <Route index element={<StatPageOrders orders={orders} getOrdersData={getOrdersData}/>} />
+                    <Route path=':id' element={<SingleOrder/>} />
+                </Routes>
+                {/* <StatPageOrders  orders={orders}/> */}
             </div>
         </div>
     )

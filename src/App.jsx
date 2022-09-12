@@ -86,7 +86,10 @@ export default function App() {
             
           {/* <Route index element={<StatPage/>} /> */}
 
-          <Route index element={ !(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <StatPage/>} />
+          <Route index element={ !(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <Navigate to="/admin/orders" replace />} />
+
+          
+          <Route path='orders/*' element={ !(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <StatPage/>} />
           <Route path='settings' element={ !(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <Settings/>} />
           <Route path='/admin/users/*' element={!(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <Users/>} />
           <Route path='/admin/products/*' element={!(user && user?.isAdmin) ? <Navigate to="/admin/login" replace /> : <Products/>} />
