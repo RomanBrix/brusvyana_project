@@ -28,6 +28,7 @@ export default function Product(){
 
     // console.log(cartStore.products);
     
+    
     useEffect(()=>{
         if(params.id){
             publicRequestRetail.get('/products/' + params.id)

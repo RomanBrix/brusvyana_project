@@ -3,12 +3,13 @@ import { ReactComponent as Uah} from "../../svg/Uah.svg";
 import {  useNavigate } from "react-router-dom";
 import ProductPagination from "./ProductPagination";
 import useQuery from "./QueryHook";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { changePageQuery } from "../../Redux/retailApi";
 import { useDispatch } from "react-redux";
+import { SuspenseImg } from "./LazyImg";
 
 
-export default function ProductsContainer({products,  categories, productsCount, fetchLoading}){
+export default function ProductsContainer({products,  categories, productsCount, fetchLoading, loadingProducts}){
     const navigate = useNavigate();
 
     const queryUrl = useQuery();
@@ -57,6 +58,20 @@ export default function ProductsContainer({products,  categories, productsCount,
             </div>
         )
     }
+    console.log(loadingProducts);
+    if(loadingProducts){
+        //fill empty products array
+        let productsLoad = new Array(10);
+        // console.log(productsLoad)
+      return  <div className="retail-products">
+            <div className="filter-btn" onClick={(e)=>{toggleFilters(e)}}>
+                <div className="line"/>
+                <div className="line"/>
+                <div className="line"/>
+            </div>
+            {renderProduct(productsLoad, true)}
+        </div>
+    }
     return(
         <div className="retail-products">
             <div className="filter-btn" onClick={(e)=>{toggleFilters(e)}}>
@@ -90,10 +105,10 @@ export default function ProductsContainer({products,  categories, productsCount,
     }
     
 
- function renderProduct(products){
+ function renderProduct(products, preload = false){
     return products.map((item, index)=> {
         return(
-            <div className="product-item" key={index} onClick={()=>{ navigate('../product/' + item._id)}}>
+            <div className={`product-item ${preload ? 'preload-product-item' : ''}`} key={index} onClick={()=>{preload ? console.log('hi') : navigate('../product/' + item._id)}}>
                 <div className="borders">
                     <div className="border border-top"/>
                     <div className="border border-right"/>
@@ -101,17 +116,26 @@ export default function ProductsContainer({products,  categories, productsCount,
                     <div className="border border-left"/>
                 </div>
                 <div className="product-image">
-                    <img src={'/src/products/'+item.image} alt={item.title}/>
+                    {
+                        preload ?
+                        <span className="material-icons">image</span>
+                        :
+                        <Suspense fallback={<div className="preloadImg"><span className="material-icons">image</span></div>  }>
+                        {/* // <img src={'/src/products/'+item.image} alt={item.title} loading="lazy"/> */}
+                            <SuspenseImg alt="" src={'/src/products/'+item.image}/>
+                        </Suspense>
+                    }
+                    
                 </div>
                 <div className="product-title">
-                    {item.title}
+                    {preload ? '' : item.title}
                 </div>
                 <div className="product-info">
                     <div className="product-price">
-                        Від { item.price }  <Uah/>
+                        Від {preload ? '-' : item.price }  <Uah/>
                     </div>
                     <div className="description">
-                        {cutDescription(item.description, 55)}
+                        {preload ? '' :cutDescription(item.description, 55)}
                     </div>
                 </div>
             </div>

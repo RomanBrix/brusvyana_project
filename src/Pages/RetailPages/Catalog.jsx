@@ -119,6 +119,7 @@ useEffect(()=>{
 
 
     console.log(retailStore);
+
     return(
         <div className="retail retail-catalog">
             <div className="content">
@@ -140,7 +141,13 @@ useEffect(()=>{
                         {/* <Route path="/:catalog/*" element={<Categories getCategories={getCategories} categories={categories} setSelectedCategory={setSelectedCategory}/>}/> */}
                     </Routes>
                      
-                    <ProductsContainer products={retailStore.products} categories={retailStore.categories} fetchLoading={retailStore.fetchLoading} productsCount={retailStore.countAllProducts}/>
+                    <ProductsContainer 
+                    products={retailStore.products} 
+                    categories={retailStore.categories} 
+                    fetchLoading={retailStore.fetchLoading} 
+                    productsCount={retailStore.countAllProducts}
+                    loadingProducts = {retailStore.loadingProduct}
+                    />
                 </div>
             </div>
         </div>

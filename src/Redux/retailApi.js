@@ -1,6 +1,6 @@
 // import axios from "axios";
 import { publicRequestRetail } from "../requestMethods";
-import { getCatalogs,getCategories, getAllProducts, getProducts, loadinGo, errorGo, clearCatalogGo, fetchLoadingGo, fetchLoadingStop } from "./retailRedux";
+import { getCatalogs,getCategories, getAllProducts, getProducts, loadinGo, errorGo, clearCatalogGo, fetchLoadingGo, fetchLoadingStop, loadingProduct, loadingProductStop } from "./retailRedux";
 
 // axios.defaults.baseURL = 'http://localhost:1338/api';
 
@@ -62,13 +62,18 @@ async function getCategoriesOfCatalog(dispatch, id, answer) {
 
 
   async function fetchProducts(dispatch, ids) {
-    dispatch(fetchLoadingGo());
 
+    dispatch(fetchLoadingGo());
+    dispatch(loadingProduct());
+    
+    
     try {
         const res = await publicRequestRetail.get(`/products/ids`, { params: { ids } });
         // console.log(res.data);
         dispatch(getProducts(res.data))
         dispatch(fetchLoadingStop());
+        dispatch(loadingProductStop());
+
         
     } catch (err) {
         console.log(err)
@@ -78,12 +83,15 @@ async function getCategoriesOfCatalog(dispatch, id, answer) {
 
   async function fetchProductsByCategory(dispatch, category) {
     dispatch(loadinGo());
+    dispatch(loadingProduct());
+
 
     try {
         const res = await publicRequestRetail.get(`/products/category`, { params: { category } });
         // console.log(res.data);
         dispatch(getProducts(res.data.products))
         dispatch(getAllProducts(res.data.count));
+        dispatch(loadingProductStop());
 
     } catch (err) {
         console.log(err)
@@ -93,10 +101,14 @@ async function getCategoriesOfCatalog(dispatch, id, answer) {
 
   async function changePageQuery(dispatch, options, limit = null) {
     dispatch(loadinGo());
+    dispatch(loadingProduct());
+
     try {
         const res = await publicRequestRetail.get(`/products/query`, { params: { options, limit } });
         // console.log(res.data);
         dispatch(getProducts(res.data))
+        dispatch(loadingProductStop());
+
         // dispatch(getAllProducts(res.data.count));
 
     } catch (err) {

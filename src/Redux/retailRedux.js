@@ -9,6 +9,7 @@ const retailSlice = createSlice({
     countAllProducts: null,
 
     loading: false,
+    loadingProduct: true,
     fetchLoading: false,
     error: false,
   },
@@ -16,6 +17,12 @@ const retailSlice = createSlice({
     loadinGo: (state) => {
        state.loading = true;
     }, 
+    loadingProduct: (state) => {
+      state.loadingProduct = true;
+    },
+    loadingProductStop: (state) => {
+      state.loadingProduct = false;
+    },
     fetchLoadingGo: (state) => {
        state.fetchLoading = true;
     }, 
@@ -45,6 +52,8 @@ const retailSlice = createSlice({
     errorGo: (state)=>{
         state.error = true;
         state.loading = false;
+        state.loadingProduct = false;
+        state.fetchLoading = false;
     },
     clearCatalogGo: (state)=>{
         state.products = null;
@@ -55,5 +64,5 @@ const retailSlice = createSlice({
   },
 });
 
-export const { loadinGo, getCatalogs, getCategories, getAllProducts, getProducts, errorGo, clearCatalogGo, fetchLoadingGo, fetchLoadingStop } = retailSlice.actions;
+export const { loadinGo, getCatalogs, getCategories, getAllProducts, getProducts, errorGo, clearCatalogGo, fetchLoadingGo, fetchLoadingStop, loadingProduct, loadingProductStop } = retailSlice.actions;
 export default retailSlice.reducer;
