@@ -12,6 +12,12 @@ export default function MainHeader() {
 
     const { pathname } = useLocation();
     const navigate = useNavigate();
+
+    const { getLanguageBlock } = useMainTranslate();
+    
+    const translate = getLanguageBlock('header');
+
+// console.log(translate)
     // console.log(pathname)
     const languagesLabels = [{label: 'Укр',value: 'ua'}, {label: 'Рус',value: 'ru'},{label: 'Eng',value: 'en'}];
     return (
@@ -19,10 +25,10 @@ export default function MainHeader() {
             <div className="head-bg"><LeafPattern/></div>
             <div className="content">
                 <ul className="menu main-menu">
-                    <li onClick={()=>{changePage('/retail')}}>Роздріб</li>
-                    <li onClick={()=>{changePage('/opt')}}>Опт</li>
-                    <li onClick={()=>{changePage('/about')}}>Про нас</li>
-                    <li onClick={()=>{changePage('/contacts')}}>Контакти</li>
+                    <li onClick={()=>{changePage('/retail')}}>{translate.retail}</li>
+                    <li onClick={()=>{changePage('/opt')}}>{translate.wholesale}</li>
+                    <li onClick={()=>{changePage('/about')}}>{translate.about}</li>
+                    <li onClick={()=>{changePage('/contacts')}}>{translate.contacts}</li>
                 </ul>
                 <div className="logo" onClick={()=>{changePage('/')}}>
                     {/* <img src="/src/img.jpg" alt="Logo" /> */}
@@ -30,10 +36,10 @@ export default function MainHeader() {
                 </div>
                 
                 <ul className="menu second-menu">
-                    <li onClick={()=>{changePage('/projects')}}>Проекти</li>
-                    <li onClick={()=>{changePage('/achievement')}}>Досягнення</li>
-                    <li onClick={()=>{changePage('/wiki')}}>База знань</li>
-                    <li onClick={()=>{changePage('/general-info')}}>Загальна інформація</li>
+                    <li onClick={()=>{changePage('/projects')}}>{translate.projects}</li>
+                    <li onClick={()=>{changePage('/achievement')}}>{translate.achievements}</li>
+                    <li onClick={()=>{changePage('/wiki')}}>{translate.knowledges}</li>
+                    <li onClick={()=>{changePage('/general-info')}}>{translate.documents}</li>
                     <li className='language'> 
                         <Lang/>
                         {renderMainLang()}

@@ -22,7 +22,7 @@ export default function AdminHeader() {
                     <ul>
                         <li onClick={(e)=>{goPage(e)}}> <Home/> Продажі</li>
                         <li onClick={(e)=>{goPage(e,'users')}}><Users/> Користувачі</li>
-                        <li onClick={(e)=>{goPage(e,'./')}}><Catalog/>Каталог</li>
+                        <li onClick={(e)=>{goPage(e,'catalog')}}><Catalog/>Каталог</li>
                         <li onClick={(e)=>{goPage(e,'products')}}><Products/>Товар</li>
                         <li onClick={(e)=>{goPage(e,'settings')}}><Settings/> Налаштування</li>
                         <li onClick={()=>{

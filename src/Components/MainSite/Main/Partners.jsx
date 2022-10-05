@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom"
 
 
 
-export default function Partners() {
+export default function Partners({translate}) {
     const navigate = useNavigate();
 
     return(
@@ -18,16 +18,16 @@ export default function Partners() {
                         <LeafPattern/>
                     </div>
                     <div className="half-content">
-                        <div className="head">Партнери</div>
+                        <div className="head">{translate.head}</div>
 
                         <div className="text-blocks">
-                            <p>За час існування Брусвяна ми співпрацювали з багатьма компаніями та побудували міцні відносини з більшістю партнерів</p>
+                            <p>{translate.text[0]}</p>
                             <Deal/>
-                            <p>Маємо позитивний досвід співпраці з компаніями в аграрній,  аграрній та аграрній галузях</p>
+                            <p>{translate.text[1]}</p>
                             <Deal/>
-                            <p>За рахунок своєчасного виконання покладених на нас обов’язків та задач </p>
+                            <p>{translate.text[2]}</p>
                             <Deal/>
-                            <p>Текст Текст Текст Текст Текст Текст Текст Текст Текст </p>
+                            <p>{translate.text[3]}</p>
                         </div>
                         <div className="btn btn-more" onClick={()=>{navigate('/partners')}}>Дізнатись більше <ArrowRight/> </div>
                     </div>

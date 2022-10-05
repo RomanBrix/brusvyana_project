@@ -43,6 +43,7 @@ export default function Catalog({cataloges,  getCatalogs}){
             )
         })
     }
+    
     function deleteCatalog(id) {
         userRequestRetail.delete('/catalog/'+id).then(res=>{
             console.log(res.data)

@@ -39,7 +39,7 @@ async function login(dispatch, login, password) {
       changeToken(res.data.token, res.data.username)
       dispatch(loginSuccess(res.data));
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error);
       dispatch(loginFailure());
     }
   }

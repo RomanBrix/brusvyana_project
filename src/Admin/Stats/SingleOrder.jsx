@@ -11,6 +11,7 @@ import { createUserAxiosRequest } from "../../requestMethods";
 
 export default function SingleOrder() {
     const [order, setOrder] = useState(null);
+    // eslint-disable-next-line
     const [user, setUser] = useState(null);
     const [note, setNote] = useState('');
 
@@ -69,6 +70,7 @@ export default function SingleOrder() {
                 console.log(err)
             })
         }
+        // eslint-disable-next-line
     },[order?.notes.length])
 
 

@@ -5,7 +5,7 @@ import { ReactComponent as Second } from "../../../svg/infoblocks/Second.svg"
 import { ReactComponent as Third } from "../../../svg/infoblocks/Third.svg"
 
 
-export default function InfoBlocks() {
+export default function InfoBlocks({translate}) {
     return(
         <div className="main-info-blocks">
             <div className="content">
@@ -20,8 +20,8 @@ export default function InfoBlocks() {
                             <First/>
                         </div>
                         <div className="text">
-                            <div className="head">2 000 000</div>
-                            <div className="add">рослин вирощено в рік</div>
+                            <div className="head">{translate.block1.text} </div>
+                            <div className="add"> {translate.block1.title}</div>
                         </div>
                     </div>
                 </div>
@@ -36,8 +36,8 @@ export default function InfoBlocks() {
                             <Second/>
                         </div>
                         <div className="text">
-                            <div className="head">200</div>
-                            <div className="add">сортів в колекції</div>
+                            <div className="head">{translate.block2.text} </div>
+                            <div className="add">{translate.block2.title}</div>
                         </div>
                     </div>
                 </div>
@@ -52,8 +52,8 @@ export default function InfoBlocks() {
                             <Third/>
                         </div>
                         <div className="text">
-                            <div className="head">1000 гектарів</div>
-                            <div className="add">наших рослин в Україні</div>
+                            <div className="head">{translate.block3.text} </div>
+                            <div className="add">{translate.block3.title}</div>
                         </div>
                     </div>
                 </div>

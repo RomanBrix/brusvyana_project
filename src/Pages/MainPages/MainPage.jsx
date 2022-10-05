@@ -17,9 +17,9 @@ export default function MainPage() {
         
             <Intro translate={translateText.intro}/>
             <Info translate={translateText.info}/>
-            <InfoBlocks/>
-            <BigButton/>
-            <Partners/>
+            <InfoBlocks translate={translateText.infoBlocks}/>
+            <BigButton translate={translateText.bigBtns}/>
+            <Partners translate={translateText.partners}/>
 
         </>
     )

@@ -2,28 +2,16 @@ export default function  Team() {
     const team = [
         {
             img: '1.jpg',
-            name: 'Іван Іванович Іванов',
-            position: 'Директор',
-            description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat eveniet qui quo amet cumque sit in, ab similique hic at nulla, aliquam eos odit accusantium.'           
+            name: 'Ліліана Дмитрієва',
+            position: 'Директор "Брусв`яна"',
+            description: 'Директор в розплідник "Брусв`яна" та голова правління в "Декоративне рослинництво України" громадська спілка (ДРУГС)'           
         },
         {
             img: '2.jpg',
-            name: 'Іван Іванович Іванов',
-            position: 'Директор',
-            description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat eveniet qui quo amet cumque sit in, ab similique hic at nulla, aliquam eos odit accusantium.'
+            name: 'Катерина Євпак',
+            position: 'Технолог "Брусвяна"',
+            description: ''
         },
-        {
-            img: '3.jpg',
-            name: 'Іван Іванович Іванов',
-            position: 'Директор',
-            description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat eveniet qui quo amet cumque sit in, ab similique hic at nulla, aliquam eos odit accusantium.'
-        },
-        {
-            img: '4.jpg',
-            name: 'Іван Іванович Іванов',
-            position: 'Директор',
-            description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat eveniet qui quo amet cumque sit in, ab similique hic at nulla, aliquam eos odit accusantium.'
-        }
     ]
     return(
         <div className="about-main about-main-team">

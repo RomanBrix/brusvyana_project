@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
-import {  createUserAxiosRequest, publicRequestRetail } from "../../requestMethods";
+import {  createUserAxiosRequest, 
+    // publicRequestRetail
+ } from "../../requestMethods";
 
 
 
@@ -55,7 +57,7 @@ export default function ProductsContainer({productsIds, getCategories}){
     function getProductsData (){
         console.log(productsIds)
         
-        publicRequestRetail.get('/products/idsAdmin', {params:{ids:productsIds}}).then(res=>{
+        userRequestRetail.get('/products/idsAdmin', {params:{ids:productsIds}}).then(res=>{
             setProducts(res.data)
         }).catch(err=>{
             console.log(err)

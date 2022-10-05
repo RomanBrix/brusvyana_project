@@ -41,13 +41,14 @@ export default function Intro({translate}) {
                     </div>
                     <div className="social-block">
                         <a href={ContactsInfo.facebook} target='_blank' rel="noreferrer">
-                            <Instagram/>
+                            <Facebook/>
+                            
                             <span>Facebook</span>
                         </a>
                     </div>
                     <div className="social-block">
                         <a href={ContactsInfo.instagram} target='_blank' rel="noreferrer">
-                            <Facebook/>
+                            <Instagram/>
                             <span>Instagram</span>
                         </a>
                     </div>

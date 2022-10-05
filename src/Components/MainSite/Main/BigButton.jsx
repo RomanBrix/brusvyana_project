@@ -6,7 +6,7 @@ import { ReactComponent as ArrowRight } from "../../../svg/ArrowRight.svg"
 
 
 
-export default function BigButton() {
+export default function BigButton({translate}) {
     return(
         <div className="main-big-button">
             <div className="content">
@@ -16,8 +16,8 @@ export default function BigButton() {
                         <LeafBtnPatternOne className='small'/>
                     </div>
                     <div className="half-content">
-                        <div className="head">Роздрібні пропозиції від Брусвяна</div>
-                        <div className="btn">Переглянути <ArrowRight/></div>
+                        <div className="head">{translate.btnRetail}</div>
+                        <div className="btn">{translate.click} <ArrowRight/></div>
 
                     </div>
                 </div>
@@ -27,8 +27,8 @@ export default function BigButton() {
                         <LeafBtnPatternTwo className='small'/>
                     </div>
                     <div className="half-content">
-                        <div className="head">Оптові пропозиції від Брусвяна</div>
-                        <div className="btn">Переглянути <ArrowRight/></div>
+                        <div className="head">{translate.btnWholesale}</div>
+                        <div className="btn">{translate.click} <ArrowRight/></div>
                     </div>
                 </div>
             </div>

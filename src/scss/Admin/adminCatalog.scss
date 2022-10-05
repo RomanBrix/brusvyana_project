@@ -1,0 +1,62 @@
+.ctgs {
+    .catalogs-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        justify-content: flex-start;
+        gap: 25px;
+        .cat {
+            border: 2px solid $darkGrey;
+            // border: 2px solid $secondaryColor;
+            transition: 0.25s;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            height: 150px;
+            cursor: pointer;
+
+            // margin-right: 25px;
+            // margin-bottom: 20px;
+            span {
+                transform: scale(1.4);
+                transition: 0.25s;
+            }
+            &:hover {
+                border: 2px solid $secondaryColor;
+                color: $secondaryColor;
+                span {
+                    color: $secondaryColor;
+                }
+            }
+        }
+
+        .ctgrs {
+            position: relative;
+            .title {
+                // opacity: 0;
+                transition: 0.25s;
+            }
+            .material-icons {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                opacity: 0;
+                transition: 0.25s;
+                // transform: scale(1.5);
+                font-size: 3em;
+            }
+            &:hover {
+                .title {
+                    opacity: 0;
+                }
+                .material-icons {
+                    opacity: 1;
+                    color: red;
+                }
+            }
+        }
+    }
+}
