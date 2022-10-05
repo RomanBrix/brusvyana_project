@@ -39,9 +39,9 @@ if(process.env.DEVELOP === 'develop'){
 });
 }
 else{
-  console.log('HELLO')
-  console.log(PORT)
-  console.log(process.env.USER_MONGO_URL)
+  // console.log('HELLO')
+  // console.log(PORT)
+  // console.log(process.env.USER_MONGO_URL)
   var privateKey = fs.readFileSync( '../cert/key.pem' );
   var certificate = fs.readFileSync( '../cert/cert.pem' );
 
