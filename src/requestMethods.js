@@ -39,7 +39,7 @@ export function createUserAxiosRequest(url = BASE_URL_RETAIL){
   if(url === 'user'){
     baseUrl = BASE_URL_USER;
   }
-  console.log(baseUrl);
+  // console.log(baseUrl);
   return axios.create({
     baseURL: baseUrl,
     headers: { token: `${USERNAME} ${TOKEN}`,   },

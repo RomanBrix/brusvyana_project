@@ -7,6 +7,7 @@ import Catalog from "../../Admin/Products/Catalog";
 import Categories from "../../Admin/Products/Categories";
 import ImportProducts from "../../Admin/Products/ImportProducts";
 import ProductsContainer from "../../Admin/Products/ProductsContainer";
+import AdminProductsTable from "../../Admin/Products/ProductsTable";
 import { publicRequestRetail } from "../../requestMethods";
 
 
@@ -53,44 +54,47 @@ export default function Products() {
     return(
         <div className="admin admin-products admin-right-content">
             <div className="content">
-                <div className="left">
+                <ImportProducts/>
+                <AdminProductsTable/>
+                
+                
+                {/* <div className="left">
                     <Routes>
                         <Route index element={<Catalog  cataloges={cataloges} getCatalogs={getCatalogs}/>} />
                         <Route path="/:catalog/*" element={<Categories getCategories={getCategories} categories={categories} setSelectedCategory={setSelectedCategory}/>}/>
                     </Routes>
-                    {/* пикаем каталог слева */}
-                </div>
+                </div> */}
 
 
-                <div className="right">
-                        {
+                {/* <div className="right"> */}
+                        {/* {
                             params["*"] ? <ImportProducts/> : ''
-                        }
-                    <Routes>
+                        } */}
+                    {/* <Routes> */}
                         {/* <Route path="*" element={<h1>{ }</h1>} /> */}
                         
-                        <Route path="*" element={productsIds.length > 0 || selectedCategory ? <ProductsContainer getCategories={getCategories} productsIds={productsIds}/> : <h1>{params["*"] ? 'Выбери категорию' : 'Выбери каталог'}</h1>} />
-                    </Routes>
-                </div>
+                        {/* <Route path="*" element={productsIds.length > 0 || selectedCategory ? <ProductsContainer getCategories={getCategories} productsIds={productsIds}/> : <h1>{params["*"] ? 'Выбери категорию' : 'Выбери каталог'}</h1>} />
+                    </Routes> */}
+                {/* </div> */}
             </div>
         </div>
     )
 
 
-    function getCatalogs() {
-        publicRequestRetail.get('/catalog').then(res=>{
-            setCataloges(res.data)
-        }).catch(err=>{ 
-            console.log(err)
-        })
-    }
+    // function getCatalogs() {
+    //     publicRequestRetail.get('/catalog').then(res=>{
+    //         setCataloges(res.data)
+    //     }).catch(err=>{ 
+    //         console.log(err)
+    //     })
+    // }
 
-    function getCategories(catalog) {
-        publicRequestRetail.get(`/category/?catalog=${catalog}`).then(res=>{
-                setCategories(res.data)
-                // console.log(res.data)
-            }).catch(err=>{ 
-                console.log(err)
-            })
-    }
+    // function getCategories(catalog) {
+    //     publicRequestRetail.get(`/category/?catalog=${catalog}`).then(res=>{
+    //             setCategories(res.data)
+    //             // console.log(res.data)
+    //         }).catch(err=>{ 
+    //             console.log(err)
+    //         })
+    // }
 }
