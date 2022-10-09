@@ -58,6 +58,7 @@ const verifyUser = (req, res, next) => {
   const verifyAdmin = (req, res, next) => {
 
     console.log('VERIFY ADMIN')
+    console.log('VERIFY ADMIN2')
 
     const authHeader = req.headers.token;
     console.log(authHeader)

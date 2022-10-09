@@ -5,8 +5,8 @@ const {Product, Variant} = require("../models/Product");
 
 
 
-// const pathToPublicProducts = __dirname + '/../../../front/public/src/products/';
-const pathToPublicProducts = __dirname + '/../../../black-work.site/public_html/src/products/';
+const pathToPublicProducts = __dirname + '/../../../front/public/src/products/';
+// const pathToPublicProducts = __dirname + '/../../../black-work.site/public_html/src/products/';
 
 const LIMIT = 10; // FOR PAGINATION
 
@@ -14,10 +14,41 @@ const { verifyUser, verifyAdmin } = require("./verifyToken");
 
 const router = require("express").Router();
 
+
+
+
+
+
+
+router.get("/adminRequest", verifyAdmin, async (req, res) => {
+    // console.log('first')
+    console.log(req.query);
+    const {options, limit} = req.query;
+    const { page, search } = JSON.parse(options);
+    const activeLimit = limit || LIMIT;
+    // console.log( page, activeLimit);
+    let title = {$regex: '', $options: 'i'};
+    if(search){
+        title = {$regex: search, $options: 'i'};
+    }
+    
+    console.log(title);
+    const products = await Product.find({
+        title
+    }, 'title price image createdAt variants')
+    .populate({path: 'category', select: 'title'})
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * activeLimit)
+    .limit(activeLimit).lean();
+
+    return res.status(200).json(products);
+
+})
+
 //get all products
 router.get("/", async (req, res) => {
     const globTime = new Date();
-
+    // console.log('first')
     try {
         // const products = await Product.find().populate({path: 'variants', select: ['title', "price", "image", "quantity", "isAvailable"]}).sort({ price: 1 }).lean();
         const products = await Product.find().populate({path: 'variants', select: ['title', "price", "image", "quantity", "isAvailable"]}).sort({ price: 1 }).lean();
@@ -59,6 +90,7 @@ router.get("/ids", async (req, res) => {
 
 router.get("/cart", async (req, res) => {
     const { ids } = req.query;
+    // console.log('first')
     
     try {
         const products = await Product.find({ '_id': { $in: ids } }, 'title price image variants').populate({path: 'variants', select: 'title price'}).lean();
@@ -105,6 +137,8 @@ router.get("/query", async (req, res) => {
     }
 
 })
+
+
 //category LOAD
 router.get("/category", async (req, res) => {
     console.log('params');
@@ -133,6 +167,7 @@ router.get("/category", async (req, res) => {
 
 //get product by id
 router.get("/:id", async (req, res) => {
+    // console.log('object');
     try {
         const product = await Product.findById(req.params.id).populate({path: 'variants', select: ['title', "price", "image", "quantity", "isAvailable"]}).lean();
         res.status(200).json(product);
