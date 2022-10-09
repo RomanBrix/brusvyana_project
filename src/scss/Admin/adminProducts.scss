@@ -1,5 +1,111 @@
 .admin-products {
     .content {
+        .all-users {
+            .import-product-layer {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 100;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .import-product-layer_content {
+                    width: 500px;
+                    min-height: 350px;
+
+                    height: auto;
+                    box-sizing: border-box;
+                    padding: 20px;
+                    border-radius: 10px;
+                    background: #fff;
+                    border: 1px solid $secondaryColor;
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: flex-start;
+                    justify-content: center;
+                    .load {
+                        width: 100%;
+                        height: 100%;
+                        min-height: 300px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        justify-content: flex-start;
+                        position: relative;
+                        h2 {
+                            text-align: center;
+                            margin-bottom: 40px;
+                        }
+                        .loader {
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 50%;
+                            border: 2px solid $secondaryColor;
+                            border-right-color: transparent;
+                            transition: 0.25s;
+                            animation: rotate 2s linear infinite;
+                            // position: relative;
+                        }
+                        &::after {
+                            content: "";
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            // transform: translate(-50%, -50%);
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            border: 2px solid $secondaryColor;
+                            border-left-color: transparent;
+                            transition: 0.25s;
+                            animation: rotate 2.2s linear infinite reverse;
+                        }
+                    }
+                    h2 {
+                        width: 100%;
+                    }
+                    .catalogs-container {
+                        width: 100%;
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 20px;
+                        .catalog_item {
+                            flex: 1 1 40%;
+                            text-align: center;
+                            box-sizing: border-box;
+                            background: $darkGrey;
+                            // background: $secondaryColor;
+                            color: #fff;
+                            padding: 10px;
+                            border-radius: 0px;
+                            transition: 0.25s;
+                            cursor: pointer;
+
+                            &:hover {
+                                background: $secondaryColor;
+                            }
+                            &.catalog_item-active {
+                                border-radius: 7px;
+                                background: $secondaryColor;
+                            }
+                        }
+                    }
+
+                    .btn {
+                        // margin-top: 20px;
+                        margin: 0 auto;
+                        margin-top: 20px;
+                    }
+                }
+            }
+        }
         .import-products {
             margin-bottom: 25px;
             display: flex;
