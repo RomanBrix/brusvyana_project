@@ -1,6 +1,6 @@
 # Setup .env file
 
-```
+```bash
 PASS_SEC = LAMA
 JWT_SEC = LAMA
 DEVELOP="develop"
