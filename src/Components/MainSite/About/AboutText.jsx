@@ -1,27 +1,37 @@
-import {ReactComponent as BigLogo} from '../../../svg/BigLogo.svg';
+import { ReactComponent as BigLogo } from "../../../svg/BigLogo.svg";
 
-
-
-
-
-
-export default function  AboutText() {
-    return(
+export default function AboutText({ translate }) {
+    return (
         <div className="about-main about-main-text">
             <div className="content">
                 <div className="bg">
-                    <BigLogo/>
+                    <BigLogo />
                 </div>
                 <div className="text-content">
-                    <h1>Про нас</h1>
-                    <div className="head">
-                        Текст про компанію
+                    <h1>{translate.head}</h1>
+                    <div className="head">{translate.miniHead}</div>
+                    <p>{translate.text1}</p>
+                    <div className="head">{translate.minihead2}</div>
+                    <p>{translate.text2}</p>
+                    <p>{translate.text22}</p>
+                    <div className="imgs">
+                        <img src="/src/about/selection1.jpg" alt="" />
+                        <img src="/src/about/selection2.jpg" alt="" />
+                        <img src="/src/about/selection3.jpg" alt="" />
                     </div>
-                    <p>Розсадник Брусвяна з 2005 року вирощує садивний матеріал лохини високорослої, малини ремонтантної, суниці альпійської та інших ягідних культур. Починаючи з 50 соток протягом 15 років розсадник збільшив площу до 3 га. Активно розвиваємо напрямок селекції та маємно власних 10 сортів занесених до реєстру України...</p>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste, magnam obcaecati sed vero temporibus deleniti eveniet non fugiat quod dolorem. Error saepe magnam doloremque mollitia?</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat eveniet qui quo amet cumque sit in, ab similique hic at nulla, aliquam eos odit accusantium.</p>
+                    <div className="head">{translate.minihead3}</div>
+                    <p>{translate.text31}</p>
+                    <p>{translate.text32}</p>
+                    <p>{translate.text33}</p>
+                    <p>{translate.text34}</p>
+                    <p>{translate.text35}</p>
+                    <div className="imgs">
+                        <img src="/src/about/history1.jpg" alt="" />
+                        <img src="/src/about/history2.jpg" alt="" />
+                        <img src="/src/about/history3.jpg" alt="" />
+                    </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }

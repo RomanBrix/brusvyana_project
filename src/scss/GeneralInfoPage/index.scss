@@ -116,6 +116,15 @@
                     width: 100%;
                     text-align: center;
                 }
+                // h2{}
+                ol,
+                ul {
+                    li {
+                        letter-spacing: 0.8px;
+                        line-height: 26px;
+                        margin-bottom: 15px;
+                    }
+                }
                 // background: red;
             }
         }

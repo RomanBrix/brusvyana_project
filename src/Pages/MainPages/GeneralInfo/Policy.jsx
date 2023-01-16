@@ -1,23 +1,51 @@
-
+import useMainTranslate from "../../../Components/hook/useMainTranslate";
 
 export default function Policy() {
+    const { getLanguageBlock } = useMainTranslate();
+    const { policy } = getLanguageBlock("Documents");
+
     return (
         <div className="general-info-text">
-            <h1>Угода користувача</h1>
+            <h1>{policy.head}</h1>
+            {createContent()}
 
-            <p>Оплата карткою при доставці кур'єром магазину можлива лише у випадку, якщо заявка була оформлена з авторизацією на сайті чи в додатку.</p>
-            <p>Щоб оплатити замовлення при доставці кур'єром</p>
+            <h2>{policy.reqi.head}</h2>
             <ul>
-                <li>При оформленні заявки виберіть тип оплати "Оплата при отриманні товару".</li>
-                <li>Заповніть решту даних для замовлення і натисніть "Замовлення підтверджую".</li>
-                <li>Під час доставки замовлення, зчитайте QR-код з мобільного додатку кур'єра і підтвердьте оплату на своєму мобільному пристрої.</li>
-                <li>Чек про оплату можна завантажити лише на сторінці замовлення в особистому кабінеті. Паперовий чек в такому випадку не надається.</li>
+                <li>{policy.reqi.fop}</li>
+                <li>{policy.reqi.ipn}</li>
+                <li>{policy.reqi.iban}</li>
             </ul>
-            
-            <p>Зверніть увагу: такий спосіб оплати можливий лише при повній оплаті замовлення.</p>
-            <p>Часткова оплата у разі відмови від товару поки неможлива. В такому разі, замовлення необхідно буде оплатити готівкою.</p>
-            <p>Вартість замовлення не може перевищувати 149 999 грн.</p>
-            <p>Також, поки не можна оплатити карткою при доставці товари з розділу алкогольні та тютюнові вироби.</p>
         </div>
-    )
+    );
+
+    function createContent() {
+        const content = [];
+        for (let i in policy) {
+            // console.log(i.includes("block"));
+
+            if (i.includes("block")) {
+                const block = [];
+                block.push(<h2 key={"head"}>{policy[i].head}</h2>);
+
+                const MainList = policy[i].list.map((item, index) => {
+                    if (typeof item === "string") {
+                        return <li key={index}>{item}</li>;
+                    } else {
+                        const miniList = [];
+                        for (let a = 0; a < item.length; a++) {
+                            miniList.push(
+                                <li key={a + item.length + 100}>{item[a]}</li>
+                            );
+                        }
+
+                        return <ol key={index}>{miniList}</ol>;
+                    }
+                });
+                block.push(<ol key={"contentList"}>{MainList}</ol>);
+
+                content.push(block);
+            }
+        }
+        return content;
+    }
 }

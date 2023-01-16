@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const BASE_URL_RETAIL = "http://localhost:1338/api";
-const BASE_URL_USER = "http://localhost:1337/api";
-const BASE_URL_BOT = "http://localhost:1339/bot";
-// const BASE_URL_BOT = "https://black-work.site:1339/bot";  //test server
-// const BASE_URL_RETAIL = "https://black-work.site:1338/api"; // test server
-// const BASE_URL_USER = "https://black-work.site:1337/api"; // test server
+// const BASE_URL_RETAIL = "http://localhost:1338/api";
+// const BASE_URL_USER = "http://localhost:1337/api";
+// const BASE_URL_BOT = "http://localhost:1339/bot";
+const BASE_URL_BOT = "https://black-work.site:1339/bot";  //test server
+const BASE_URL_RETAIL = "https://black-work.site:1338/api"; // test server
+const BASE_URL_USER = "https://black-work.site:1337/api"; // test server
 
 // const TOKEN =
 //   JSON.parse(JSON.parse(localStorage.getItem("persist:root")).user).currentUser
