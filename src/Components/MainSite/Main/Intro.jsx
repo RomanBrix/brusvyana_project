@@ -41,15 +41,15 @@ export default function Intro({ translate }) {
                 </div>
                 <div className="bottom">
                     <div className="social-block">
-                        <a href={ContactsInfo.smallPhone}>
+                        <a href={ContactsInfo.phonePost}>
                             <Phone />
-                            <span>{ContactsInfo.smallPhoneLabel}</span>
+                            <span>{ContactsInfo.phonePostLabel}</span>
                         </a>
                     </div>
                     <div className="social-block">
-                        <a href={ContactsInfo.bigPhone}>
+                        <a href={ContactsInfo.phone}>
                             <Phone />
-                            <span>{ContactsInfo.bigphoneLabel}</span>
+                            <span>{ContactsInfo.phoneLabel}</span>
                         </a>
                     </div>
                     <div className="social-block">

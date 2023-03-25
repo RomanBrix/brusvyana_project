@@ -4,8 +4,9 @@ import { ReactComponent as Instagram } from "../../../svg/socials/Instagram.svg"
 import { ReactComponent as Mail } from "../../../svg/socials/Mail.svg";
 import { ReactComponent as Facebook } from "../../../svg/socials/Facebook.svg";
 import { ContactsInfo } from "../../localData";
-
+import { useNavigate } from "react-router-dom";
 export default function Footer() {
+    const navigate = useNavigate();
     return (
         <div className="footer">
             <div className="content">
@@ -16,19 +17,67 @@ export default function Footer() {
 
                 <div className="links-block">
                     <ul className="menu">
-                        <li>Роздріб</li>
-                        <li>Опт</li>
-                        <li>Про нас</li>
-                        <li>Контакти</li>
+                        <li
+                            onClick={() => {
+                                navigate("/retail");
+                            }}
+                        >
+                            Роздріб
+                        </li>
+                        <li
+                            onClick={() => {
+                                navigate("/opt");
+                            }}
+                        >
+                            Опт
+                        </li>
+                        <li
+                            onClick={() => {
+                                navigate("/about");
+                            }}
+                        >
+                            Про нас
+                        </li>
+                        <li
+                            onClick={() => {
+                                navigate("/contacts");
+                            }}
+                        >
+                            Контакти
+                        </li>
                     </ul>
                 </div>
 
                 <div className="links-block">
                     <ul className="menu">
-                        <li>Оплата</li>
-                        <li>Доставка</li>
-                        <li>Гарантія</li>
-                        <li>Угода користувача</li>
+                        <li
+                            onClick={() => {
+                                navigate("/general-info");
+                            }}
+                        >
+                            Оплата
+                        </li>
+                        <li
+                            onClick={() => {
+                                navigate("/general-info/delivery");
+                            }}
+                        >
+                            Доставка
+                        </li>
+                        <li
+                            onClick={() => {
+                                navigate("/general-info/guarantee");
+                            }}
+                        >
+                            Гарантія
+                        </li>
+                        <li
+                            onClick={() => {
+                                navigate("/general-info/policy");
+                            }}
+                        >
+                            Угода користувача
+                        </li>
                     </ul>
                 </div>
 
@@ -42,9 +91,9 @@ export default function Footer() {
                     </div>
                     <div className="call">
                         <div className="head">Торгові мережі/ дрібний опт</div>
-                        <a href="tel:380674116906">
+                        <a href={ContactsInfo.phonePost}>
                             <Phone />
-                            +38 067 411 69 06
+                            {ContactsInfo.phonePostLabel}
                         </a>
                     </div>
                 </div>
@@ -67,6 +116,12 @@ export default function Footer() {
                                 {ContactsInfo.mail}
                             </a>
                         </li>
+                        <li>
+                            <a href={`mailto:${ContactsInfo.mailRetail}`}>
+                                <Mail />
+                                {ContactsInfo.mailRetail}
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
@@ -78,6 +133,10 @@ export default function Footer() {
                             вул. Польова 1
                         </a>
                     </div>
+                </div>
+
+                <div className="btm">
+                    <img src="/src/mc_logo.png" alt="" className="mclogo" />
                 </div>
             </div>
         </div>
