@@ -2,7 +2,9 @@
     background: #b4e4ac;
     box-sizing: border-box;
     padding: 30px;
-
+    z-index: 150;
+    position: relative;
+    margin-top: auto;
     .content {
         display: flex;
         align-items: flex-start;
@@ -19,6 +21,8 @@
             margin-top: 25px;
             img {
                 max-width: 300px;
+                max-height: 40px;
+                margin-right: 25px;
             }
         }
         .logo {

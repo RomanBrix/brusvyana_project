@@ -1,13 +1,12 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-// const BASE_URL_RETAIL = "http://localhost:1338/api";
-// const BASE_URL_USER = "http://localhost:1337/api";
-// const BASE_URL_BOT = "http://localhost:1339/bot";
-// const BASE_URL_BOT = "https://brusvyana.com.ua:1339/bot"; //test server
-const BASE_URL_BOT = "https://bot.brusvyana.com.ua/bot"; //test server
-const BASE_URL_RETAIL = "https://retail.brusvyana.com.ua/api"; // test server
-const BASE_URL_USER = "https://usr.brusvyana.com.ua/api"; // test server
+const BASE_URL_RETAIL = "http://localhost:1489/api";
+const BASE_URL_USER = "http://localhost:1488/api";
+const BASE_URL_BOT = "http://localhost:1490/bot";
+// const BASE_URL_BOT = "https://bot.brusvyana.com.ua/bot"; //test server
+// const BASE_URL_RETAIL = "https://retail.brusvyana.com.ua/api"; // test server
+// const BASE_URL_USER = "https://usr.brusvyana.com.ua/api"; // test server
 
 // const TOKEN =
 //   JSON.parse(JSON.parse(localStorage.getItem("persist:root")).user).currentUser
@@ -37,6 +36,9 @@ export function createUserAxiosRequest(url = BASE_URL_RETAIL) {
     let baseUrl = url;
     if (url === "user") {
         baseUrl = BASE_URL_USER;
+    }
+    if (url === "bot") {
+        baseUrl = BASE_URL_BOT;
     }
     // console.log(baseUrl);
     const api = axios.create({

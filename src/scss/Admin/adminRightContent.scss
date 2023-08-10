@@ -34,25 +34,27 @@
                 }
             }
             button {
-                background: #c3f0bb;
-                box-sizing: border-box;
-                border: 1px solid #b4e4ac;
-                // color: #169300;
-                padding: 10px 20px;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: 0.25s;
+                &:not([type="button"]) {
+                    background: #c3f0bb;
+                    box-sizing: border-box;
+                    border: 1px solid #b4e4ac;
+                    // color: #169300;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: 0.25s;
 
-                &:hover {
-                    background: #b4e4ac;
-                    color: #fff;
-                }
-                &.btn-warning {
-                    background: #f0c3bb;
-                    border: 1px solid #e4b4ac;
                     &:hover {
-                        background: #e4b4ac;
+                        background: #b4e4ac;
                         color: #fff;
+                    }
+                    &.btn-warning {
+                        background: #f0c3bb;
+                        border: 1px solid #e4b4ac;
+                        &:hover {
+                            background: #e4b4ac;
+                            color: #fff;
+                        }
                     }
                 }
             }

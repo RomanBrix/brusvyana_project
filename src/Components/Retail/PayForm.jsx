@@ -119,7 +119,7 @@ export default function PayForm({ totalPrice, products, user }) {
                     onChange={changePayOption}
                 >
                     <div className="pay box">
-                        <label htmlFor="cash">Готівкою</label>
+                        <label htmlFor="cash">Післяоплата</label>
                         <input
                             type="radio"
                             defaultChecked={payOption === "cash"}

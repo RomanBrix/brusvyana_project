@@ -1,0 +1,125 @@
+.vacancy {
+    box-sizing: border-box;
+    padding: 20px 0;
+    .content {
+        button {
+            background: #c3f0bb;
+            box-sizing: border-box;
+            border: 1px solid #b4e4ac;
+            // color: #169300;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.25s;
+
+            &:hover {
+                background: #b4e4ac;
+                color: #fff;
+            }
+        }
+        h1 {
+            text-align: center;
+        }
+        .vacancy-container {
+            display: flex;
+            align-items: stretch;
+            justify-content: flex-start;
+            gap: 15px 20px;
+            flex-wrap: wrap;
+
+            .block {
+                background: rgb(251, 251, 255);
+                box-sizing: border-box;
+                padding: 15px;
+                border-radius: 8px;
+                border: 1px solid rgba($color: #000000, $alpha: 0.35);
+                width: 250px;
+                min-height: 125px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                transition: 0.25s;
+                font-size: 21px;
+                cursor: pointer;
+                text-align: center;
+                .trash {
+                    position: absolute;
+                    right: 10px;
+                    top: 10px;
+                    opacity: 0;
+                    transition: 0.25s;
+                    svg {
+                        width: 25px;
+                        height: auto;
+                        * {
+                            transition: 0.25s;
+                        }
+                    }
+                    &:hover {
+                        * {
+                            fill: red;
+                        }
+                    }
+                }
+
+                &:hover {
+                    font-size: 24px;
+                    .trash {
+                        opacity: 1;
+                    }
+                }
+
+                &.block-add {
+                    font-weight: bold;
+                    font-size: 36px;
+                }
+            }
+        }
+
+        .ql-indent-1 {
+            box-sizing: border-box;
+            padding-left: 3em;
+        }
+        .ql-indent-2 {
+            box-sizing: border-box;
+
+            padding-left: 6em;
+        }
+        .ql-indent-3 {
+            box-sizing: border-box;
+
+            padding-left: 9em;
+        }
+        .ql-indent-4 {
+            box-sizing: border-box;
+
+            padding-left: 12em;
+        }
+        .ql-indent-5 {
+            box-sizing: border-box;
+
+            padding-left: 15em;
+        }
+        .ql-indent-5 {
+            box-sizing: border-box;
+
+            padding-left: 15em;
+        }
+        .ql-indent-6 {
+            box-sizing: border-box;
+
+            padding-left: 18em;
+        }
+        .ql-indent-7 {
+            box-sizing: border-box;
+
+            padding-left: 21em;
+        }
+        .ql-indent-8 {
+            box-sizing: border-box;
+
+            padding-left: 24em;
+        }
+    }
+}

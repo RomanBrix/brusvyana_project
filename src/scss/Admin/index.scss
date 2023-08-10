@@ -13,77 +13,7 @@ $lightWhite: rgb(251, 251, 255);
 @import "./adminStats.scss";
 @import "./adminCatalog.scss";
 @import "./adminProducts.scss";
-// .admin-products {
-//     .content {
-//         display: flex;
-//         align-items: stretch;
-//         justify-content: space-between;
-//         border-top: 1px solid $darkGrey;
-//         box-sizing: border-box;
-//         padding-top: 10px;
-//         .left {
-//             flex: 1 1 25%;
-//             border-right: 1px solid $darkGrey;
-//             box-sizing: border-box;
-//             padding: 0 20px;
-//             .catalog-btn {
-//                 display: flex;
-//                 align-items: center;
-//                 justify-content: center;
-//                 box-sizing: border-box;
-//                 padding: 7px 10px;
-//                 border: 1px solid $grey;
-//                 background: $lightBlue;
-//                 color: $darkGrey;
-//                 border-radius: 4px;
-//                 cursor: pointer;
-//                 transition: 0.25s;
-//                 margin-bottom: 10px;
-//                 position: relative;
-//                 .delete {
-//                     position: absolute;
-//                     right: 5px;
-//                     top: 5px;
-//                     width: 20px;
-//                     height: 20px;
-//                     background: $grey;
-//                     color: #f8f8f8;
-//                     text-align: center;
-//                     cursor: pointer;
-//                     transition: 0.25s;
-//                     &:hover {
-//                         background: red;
-//                     }
-//                 }
-//             }
-//         }
-//         .right {
-//             flex: 1 1 75%;
-//             box-sizing: border-box;
-//             padding: 0 20px;
-//             .top {
-//                 width: 100%;
-//                 display: flex;
-//                 align-items: center;
-//                 justify-content: flex-start;
-//                 .btn {
-//                     display: flex;
-//                     align-items: center;
-//                     justify-content: center;
-//                     box-sizing: border-box;
-//                     padding: 10px 15px;
-//                     border: 1px solid $grey;
-//                     background: $lightBlue;
-//                     color: $darkGrey;
-//                     border-radius: 4px;
-//                     cursor: pointer;
-//                     transition: 0.25s;
-//                     margin-right: 20px;
-//                 }
-//             }
-//         }
-//     }
-// }
+@import "./adminVacancy.scss";
 
 .admin-single-product {
     .content {

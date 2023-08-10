@@ -103,13 +103,13 @@ const MainTranslate = {
                         description:
                             "Контакти: brusvyana@ukr.net +380674113692",
                     },
-                    {
-                        name: "Горова Тетяна Сергіївна",
-                        img: "4.jpg",
-                        position: "Менеджер по роботі з оптовими клієнтами",
-                        description:
-                            "Контакти: brusvyana@ukr.net +380674113691",
-                    },
+                    // {
+                    //     name: "Горова Тетяна Сергіївна",
+                    //     img: "4.jpg",
+                    //     position: "Менеджер по роботі з оптовими клієнтами",
+                    //     description:
+                    //         "Контакти: brusvyana@ukr.net +380674113691",
+                    // },
                 ],
             },
         },
@@ -519,13 +519,13 @@ const MainTranslate = {
                         description:
                             "Контакты: brusvyana@ukr.net +380674113692",
                     },
-                    {
-                        name: "Горовая Татьяна Сергеевна",
-                        img: "4.jpg",
-                        position: "Менеджер по работе с оптовыми клиентами",
-                        description:
-                            "Контакты: brusvyana@ukr.net +380674113691",
-                    },
+                    // {
+                    //     name: "Горовая Татьяна Сергеевна",
+                    //     img: "4.jpg",
+                    //     position: "Менеджер по работе с оптовыми клиентами",
+                    //     description:
+                    //         "Контакты: brusvyana@ukr.net +380674113691",
+                    // },
                 ],
             },
         },
@@ -932,13 +932,13 @@ const MainTranslate = {
                         description:
                             "Contacts: brusvyana@ukr.net +380674113692",
                     },
-                    {
-                        name: "Horova Tetyana Serhiivna",
-                        img: "4.jpg",
-                        position: "Manager for work with wholesale customers",
-                        description:
-                            "Contacts: brusvyana@ukr.net +380674113691",
-                    },
+                    // {
+                    //     name: "Horova Tetyana Serhiivna",
+                    //     img: "4.jpg",
+                    //     position: "Manager for work with wholesale customers",
+                    //     description:
+                    //         "Contacts: brusvyana@ukr.net +380674113691",
+                    // },
                 ],
             },
         },

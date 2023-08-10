@@ -28,6 +28,8 @@ import OrderSuccess from "./Pages/RetailPages/OrderSuccess";
 import OrderError from "./Pages/RetailPages/OrderError";
 import Settings from "./Pages/Admin/Settings";
 import AdminCatalog from "./Pages/Admin/Catalog";
+import MainVacancy from "./Pages/MainPages/Vacancy";
+import AdminVacancy from "./Pages/Admin/Vacancy";
 
 export default function App() {
     const { pathname } = useLocation();
@@ -58,6 +60,7 @@ export default function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/contacts" element={<Contact />} />
 
+                    <Route path="/vacancy/*" element={<MainVacancy />} />
                     <Route path="/partners" element={<Partners />} />
 
                     <Route path="/general-info" element={<GeneralInfoLayout />}>
@@ -164,6 +167,16 @@ export default function App() {
                                 <Navigate to="/admin/login" replace />
                             ) : (
                                 <SingleProduct />
+                            )
+                        }
+                    />
+                    <Route
+                        path="/admin/vacancy/*"
+                        element={
+                            !(user && user?.isAdmin) ? (
+                                <Navigate to="/admin/login" replace />
+                            ) : (
+                                <AdminVacancy />
                             )
                         }
                     />
