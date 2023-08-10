@@ -5,8 +5,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 const userUrlServer = process.env.USER_URL_SERVER;
 
-
-
 // CHECK USER AUTHENTICATION
 const verifyUser = (req, res, next) => {
     // console.log('go check user')
@@ -16,11 +14,11 @@ const verifyUser = (req, res, next) => {
 
     //set request header
     const options = {
-        url: userUrlServer  + '/user',
+        url: userUrlServer + "/user",
         method: "GET",
         headers: {
-            "token": authHeader
-        }
+            token: authHeader,
+        },
     };
     //send request
     request(options, function (error, response, body) {
@@ -29,13 +27,13 @@ const verifyUser = (req, res, next) => {
         }
 
         const statusCode = response && response.statusCode;
-            // console.log(error)
-            // console.log(response.statusCode)
-            // console.log(body)
-            // console.log('end check user')
+        // console.log(error)
+        // console.log(response.statusCode)
+        // console.log(body)
+        // console.log('end check user')
         switch (statusCode) {
             case 401:
-                res.status(401).json(JSON.parse(body))
+                res.status(401).json(JSON.parse(body));
                 break;
 
             case 403:
@@ -51,26 +49,20 @@ const verifyUser = (req, res, next) => {
                 break;
         }
     });
-  };
+};
 
-
-
-  const verifyAdmin = (req, res, next) => {
-
-    console.log('VERIFY ADMIN')
-    console.log('VERIFY ADMIN2')
-
+const verifyAdmin = (req, res, next) => {
     const authHeader = req.headers.token;
-    console.log(authHeader)
+    // console.log(authHeader)
 
     //set request header
     const options = {
-        url: userUrlServer  + '/admin',
+        url: userUrlServer + "/admin",
         method: "GET",
         rejectUnauthorized: false,
         headers: {
-            "token": authHeader
-        }
+            token: authHeader,
+        },
     };
     //send request
     request(options, function (error, response, body) {
@@ -79,15 +71,15 @@ const verifyUser = (req, res, next) => {
             console.log(error);
             return res.status(500).json(error);
         }
-
+        // console.log(response);
         const statusCode = response && response.statusCode;
-            // console.log(error)
-            // console.log(response.statusCode)
-            // console.log(body)
-            // console.log('end check user')
+        // console.log(error)
+        // console.log(response.statusCode)
+        // console.log(body)
+        // console.log('end check user')
         switch (statusCode) {
             case 401:
-                res.status(401).json(JSON.parse(body))
+                res.status(401).json(JSON.parse(body));
                 break;
 
             case 403:
@@ -103,12 +95,9 @@ const verifyUser = (req, res, next) => {
                 break;
         }
     });
-  };
+};
 
-
-
-  module.exports = {
+module.exports = {
     verifyUser,
-    verifyAdmin
-  };
-  
+    verifyAdmin,
+};

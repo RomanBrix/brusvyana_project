@@ -15,6 +15,8 @@ const productsRoute = require("./routes/products");
 const orders = require("./routes/order");
 const np = require("./routes/np");
 
+const vacancyRoute = require("./routes/vacancy");
+
 dotenv.config();
 const PORT = process.env.RETAIL_PORT || 5000;
 
@@ -35,6 +37,8 @@ app.use("/api/category", categoryRoute);
 app.use("/api/products", productsRoute);
 app.use("/api/orders", orders);
 app.use("/api/np", np);
+
+app.use("/api/vacancy", vacancyRoute);
 
 app.listen(PORT, () => {
     console.log("Backend server is running! port:  " + PORT);
