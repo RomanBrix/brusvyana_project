@@ -4,6 +4,7 @@ const fs = require("fs");
 
 dotenv.config();
 const bot = new Telegraf(process.env.BOT_TOKEN);
+console.log("BOT STARTED");
 
 let alertsIdRaw = fs.readFileSync(__dirname + "/alerts.json");
 let alertsId = JSON.parse(alertsIdRaw);

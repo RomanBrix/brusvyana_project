@@ -4,7 +4,7 @@ const router = require("express").Router();
 const { verifyUser, verifyAdmin } = require("./verifyToken");
 
 router.post("/newOrder", async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const order = new Order(req.body);
     try {
         await order.save();
@@ -36,7 +36,7 @@ router.get("/order/:id", verifyAdmin, async (req, res) => {
 
 router.post("/note", verifyAdmin, async (req, res) => {
     const { id, note } = req.body;
-    console.log(note, id);
+    // console.log(note, id);
     try {
         const order = await Order.findById(id);
         if (order.notes) {
@@ -53,8 +53,8 @@ router.post("/note", verifyAdmin, async (req, res) => {
 });
 
 router.put("/order/:id", verifyAdmin, async (req, res) => {
-    console.log(req.body);
-    console.log(req.params.id);
+    // console.log(req.body);
+    // console.log(req.params.id);
     try {
         const updatedOrder = await Order.findByIdAndUpdate(
             req.params.id,

@@ -17,7 +17,7 @@ router.get("/users", async (req, res) => {
 });
 
 router.delete("/user", async (req, res) => {
-    console.log();
+    // console.log();
     const { id } = req.query;
     try {
         if (!id) throw new Error("xx");
@@ -38,7 +38,6 @@ router.delete("/user", async (req, res) => {
 });
 
 router.post("/user", async (req, res) => {
-    // console.log(req.body);
     const { id } = req.body;
     try {
         if (!id) throw new Error("xx");
@@ -92,7 +91,9 @@ router.post("/newOrder", async (req, res) => {
     const msgProducts = products
         .map((product) => {
             const str = `${product.title} ${
-                product.variants ? `[ ${product.varTitle} ]` : ""
+                product?.variants && product.variants.length > 0
+                    ? `[ ${product.varTitle} ]`
+                    : ""
             } - ${product.quantity} шт. (${product.price} грн.)`;
             return replaceDots(str);
         })
@@ -120,7 +121,7 @@ router.post("/newOrder", async (req, res) => {
 ${msgProducts}
 `;
 
-    console.log(alertsId);
+    // console.log(alertsId);
 
     try {
         // for (let i = 0; i < alertsId.length; i++) {
@@ -175,6 +176,22 @@ async function sendMsgToAdmins(msg) {
         console.log(err);
         return err;
     }
+}
+
+function replaceDots(str = "неизвестно") {
+    if (typeof str !== "string") str = str + "";
+    const specialChars = "|()*#.!_[]`~+-={}"; // Список специальных символов
+    let result = "";
+
+    for (let i = 0; i < str.length; i++) {
+        if (specialChars.includes(str[i])) {
+            result += "\\"; // Добавляем символ "\\" перед специальным символом
+            // result += "\\"; // Добавляем символ "\\" перед специальным символом
+        }
+        result += str[i];
+    }
+
+    return result;
 }
 
 module.exports = router;

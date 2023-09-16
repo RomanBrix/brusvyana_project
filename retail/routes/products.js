@@ -16,7 +16,7 @@ const { verifyUser, verifyAdmin } = require("./verifyToken");
 const router = require("express").Router();
 
 router.get("/adminRequest", verifyAdmin, async (req, res) => {
-    // console.log('first')
+    console.log("first");
     console.log(req.query);
     const { options, limit } = req.query;
     const { page, search } = JSON.parse(options);
