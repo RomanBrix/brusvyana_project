@@ -1,55 +1,44 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { publicRequestRetail } from "../../requestMethods";
 import { ReactComponent as Uah } from "../../svg/Uah.svg";
 import { ReactComponent as Guar } from "../../svg/Guar.svg";
 import { goSetProducts } from "../../Redux/cartApi";
 import { ReactComponent as Cart } from "../../svg/Cart.svg";
+import { useQuery } from "@tanstack/react-query";
 
 // import { ReactComponent as Approx} from "../../svg/approx.svg"
 
 export default function Product() {
-    const [product, setProduct] = useState(null);
-    const [selectedVariant, setSelectedVariant] = useState(null);
-
-    const cartStore = useSelector((state) => state.persistedReducer.cart);
-    const dispatch = useDispatch();
-
     const navigate = useNavigate();
     const params = useParams();
+    // console.log(params);
+    // const { state: locationState } = useLocation();
 
-    const {
-        cart: { products },
-    } = useSelector((state) => state.persistedReducer);
+    const cartStore = useSelector((state) => state.persistedReducer.cart);
     const productCount =
-        products.length > 0
-            ? products.reduce((acc, curr) => {
+        cartStore.products.length > 0
+            ? cartStore.products.reduce((acc, curr) => {
                   return (acc += +curr.quantity);
               }, 0)
             : 0;
 
-    // console.log(cartStore.products);
+    const {
+        data: product,
+        isError,
+        isLoading,
+    } = useQuery(["product"], () => fetchProduct(params.id || null), {
+        keepPreviousData: true,
+    });
+    // const [product, setProduct] = useState(null);
 
-    useEffect(() => {
-        if (params.id) {
-            publicRequestRetail
-                .get("/products/" + params.id)
-                .then((res) => {
-                    // console.log(res.data);
-                    setProduct(res.data);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        } else {
-            setProduct(null);
-        }
-        // eslint-disable-next-line
-    }, []);
+    const [selectedVariant, setSelectedVariant] = useState(null);
 
-    if (product === null) {
+    const dispatch = useDispatch();
+
+    if (isLoading) {
         return (
             <div className="product-page">
                 <div className="content">
@@ -58,7 +47,8 @@ export default function Product() {
             </div>
         );
     }
-
+    if (isError) return navigate("../", { replace: true });
+    console.log(product);
     return (
         <div className="product-page">
             <div className="content">
@@ -125,8 +115,17 @@ export default function Product() {
         </div>
     );
 
+    async function fetchProduct(id) {
+        const { data } = await publicRequestRetail.get(
+            "/productsV2/product/" + id
+        );
+        return data;
+    }
+
     function addToCart() {
-        // console.log(cartStore.loading);
+        // console.log(product);
+        // console.log(product.variants.length);
+
         if (cartStore.loading) {
             return;
         }
@@ -135,6 +134,7 @@ export default function Product() {
             variant: null,
             quantity: 1,
         };
+
         if (product.variants.length > 0) {
             if (selectedVariant) {
                 // addToCart(dispatch, selectedVariant._id, 1);
@@ -145,38 +145,27 @@ export default function Product() {
                 return;
             }
         }
+
         const allProdutcsToDispatch = cartStore.products.map((item) => item);
         // console.log(allProdutcsToDispatch);
-        let chekedElement = null;
-        allProdutcsToDispatch.map((item, index) => {
-            console.log("selected var: ", selectedVariant._id);
-            console.log("item.variant: ", item.variant);
-            console.log(item.variant === selectedVariant._id);
+        // console.log(allProdutcsToDispatch);
+        console.log(allProdutcsToDispatch);
 
-            if (selectedVariant) {
-                if (item.variant === selectedVariant._id) {
-                    chekedElement = index;
-                }
-            } else {
-                if (item.id === prod.id) {
-                    chekedElement = index;
-                }
-            }
-            return item;
-        });
+        const dubleCartItemIndex = allProdutcsToDispatch.findIndex((item) =>
+            selectedVariant
+                ? item.variant === selectedVariant._id
+                : item.id === prod.id
+        );
 
-        console.log("index: ", chekedElement);
-        if (chekedElement !== null) {
-            allProdutcsToDispatch[chekedElement] = {
+        console.log("index: ", dubleCartItemIndex);
+        if (dubleCartItemIndex !== null && dubleCartItemIndex !== -1) {
+            allProdutcsToDispatch[dubleCartItemIndex] = {
                 ...prod,
-                quantity: allProdutcsToDispatch[chekedElement].quantity + 1,
+                quantity:
+                    allProdutcsToDispatch[dubleCartItemIndex].quantity + 1,
             };
-            // prod.quantity = cartStore.products[chekedElement].quantity + 1;
-            // cartStore.products[chekedElement].quantity += 1;
-            // dispatch(setProducts(cartStore.products));
         } else {
             allProdutcsToDispatch.push(prod);
-            // cartStore.products.push(prod);
         }
 
         goSetProducts(dispatch, allProdutcsToDispatch);

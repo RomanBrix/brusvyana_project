@@ -1,100 +1,107 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import { Route, Routes, useParams,
-    //  useLocation, 
-    } from "react-router-dom"
-import Catalog from "../../Admin/Products/Catalog";
-import Categories from "../../Admin/Products/Categories";
-import ImportProducts from "../../Admin/Products/ImportProducts";
-import ProductsContainer from "../../Admin/Products/ProductsContainer";
-import AdminProductsTable from "../../Admin/Products/ProductsTable";
-import { publicRequestRetail } from "../../requestMethods";
-
+import { useEffect, useState } from "react";
+import { createUserAxiosRequest } from "../../requestMethods";
+import { useQuery } from "@tanstack/react-query";
+import ProductsTableNew from "../../Admin/Products/ProductsTableNew";
+import { useSearchParams } from "react-router-dom";
 
 export default function Products() {
-    // const location = useLocation();
-    const params = useParams();
-    // console.log(location);
-    // console.log(params);
-    const [productsIds, setProductsIds] = useState([]);
-    const [cataloges, setCataloges] = useState([]);
-    const [categories, setCategories] = useState([]);
+    const adminRequest = createUserAxiosRequest();
+    let [searchParams, setSearchParams] = useSearchParams();
+    const [searchQuery, setSearchQuery] = useState(
+        searchParams.get("search") || ""
+    );
+    const [pageQuery, setPageQuery] = useState(searchParams.get("page") || 1);
 
-    const [selectedCategory, setSelectedCategory] = useState(params["*"].split('/')[1] || null);
+    useEffect(() => {
+        changeSearchParams("search", searchQuery);
+    }, [searchQuery]);
+    useEffect(() => {
+        changeSearchParams("page", pageQuery);
+    }, [pageQuery]);
 
-    useEffect(()=>{
-        if(!(params["*"].split('/')[1])){
-            setSelectedCategory(null);
+    const {
+        data: products,
+        isLoading,
+        isError,
+    } = useQuery(
+        ["products", searchQuery, pageQuery],
+        () => fetchProducts({ searchQuery, pageQuery }),
+        {
+            keepPreviousData: true,
+            refetchOnWindowFocus: true,
+            // refetchInterval: 2000,
         }
-        if(!(params["*"].split('/')[0])){
-            setCategories([])
+    );
+    const { data: productsCount = 0 } = useQuery(
+        ["productsCount"],
+        () => fetchProductsCount(),
+        {
+            keepPreviousData: false,
+            refetchOnWindowFocus: false,
+            // refetchInterval: 2000,
         }
+    );
 
-        // eslint-disable-next-line
-    },[params["*"]])
-
-
-    useEffect(()=>{
-        if(selectedCategory){
-            let idsArr = categories.filter((category)=> category._id === selectedCategory)[0]?.products
-            setProductsIds(idsArr || []);
-        }else{
-            let idsArr = [];
-            categories.forEach((category)=>{
-                idsArr = [...idsArr, ...category.products];
-            } )
-            setProductsIds(idsArr);
-        }
-        // eslint-disable-next-line
-    }, [categories, selectedCategory])
-    
-
-
-
-    return(
+    if (isLoading || isError)
+        return (
+            <div className="admin admin-products admin-right-content">
+                <div className="content">
+                    {isLoading && <h1>Loading</h1>}
+                    {isError && <h1>Error</h1>}
+                </div>
+            </div>
+        );
+    return (
         <div className="admin admin-products admin-right-content">
             <div className="content">
-                <ImportProducts/>
-                <AdminProductsTable/>
-                
-                
-                {/* <div className="left">
-                    <Routes>
-                        <Route index element={<Catalog  cataloges={cataloges} getCatalogs={getCatalogs}/>} />
-                        <Route path="/:catalog/*" element={<Categories getCategories={getCategories} categories={categories} setSelectedCategory={setSelectedCategory}/>}/>
-                    </Routes>
-                </div> */}
-
-
-                {/* <div className="right"> */}
-                        {/* {
-                            params["*"] ? <ImportProducts/> : ''
-                        } */}
-                    {/* <Routes> */}
-                        {/* <Route path="*" element={<h1>{ }</h1>} /> */}
-                        
-                        {/* <Route path="*" element={productsIds.length > 0 || selectedCategory ? <ProductsContainer getCategories={getCategories} productsIds={productsIds}/> : <h1>{params["*"] ? 'Выбери категорию' : 'Выбери каталог'}</h1>} />
-                    </Routes> */}
-                {/* </div> */}
+                {/* productsCount: {productsCount} */}
+                <ProductsTableNew
+                    productsCount={productsCount}
+                    products={products}
+                    search={{
+                        setSearchQuery,
+                        searchQuery,
+                    }}
+                    // changeSearchParams={changeSearchParams}
+                    changePage={changePage}
+                />
             </div>
         </div>
-    )
+    );
+    function changePage(state = true) {
+        setPageQuery((prev) => {
+            if (typeof state === "number") return state;
+            if (state) return +prev + 1;
 
+            if (+prev === 1) return 1;
+            return --prev;
+        });
+    }
 
-    // function getCatalogs() {
-    //     publicRequestRetail.get('/catalog').then(res=>{
-    //         setCataloges(res.data)
-    //     }).catch(err=>{ 
-    //         console.log(err)
-    //     })
-    // }
+    function changeSearchParams(key, value) {
+        if (value) {
+            if (searchParams.has(key)) {
+                searchParams.set(key, value);
+            } else {
+                searchParams.append(key, value);
+            }
+        } else {
+            searchParams.delete(key);
+        }
+        setSearchParams(searchParams);
+    }
 
-    // function getCategories(catalog) {
-    //     publicRequestRetail.get(`/category/?catalog=${catalog}`).then(res=>{
-    //             setCategories(res.data)
-    //             // console.log(res.data)
-    //         }).catch(err=>{ 
-    //             console.log(err)
-    //         })
-    // }
+    async function fetchProducts({ searchQuery, pageQuery }) {
+        const { data } = await adminRequest.get("/productsV2/products", {
+            params: {
+                searchQuery,
+                pageQuery,
+            },
+        });
+        return data;
+    }
+    async function fetchProductsCount() {
+        const { data } = await adminRequest.get("/productsV2/prod-count");
+        return data;
+    }
 }

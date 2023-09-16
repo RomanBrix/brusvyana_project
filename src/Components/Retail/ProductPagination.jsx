@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export default function ProductPagination({
     activePage,
     countAllProducts,
-    setActivePage,
+    changePage,
 }) {
     const pageLimit = 10;
     const pagesCount = Math.ceil(countAllProducts / pageLimit);
@@ -35,7 +35,7 @@ export default function ProductPagination({
                                 if (!(+activePage === item + 1)) {
                                     // scroll to top
                                     window.scrollTo(0, 0);
-                                    setActivePage(item + 1);
+                                    changePage(item + 1);
                                 }
                             }}
                         >

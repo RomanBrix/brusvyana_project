@@ -17,7 +17,7 @@ export default function Cart() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    console.log(cartStore);
+    // console.log(cartStore);
     // console.log(products);
 
     useEffect(() => {
@@ -25,10 +25,10 @@ export default function Cart() {
             let ids = cartStore.products.map((product) => product.id);
 
             publicRequestRetail
-                .get("/products/cart", { params: { ids } })
+                .get("/productsV2/cart", { params: { ids } })
                 .then((res) => {
-                    console.log(res.data);
-                    const productForSave = doNiceProductViev(res.data);
+                    // console.log(res.data);
+                    const productForSave = doNiceProductView(res.data);
                     setProducts(productForSave);
                 })
                 .catch((err) => {
@@ -64,7 +64,7 @@ export default function Cart() {
                         <div
                             className="btn btn-back"
                             onClick={() => {
-                                navigate(-1);
+                                navigate("/retail");
                             }}
                         >
                             Продовжити покупки
@@ -103,7 +103,7 @@ export default function Cart() {
 
                         {products.length > 0
                             ? renderProducts(products)
-                            : "НЕМА!"}
+                            : "Ви не додали продуктів до кошика!"}
                     </div>
                 </div>
                 <div className="paying-form">
@@ -124,7 +124,12 @@ export default function Cart() {
     function removeAll() {
         goSetProducts(dispatch, []);
     }
-
+    function removeNotItarebleProducts(id) {
+        goSetProducts(
+            dispatch,
+            cartStore.products.filter((item) => item.id !== id)
+        );
+    }
     //REMOVE BLOCK OF PRODUCT
     function removeBlockCart(position) {
         const { products } = cartStore;
@@ -142,7 +147,7 @@ export default function Cart() {
                 // changeProd[position].quantity += 1;
                 changeProd = products.map((item, index) => {
                     if (index === position) {
-                        console.log(products[position].id);
+                        // console.log(products[position].id);
                         return {
                             ...item,
                             quantity: item.quantity + 1,
@@ -174,6 +179,7 @@ export default function Cart() {
     //RENDER PRODUCT
     function renderProducts(products) {
         return products.map((product, key) => {
+            // console.log(product.variants);
             return (
                 <div className="product" key={key}>
                     <div className="img">
@@ -184,10 +190,8 @@ export default function Cart() {
                     </div>
                     <div className="title">
                         {product.title}{" "}
-                        {product.variants ? (
+                        {product?.variants && product.variants.length > 0 && (
                             <div className="sub">[ {product.varTitle} ]</div>
-                        ) : (
-                            ""
                         )}
                     </div>
                     <div className="count">
@@ -221,19 +225,25 @@ export default function Cart() {
         });
     }
 
-    function doNiceProductViev(data) {
-        return cartStore.products.map((item, index) => {
+    function doNiceProductView(data) {
+        const prods = cartStore.products.map((item, index) => {
             const prod = data.find((product) => product._id === item.id);
+            // console.log(prod);
+            if (!prod) {
+                removeNotItarebleProducts(item.id);
+                return null;
+            }
             let price = 0;
             let varTitle = null;
+            let varSKU = null;
             if (item.variant) {
-                price =
-                    prod.variants.find(
-                        (variant) => variant._id === item.variant
-                    ).price * item.quantity;
-                varTitle = prod.variants.find(
+                const pickedVariant = prod.variants.find(
                     (variant) => variant._id === item.variant
-                ).title;
+                );
+                price = pickedVariant.price * item.quantity;
+                varTitle = pickedVariant.title;
+
+                varSKU = pickedVariant.SKU;
             } else {
                 price = prod.price * item.quantity;
             }
@@ -241,10 +251,13 @@ export default function Cart() {
                 ...prod,
                 quantity: item.quantity,
                 price,
-                variants: item.variant,
                 varTitle,
+                varSKU,
+                varId: item.variant,
                 position: index,
             };
         });
+
+        return prods.filter((item) => item);
     }
 }

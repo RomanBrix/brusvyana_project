@@ -1,151 +1,102 @@
-// eslint-disable-next-line
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { publicRequestRetail } from "../../requestMethods";
 import CatalogItem from "../../Components/Retail/CatalogItem";
-import Filters from "../../Components/Retail/Filters";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import Cart from "./Cart";
+import { useSelector } from "react-redux";
 import ProductsContainer from "../../Components/Retail/Products";
-import useQuery from "../../Components/Retail/QueryHook";
-import {
-    getAllCataloges,
-    getCategoriesOfCatalog,
-    fetchProducts,
-    clearCatalog,
-    lengthOfAllCatalogProducts,
-} from "../../Redux/retailApi";
-
-import { ReactComponent as Cart } from "../../svg/Cart.svg";
+import Filters from "../../Components/Retail/Filters";
 
 export default function RetailCatalog() {
-    const retailStore = useSelector((state) => state.retail);
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const queryUrl = useQuery();
-    const location = useLocation();
-
-    const activeCatalog = queryUrl.get("catalog");
-    const activeCategory = queryUrl.get("category");
-
-    // const [notificationWindow, setNotificationWindow] = useState(() => {
-    //     const localStore = window.localStorage.getItem("notificationWindow");
-    //     if (!localStore) return true;
-    //     return JSON.parse(localStore);
-    // });
-    /*
-    for mobile cart
-    */
-    const {
-        cart: { products },
-    } = useSelector((state) => state.persistedReducer);
+    const cartStore = useSelector((state) => state.persistedReducer.cart);
     const productCount =
-        products.length > 0
-            ? products.reduce((acc, curr) => {
+        cartStore.products.length > 0
+            ? cartStore.products.reduce((acc, curr) => {
                   return (acc += +curr.quantity);
               }, 0)
             : 0;
 
-    // console.log(activeCatalog);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [activeCatalog, setActiveCatalog] = useState(
+        searchParams.get("catalog") || ""
+    );
+    const [activeCategory, setActiveCategory] = useState(
+        searchParams.get("category") || ""
+    );
+    const [activePage, setActivePage] = useState(
+        searchParams.get("page") || ""
+    );
 
-    useEffect(() => {
-        if (location.pathname !== "/retail/products/") {
-            // console.log('clear');
-            clearCatalog(dispatch);
+    const {
+        data: catalogs,
+        isError: catalogsError,
+        isLoading: catalogsLoad,
+    } = useQuery(["catalogs"], fetchCatalogs, {
+        keepPreviousData: true,
+        refetchOnWindowFocus: false,
+    });
+    const {
+        data: products,
+        isError: productsError,
+        isLoading: productsLoad,
+    } = useQuery(
+        ["products", activeCatalog, activeCategory, activePage],
+        () => fetchProducts(activeCatalog, activeCategory, activePage),
+        {
+            keepPreviousData: true,
+            refetchOnWindowFocus: false,
+            enabled: !!activeCatalog,
         }
-        // eslint-disable-next-line
-    }, [location.pathname]);
-    //get catalogs
-    useEffect(() => {
-        // console.log(retailStore.catalogs.length);
-        if (retailStore.catalogs.length < 1) {
-            getAllCataloges(dispatch, (activeFirst) => {
-                let goTo = activeFirst;
-                if (activeCatalog) {
-                    goTo = activeCatalog;
-                }
-                // console.log('asdasdasd')
-                if (activeCatalog) {
-                    queryUrl.set("catalog", goTo);
-
-                    navigate("./?" + queryUrl.toString(), { replace: true });
-                } else {
-                    navigate("./?catalog=" + goTo, { replace: true });
-                }
-            });
+    );
+    const { data: productsCount } = useQuery(
+        ["prodCount", activeCatalog, activeCategory],
+        () => fetchProductsCount(activeCatalog, activeCategory),
+        { enabled: !!activeCatalog }
+    );
+    const { data: categories = [] } = useQuery(
+        ["categories", activeCatalog],
+        () => fetchCatalogsCategory(activeCatalog),
+        {
+            enabled: !!activeCatalog,
+            keepPreviousData: true,
+            refetchOnWindowFocus: false,
         }
+    );
 
-        //eslint-disable-next-line
-    }, [retailStore.catalogs]);
-
-    //get categories
+    // console.log(productsCount);
+    //change catalogs
     useEffect(() => {
-        // console.log(activeCatalog)
-
+        if (catalogs && !activeCatalog && catalogs.length > 0) {
+            setActiveCatalog(catalogs[0].SKU);
+        }
         if (activeCatalog) {
-            getCategoriesOfCatalog(dispatch, activeCatalog, (err) => {
-                if (err) {
-                    console.log(err);
-                    navigate("../", { replace: true });
-                }
-            });
+            changeSearchParams("catalog", activeCatalog);
+            setActivePage(1);
+            setActiveCategory("");
         }
-        //eslint-disable-next-line
-    }, [activeCatalog]);
+    }, [catalogs, activeCatalog]);
 
-    //load products
     useEffect(() => {
-        if (
-            retailStore.countAllProducts !== null &&
-            retailStore.countAllProducts !== 0 &&
-            activeCategory === null
-        ) {
-            // if(retailStore.categories.length < 1){
-            //     thereIsNoProducts(dispatch)
-            // }
-            if (retailStore.countAllProducts > 0) {
-                const categoriesId = retailStore.categories.map((item) => {
-                    return item._id;
-                });
+        changeSearchParams("category", activeCategory);
+        setActivePage(1);
+    }, [activeCategory]);
+    useEffect(() => {
+        changeSearchParams("page", activePage);
+        // setActivePage(1);
+    }, [activePage]);
 
-                fetchProducts(dispatch, categoriesId);
-            } else {
-                // thereIsNoProducts(dispatch)
-            }
-        } else if (
-            (retailStore.countAllProducts === null ||
-                retailStore.countAllProducts === 0) &&
-            activeCategory === null &&
-            activeCatalog !== null
-        ) {
-            console.log("first");
-            lengthOfAllCatalogProducts(dispatch, activeCatalog);
-            if (retailStore.categories) {
-                const categoriesId = retailStore.categories.map((item) => {
-                    return item._id;
-                });
-
-                fetchProducts(dispatch, categoriesId);
-            }
-        }
-        // eslint-disable-next-line
-    }, [retailStore.categories, activeCategory]);
-
-    console.log(retailStore);
-
+    // console.log(products);
     return (
         <div className="retail retail-catalog">
             <div className="content">
                 <div className="catalog-header">
-                    <Routes>
-                        <Route
-                            path="*"
-                            element={
-                                <RenderCatalogHeader
-                                    catalogs={retailStore.catalogs}
-                                />
-                            }
-                        />
-                        {/* <Route path="/:catalog/*" element={<Categories getCategories={getCategories} categories={categories} setSelectedCategory={setSelectedCategory}/>}/> */}
-                    </Routes>
+                    <RenderCatalogHeader
+                        catalogs={catalogs}
+                        state={{ error: catalogsError, loading: catalogsLoad }}
+                        setActiveCatalog={setActiveCatalog}
+                    />
                 </div>
                 <div className="retail-content">
                     <div
@@ -156,46 +107,94 @@ export default function RetailCatalog() {
                     >
                         <Cart /> <div className="count">{productCount}</div>
                     </div>
-
-                    <Routes>
-                        <Route
-                            path="*"
-                            element={
-                                retailStore.categories ? (
-                                    <Filters
-                                        categories={retailStore.categories}
-                                    />
-                                ) : (
-                                    <h2>Loading...</h2>
-                                )
-                            }
-                        />
-                        {/* <Route path="/:catalog/*" element={<Categories getCategories={getCategories} categories={categories} setSelectedCategory={setSelectedCategory}/>}/> */}
-                    </Routes>
-
+                    <Filters
+                        categories={categories}
+                        activeCategory={activeCategory}
+                        setActiveCategory={setActiveCategory}
+                    />
                     <ProductsContainer
-                        products={retailStore.products}
-                        categories={retailStore.categories}
-                        fetchLoading={retailStore.fetchLoading}
-                        productsCount={retailStore.countAllProducts}
-                        loadingProducts={retailStore.loadingProduct}
+                        products={products}
+                        state={{ loading: productsLoad, error: productsError }}
+                        productsCount={productsCount}
+                        activePage={activePage}
+                        changePage={changePage}
                     />
                 </div>
             </div>
         </div>
     );
+
+    function changePage(state = true) {
+        setActivePage((prev) => {
+            if (typeof state === "number") return state;
+            if (state) return +prev + 1;
+
+            if (+prev === 1) return 1;
+            return --prev;
+        });
+    }
+
+    async function fetchCatalogs() {
+        const { data } = await publicRequestRetail("/catalog");
+        return data;
+    }
+
+    async function fetchProductsCount(catalog, category) {
+        const { data } = await publicRequestRetail("/productsV2/prod-count", {
+            params: {
+                catalog,
+                category,
+            },
+        });
+        return data;
+    }
+    async function fetchCatalogsCategory(catalog) {
+        const { data } = await publicRequestRetail(
+            "/productsV2/catalogs-category",
+            {
+                params: {
+                    catalog,
+                },
+            }
+        );
+        return data;
+    }
+    async function fetchProducts(catalog, category, page) {
+        const { data } = await publicRequestRetail("/productsV2/catalog-prod", {
+            params: {
+                catalog,
+                category,
+                page,
+            },
+        });
+        return data;
+    }
+
+    function changeSearchParams(key, value) {
+        if (value) {
+            if (searchParams.has(key)) {
+                searchParams.set(key, value);
+            } else {
+                searchParams.append(key, value);
+            }
+        } else {
+            searchParams.delete(key);
+        }
+        setSearchParams(searchParams);
+    }
 }
 
-function RenderCatalogHeader({ catalogs }) {
-    return catalogs.map((catalog, index) => {
+function RenderCatalogHeader({ catalogs, state, setActiveCatalog }) {
+    if (state.error) return <h1>Error Load Menu</h1>;
+    if (state.loading) return <h1>Завантаження меню</h1>;
+    return catalogs.map((catalog) => {
         return (
-            <CatalogItem title={catalog.title} id={catalog._id} key={index} />
+            <CatalogItem
+                title={catalog.title}
+                id={catalog.SKU}
+                key={catalog.SKU}
+                setActiveCatalog={setActiveCatalog}
+            />
         );
     });
 }
-
-/*
-{retailStore.catalogs.map((item, index)=> {
-                        return <CatalogItem title={item.title} active={item._id === activeCatalog} id={item._id} key={index} />
-                    } )}
-                    */

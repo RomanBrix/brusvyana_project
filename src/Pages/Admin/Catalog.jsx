@@ -1,29 +1,41 @@
-import { 
-    // Navigate, useNavigate,
-    Route, Routes  } from "react-router-dom";
-import AdminCtg from "../../Admin/Catalog/Catalogs";
-import AdminCategories from "../../Admin/Catalog/Categories";
+import { useQuery } from "@tanstack/react-query";
+import { createUserAxiosRequest } from "../../requestMethods";
+import CatalogsTableNew from "../../Admin/Catalog/CatalogTable";
 
+export default function Catalog() {
+    const adminRequest = createUserAxiosRequest();
 
+    const {
+        data: catalogs,
+        isError,
+        isLoading,
+    } = useQuery(["catalogs"], fetchCatalogs, {
+        keepPreviousData: true,
+        refetchOnWindowFocus: false,
+    });
 
-export default function AdminCatalog(){
+    if (isLoading || isError)
+        return (
+            <div className="admin admin-products admin-right-content">
+                <div className="content">
+                    {isLoading && <h1>Loading</h1>}
+                    {isError && <h1>Error</h1>}
+                </div>
+            </div>
+        );
 
-
-    // const navigate = useNavigate();
-
-    return(
-        
-        <div className="admin admin-catalog admin-right-content">
+    // console.log(catalogs);
+    return (
+        <div className="admin admin-catalog admin-products admin-right-content">
             <div className="content">
-                <Routes>
-                    {/* <Route index element={<Navigate to="/admin/catalog/ctg" replace />} /> */}
-                    <Route index element={<AdminCtg/>} />
-
-                    <Route path=':id' element={<AdminCategories/>} />
-                    {/* <Route path='ctgr/*' element={<SingleOrder/>} /> */}
-                </Routes>
-                {/* <StatPageOrders  orders={orders}/> */}
+                <CatalogsTableNew catalogs={catalogs} />
             </div>
         </div>
-    )
+    );
+
+    async function fetchCatalogs() {
+        const { data } = await adminRequest.get("/catalog");
+
+        return data;
+    }
 }

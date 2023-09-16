@@ -155,7 +155,7 @@ export default function PayForm({ totalPrice, products, user }) {
     );
 
     function acceptOrder(status = "new") {
-        if (totalPrice < 1) return;
+        if (products.length < 1) return;
         // alert('Ваше замовлення прийнято');
 
         const address = {
@@ -169,10 +169,20 @@ export default function PayForm({ totalPrice, products, user }) {
             address.town = novaPochtaSelected.city.label;
             address.address = novaPochtaSelected.warehouse.label;
         }
-        const productsIds = products.map((product) => product._id);
-        const variantsIds = products.map((product) => product.variants);
+        // console.log(products);
+        // const productsIds = products.map((product) => product._id);
+        // const variantsIds = products.map((product) => product.variants);
+        // const variantsSKU = products.map((product) => product.variants);
+        const productsBuyList = products.map((product) => ({
+            prodId: product._id,
+            prodSkKU: product.SKU,
+            variantSKU: product.varSKU,
+            variantId: product.varId,
+            quantity: product.quantity,
+        }));
 
         const newOrder = {
+            productsBuyList,
             id: orderId,
             user: null,
             guestUser: {
@@ -181,13 +191,14 @@ export default function PayForm({ totalPrice, products, user }) {
             },
             status,
             productsWhenBuy: products,
-            products: productsIds,
-            variants: variantsIds,
+            // products: productsIds,
+            // variants: variantsIds,
             totalPrice: totalPrice,
             paymanetMethod: payOption,
             deliveryMethod: deliveryOption,
         };
-
+        console.log(newOrder);
+        // return "";
         __AcceptOrder(dispatch, newOrder, (orderId) => {
             console.log(orderId);
             sendAceptedOrder(
@@ -235,6 +246,7 @@ export default function PayForm({ totalPrice, products, user }) {
 
         switch (payOption) {
             case "cash":
+                console.log("asdasdasd");
                 acceptOrder();
                 break;
             case "card":

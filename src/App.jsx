@@ -96,8 +96,6 @@ export default function App() {
                         }
                     />
 
-                    {/* <Route index element={<StatPage/>} /> */}
-
                     <Route
                         index
                         element={
