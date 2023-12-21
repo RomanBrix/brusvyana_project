@@ -186,7 +186,7 @@ export default function App() {
                         element={<Navigate to="/retail/products" replace />}
                     />
                     <Route path="product/:id" element={<Product />} />
-                    {/* <Route path=":catalog" element={<RetailCatalog/>} /> */}
+                    {/* <Route path=":catalog" element={<RetailCatalog />} /> */}
                     <Route path="products/*" element={<RetailCatalog />} />
                     <Route path="cart" element={<Cart />} />
 

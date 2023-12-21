@@ -1,10 +1,16 @@
+import { useNavigate } from "react-router-dom";
+import { createUserAxiosRequest } from "../../requestMethods";
+
 export default function CatalogsTableNew({
     // productsCount,
     // products,
     // search,
     // changePage,
+    updData,
     catalogs,
 }) {
+    const userRequestRetail = createUserAxiosRequest();
+
     return (
         <div className="all-users whiteBg">
             <div className="top">
@@ -22,7 +28,11 @@ export default function CatalogsTableNew({
                         placeholder={"Пошук (Назва)"}
                     />
                 </div>
-                <div className="btns"></div>
+                <div className="btns">
+                    <div className="cat" onClick={addCatalog}>
+                        <span className="material-icons">add</span>
+                    </div>
+                </div>
             </div>
 
             <table>
@@ -30,7 +40,8 @@ export default function CatalogsTableNew({
                     <tr>
                         <th>Назва</th>
                         <th>Продуктів</th>
-                        <th>SKU</th>
+                        {/* <th>SKU</th> */}
+                        <th>-</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,6 +51,7 @@ export default function CatalogsTableNew({
                                 <RenderProducts
                                     key={catalog.SKU}
                                     catalog={catalog}
+                                    updData={updData}
                                 />
                             );
                         })}
@@ -47,27 +59,71 @@ export default function CatalogsTableNew({
             </table>
         </div>
     );
+
+    function addCatalog() {
+        const title = window.prompt(
+            "Введите название каталога",
+            "Новый каталог"
+        );
+
+        if (!title) return;
+        try {
+            const { data } = userRequestRetail.post("/catalog", { title });
+            updData();
+            console.log(data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
 }
 
-function RenderProducts({ catalog }) {
+function RenderProducts({ catalog, updData }) {
     // const anchorRef = useRef()
-    // const navigate = useNavigate();
+    const userRequestRetail = createUserAxiosRequest();
+
+    const navigate = useNavigate();
 
     // console.log(anchorRef);
     if (!catalog) {
         return (
             <tr>
                 <td> Немає продуктів </td>
-                <td> Немає продуктів </td>
-                <td> Немає продуктів </td>
+                <td> - </td>
+                <td> - </td>
             </tr>
         );
     }
     return (
-        <tr>
+        <tr
+            onClick={() => {
+                // navigate("./" + catalog._id);
+            }}
+        >
             <td>{catalog.title}</td>
             <td>{catalog.products}</td>
-            <td>{catalog.SKU}</td>
+            {/* <td>{catalog.SKU}</td> */}
+            <td>
+                <span
+                    className="material-icons"
+                    onClick={() => {
+                        deleteCatalog(catalog._id);
+                        // deleteCatalog(catalog.SKU);
+                    }}
+                >
+                    delete
+                </span>
+            </td>
         </tr>
     );
+
+    async function deleteCatalog(id) {
+        // console.log(id);
+        try {
+            const { data } = await userRequestRetail.delete(`/catalog/${id}`);
+            updData();
+            console.log(data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
 }

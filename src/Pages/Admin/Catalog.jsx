@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { createUserAxiosRequest } from "../../requestMethods";
 import CatalogsTableNew from "../../Admin/Catalog/CatalogTable";
+import { Route, Routes } from "react-router-dom";
+import AdminCategories from "../../Admin/Catalog/Categories";
 
 export default function Catalog() {
     const adminRequest = createUserAxiosRequest();
@@ -9,6 +11,7 @@ export default function Catalog() {
         data: catalogs,
         isError,
         isLoading,
+        refetch: updData,
     } = useQuery(["catalogs"], fetchCatalogs, {
         keepPreviousData: true,
         refetchOnWindowFocus: false,
@@ -26,11 +29,30 @@ export default function Catalog() {
 
     // console.log(catalogs);
     return (
-        <div className="admin admin-catalog admin-products admin-right-content">
-            <div className="content">
-                <CatalogsTableNew catalogs={catalogs} />
-            </div>
-        </div>
+        <Routes>
+            {/* <Route index element={<Navigate to="/admin/catalog/ctg" replace />} /> */}
+            <Route
+                index
+                element={
+                    <div className="admin admin-catalog admin-products admin-right-content">
+                        <div className="content">
+                            <CatalogsTableNew
+                                catalogs={catalogs}
+                                updData={updData}
+                            />
+                        </div>
+                    </div>
+                }
+            />
+
+            {/* <Route path=":id" element={<AdminCategories />} /> */}
+            {/* <Route path='ctgr/*' element={<SingleOrder/>} /> */}
+        </Routes>
+        // <div className="admin admin-catalog admin-products admin-right-content">
+        //     <div className="content">
+        //         <CatalogsTableNew catalogs={catalogs} />
+        //     </div>
+        // </div>
     );
 
     async function fetchCatalogs() {

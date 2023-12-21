@@ -3,6 +3,7 @@ import { createUserAxiosRequest } from "../../requestMethods";
 import { useQuery } from "@tanstack/react-query";
 import ProductsTableNew from "../../Admin/Products/ProductsTableNew";
 import { useSearchParams } from "react-router-dom";
+import ImportProducts from "../../Admin/Products/ImportProducts";
 
 export default function Products() {
     const adminRequest = createUserAxiosRequest();
@@ -11,6 +12,7 @@ export default function Products() {
         searchParams.get("search") || ""
     );
     const [pageQuery, setPageQuery] = useState(searchParams.get("page") || 1);
+    const [newProductLayer, setNewProductLayer] = useState(false);
 
     useEffect(() => {
         changeSearchParams("search", searchQuery);
@@ -55,7 +57,11 @@ export default function Products() {
         <div className="admin admin-products admin-right-content">
             <div className="content">
                 {/* productsCount: {productsCount} */}
+                <ImportProducts setNewProductLayer={setNewProductLayer} />
+
                 <ProductsTableNew
+                    newProductLayer={newProductLayer}
+                    setNewProductLayer={setNewProductLayer}
                     productsCount={productsCount}
                     products={products}
                     search={{

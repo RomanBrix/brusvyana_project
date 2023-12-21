@@ -145,6 +145,7 @@ export default function Footer() {
                 <div className="btm">
                     <img src="/src/mc_logo.png" alt="" className="mclogo" />
                     <img src="/src/np_logo.png" alt="" className="np_logo" />
+                    <img src="/src/ukrposhta.svg" alt="" className="np_logo" />
                 </div>
             </div>
         </div>

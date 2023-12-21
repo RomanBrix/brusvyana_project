@@ -40,7 +40,7 @@ export default function SettungsNovaPochta({ userRequest }) {
 
     async function updateNovaPochta() {
         setPochtaUpdate(true);
-        const novaApi = "1760ffa76a05a6350af1012644c044f6";
+        const novaApi = "b90b834edc2d40e604b6530bf0519bf0";
         const novaUrl = "https://api.novaposhta.ua/v2.0/json/";
         const getCities = {
             apiKey: novaApi,

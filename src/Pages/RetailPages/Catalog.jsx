@@ -69,7 +69,8 @@ export default function RetailCatalog() {
     //change catalogs
     useEffect(() => {
         if (catalogs && !activeCatalog && catalogs.length > 0) {
-            setActiveCatalog(catalogs[0].SKU);
+            // setActiveCatalog(catalogs[0].SKU);
+            setActiveCatalog(catalogs[0]._id);
         }
         if (activeCatalog) {
             changeSearchParams("catalog", activeCatalog);
@@ -191,7 +192,8 @@ function RenderCatalogHeader({ catalogs, state, setActiveCatalog }) {
         return (
             <CatalogItem
                 title={catalog.title}
-                id={catalog.SKU}
+                // id={catalog.SKU}
+                id={catalog._id}
                 key={catalog.SKU}
                 setActiveCatalog={setActiveCatalog}
             />

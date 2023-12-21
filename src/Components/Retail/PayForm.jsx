@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { sendAceptedOrder } from "../../Redux/botApi";
 import { __AcceptOrder } from "../../Redux/cartApi";
 import NovaPochta from "./NovaPochta";
+import Ukrpochta from "./UkrPochta";
 
 export default function PayForm({ totalPrice, products, user }) {
     const [deliveryOption, setDeliveryOption] = useState(user.delivery || "");
@@ -28,6 +29,11 @@ export default function PayForm({ totalPrice, products, user }) {
     const [courierFields, setCourierFields] = useState({
         town: user.user?.town || "",
         address: user.user?.address || "",
+    });
+    const [ukrpochtaFields, setUkrpochtaFields] = useState({
+        postcode: "",
+        house: "",
+        street: "",
     });
 
     return (
@@ -80,6 +86,17 @@ export default function PayForm({ totalPrice, products, user }) {
                             value="novaPochta"
                             defaultChecked={deliveryOption === "novaPochta"}
                             id="novaPochta"
+                            name="delivery"
+                        />
+                    </div>
+
+                    <div className="del box">
+                        <label htmlFor="ukrpochta">Укрпошта</label>
+                        <input
+                            type="radio"
+                            value="ukrpochta"
+                            defaultChecked={deliveryOption === "ukrpochta"}
+                            id="ukrpochta"
                             name="delivery"
                         />
                     </div>
@@ -156,7 +173,6 @@ export default function PayForm({ totalPrice, products, user }) {
 
     function acceptOrder(status = "new") {
         if (products.length < 1) return;
-        // alert('Ваше замовлення прийнято');
 
         const address = {
             town: null,
@@ -168,7 +184,13 @@ export default function PayForm({ totalPrice, products, user }) {
         } else if (deliveryOption === "novaPochta") {
             address.town = novaPochtaSelected.city.label;
             address.address = novaPochtaSelected.warehouse.label;
+        } else if (deliveryOption === "ukrpochta") {
+            address.town = ukrpochtaFields.postcode;
+            address.address =
+                ukrpochtaFields.street + " /" + ukrpochtaFields.house;
         }
+        // console.log(address);
+
         // console.log(products);
         // const productsIds = products.map((product) => product._id);
         // const variantsIds = products.map((product) => product.variants);
@@ -198,6 +220,7 @@ export default function PayForm({ totalPrice, products, user }) {
             deliveryMethod: deliveryOption,
         };
         console.log(newOrder);
+
         // return "";
         __AcceptOrder(dispatch, newOrder, (orderId) => {
             console.log(orderId);
@@ -246,7 +269,6 @@ export default function PayForm({ totalPrice, products, user }) {
 
         switch (payOption) {
             case "cash":
-                console.log("asdasdasd");
                 acceptOrder();
                 break;
             case "card":
@@ -280,6 +302,22 @@ export default function PayForm({ totalPrice, products, user }) {
                     return false;
                 }
                 return true;
+            case "ukrpochta":
+                if (
+                    !ukrpochtaFields.house ||
+                    !ukrpochtaFields.postcode ||
+                    !ukrpochtaFields.street
+                ) {
+                    return false;
+                }
+                if (
+                    ukrpochtaFields.street.length < 3 ||
+                    ukrpochtaFields.house.length < 1 ||
+                    ukrpochtaFields.postcode.length !== 5
+                ) {
+                    return false;
+                }
+                return true;
             default:
                 return false;
         }
@@ -299,6 +337,12 @@ export default function PayForm({ totalPrice, products, user }) {
         return true;
     }
 
+    function changeUkrpochtaData({ target }) {
+        setUkrpochtaFields((prev) => ({
+            ...prev,
+            [target.id]: target.value,
+        }));
+    }
     function changeUserFieldData(e) {
         setUserFields({
             ...userFields,
@@ -368,6 +412,14 @@ export default function PayForm({ totalPrice, products, user }) {
             });
         }
     }
+    function ukrPochtaDelivery() {
+        return (
+            <Ukrpochta
+                ukrpochtaFields={ukrpochtaFields}
+                changeUkrpochtaData={changeUkrpochtaData}
+            />
+        );
+    }
 
     function selfDelivery() {
         const mapLink =
@@ -391,6 +443,8 @@ export default function PayForm({ totalPrice, products, user }) {
                 return courierDelivery();
             case "novaPochta":
                 return novaPochtaDelivery();
+            case "ukrpochta":
+                return ukrPochtaDelivery();
             case "self":
                 return selfDelivery();
             default:

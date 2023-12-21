@@ -96,13 +96,13 @@ const MainTranslate = {
                         description:
                             "Контакти: brusvyana@ukr.net +380674113695",
                     },
-                    {
-                        name: "Король Євген Антонійович",
-                        img: "3.jpg",
-                        position: "Директор садового центра Брусвяна",
-                        description:
-                            "Контакти: brusvyana@ukr.net +380674113692",
-                    },
+                    // {
+                    //     name: "Король Євген Антонійович",
+                    //     img: "3.jpg",
+                    //     position: "Директор садового центра Брусвяна",
+                    //     description:
+                    //         "Контакти: brusvyana@ukr.net +380674113692",
+                    // },
                     // {
                     //     name: "Горова Тетяна Сергіївна",
                     //     img: "4.jpg",
@@ -512,13 +512,13 @@ const MainTranslate = {
                         description:
                             "Контакты: brusvyana@ukr.net +380674113695",
                     },
-                    {
-                        name: "Король Евгений Антониевич",
-                        img: "3.jpg",
-                        position: "Директор садового центра Брусвяна",
-                        description:
-                            "Контакты: brusvyana@ukr.net +380674113692",
-                    },
+                    // {
+                    //     name: "Король Евгений Антониевич",
+                    //     img: "3.jpg",
+                    //     position: "Директор садового центра Брусвяна",
+                    //     description:
+                    //         "Контакты: brusvyana@ukr.net +380674113692",
+                    // },
                     // {
                     //     name: "Горовая Татьяна Сергеевна",
                     //     img: "4.jpg",
@@ -925,13 +925,13 @@ const MainTranslate = {
                         description:
                             "Contacts: brusvyana@ukr.net +380674113695",
                     },
-                    {
-                        name: "King Evgeny Antoniyovych",
-                        img: "3.jpg",
-                        position: "Director of Brusvyan garden center",
-                        description:
-                            "Contacts: brusvyana@ukr.net +380674113692",
-                    },
+                    // {
+                    //     name: "King Evgeny Antoniyovych",
+                    //     img: "3.jpg",
+                    //     position: "Director of Brusvyan garden center",
+                    //     description:
+                    //         "Contacts: brusvyana@ukr.net +380674113692",
+                    // },
                     // {
                     //     name: "Horova Tetyana Serhiivna",
                     //     img: "4.jpg",

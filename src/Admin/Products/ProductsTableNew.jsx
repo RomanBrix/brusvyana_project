@@ -1,11 +1,30 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { publicRequestRetail } from "../../requestMethods";
+
 export default function ProductsTableNew({
     productsCount,
     products,
     search,
     changePage,
+    newProductLayer,
+    setNewProductLayer,
 }) {
+    // const [newProductLayer, setNewProductLayer] = useState(false);
     return (
         <div className="all-users whiteBg">
+            {/* {scrollY > 150 ? (
+                <button
+                    className="btn btn-primary btn-top"
+                    onClick={() => window.scrollTo(0, 0)}
+                >
+                    Наверх
+                </button>
+            ) : null} */}
+
+            {newProductLayer && (
+                <NewProductLayer setNewProductLayer={setNewProductLayer} />
+            )}
             <div className="top">
                 <h1>Товари ({productsCount})</h1>
                 <div className="search">
@@ -22,6 +41,15 @@ export default function ProductsTableNew({
                     />
                 </div>
                 <div className="btns">
+                    {/* <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                            // /admin/product/:catalog/new
+                            setNewProductLayer(true);
+                        }}
+                    >
+                        Додати Продукт
+                    </button> */}
                     <button
                         className="btn"
                         style={{ marginRight: "7px" }}
@@ -101,7 +129,8 @@ function RenderProducts({ product, index, allLength }) {
             <td>
                 {product.image ? (
                     <img
-                        src={"/src/products/" + product.image}
+                        // src={"/src/products/" + product.image}
+                        src={product.image}
                         alt={product.image}
                     />
                 ) : (
@@ -116,4 +145,57 @@ function RenderProducts({ product, index, allLength }) {
             <td>{product.SKU}</td>
         </tr>
     );
+}
+
+function NewProductLayer({ setNewProductLayer }) {
+    const [catalogs, setCatalogs] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        getCatalogs();
+    }, []);
+    // console.log(catalogId);
+    return (
+        <div
+            className="import-product-layer"
+            onClick={() => {
+                setNewProductLayer(false);
+            }}
+        >
+            <div
+                className="import-product-layer_content"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <h2>Виберiть каталог:</h2>
+                <div className="catalogs-container">{renderCatalogs()}</div>
+            </div>
+        </div>
+    );
+
+    function renderCatalogs() {
+        return catalogs.map((catalog) => {
+            return (
+                <div
+                    className="catalog_item"
+                    key={catalog._id}
+                    onClick={() => {
+                        navigate(`/admin/product/${catalog._id}/new`);
+                    }}
+                >
+                    {catalog.title}
+                </div>
+            );
+        }, []);
+    }
+
+    function getCatalogs() {
+        publicRequestRetail
+            .get("/catalog")
+            .then((res) => {
+                setCatalogs(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 }
