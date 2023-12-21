@@ -20,7 +20,7 @@ const prod1cRoute = require("./routes/products1c");
 const productsV2Route = require("./routes/productsV2");
 
 function useRetail(app) {
-    app.use(express.json({ limit: "5mb" }));
+    app.use(express.json({ limit: "25mb" }));
     // app.use(fileUpload());
     // console.log("asdasdas");
     app.use("/api/catalog", catalogRoute);
@@ -28,12 +28,12 @@ function useRetail(app) {
     app.use(
         "/api/products",
         express.json({ limit: "15mb" }),
-        fileUpload,
+        // fileUpload,
         productsRoute
     );
     app.use("/api/productsV2", productsV2Route);
     app.use("/api/orders", orders);
-    app.use("/api/np", express.json({ limit: "90mb" }), np);
+    app.use("/api/np", np);
 
     app.use("/api/vacancy", vacancyRoute);
 

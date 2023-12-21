@@ -1,4 +1,5 @@
 const Catalog = require("../models/Catalog");
+const Order = require("../models/Order");
 const { Product, Variant } = require("../models/Product");
 
 // const Category = require("../models/Category");
@@ -228,6 +229,35 @@ router.put("/variants", async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(200).json(false);
+    }
+});
+
+router.get("/orders", async (req, res) => {
+    const { dateStart, dateEnd } = req.query;
+    let from = dateStart;
+    let to = dateEnd;
+    if (!dateStart) {
+        const today = new Date();
+        today.setHours(0, 0, 1, 0); // Устанавливаем время на 00:01
+        from = today;
+    }
+    if (!dateEnd) {
+        const today = new Date();
+        today.setHours(23, 59, 59, 0); // Устанавливаем время на 00:01
+        to = today;
+    }
+
+    try {
+        const orders = await Order.find({
+            createdAt: {
+                $gte: from,
+                $lte: to,
+            },
+        }).lean();
+        console.log(orders.length);
+        return res.status(200).json(orders);
+    } catch (err) {
+        return res.status(500).json(false);
     }
 });
 

@@ -72,7 +72,9 @@ router.get("/products", async (req, res) => {
 
 router.get("/catalog-prod", async (req, res) => {
     const { catalog, category = "", page = 1 } = req.query;
-    console.log(category);
+    console.log("category: ", category);
+    console.log("catalog: ", catalog);
+    console.log("page: ", page);
     const limit = 20;
     const skipAmount = (page - 1) * limit;
 
@@ -82,11 +84,6 @@ router.get("/catalog-prod", async (req, res) => {
                 $match: {
                     catalog: catalog,
                     category: category !== "" ? category : { $exists: true },
-                },
-            },
-            {
-                $sort: {
-                    SKU: -1,
                 },
             },
             {

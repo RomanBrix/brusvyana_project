@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var catalogSchema = new Schema(
     {
         title: { type: String, required: true, unique: true },
-        SKU: { type: String, required: true, unique: true },
+        // SKU: { type: String, required: true, unique: true },
         // categories: [{ type: Schema.Types.ObjectId, ref: "Category" }],
         // products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
     },

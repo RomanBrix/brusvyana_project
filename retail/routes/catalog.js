@@ -1,5 +1,6 @@
 const Catalog = require("../models/Catalog");
 const Category = require("../models/Category");
+const { Product } = require("../models/Product");
 
 const { verifyUser, verifyAdmin } = require("./verifyToken");
 
@@ -97,12 +98,29 @@ router.get("/catalogProducts", async (req, res) => {
 
 //Get catalog by id
 router.get("/:id", async (req, res) => {
+    console.log("iD: ", req.params);
     try {
-        const catalog = await Catalog.findById(req.params.id).populate(
-            "categories"
-        );
+        // const catalog = await Catalog.findById(req.params.id).populate(
+        //     "categories"
+        // );
+
+        const catalog = await Catalog.findById(req.params.id).lean();
+
+        if (!catalog) {
+            throw new Error("Catalog not found");
+        }
+
+        const categories = await Category.find({ catalog: catalog._id }).lean();
+
+        const dataToSend = {
+            ...catalog,
+            categories,
+            //   categories: categories.map(category => category.title)
+        };
+        console.log(dataToSend);
         res.status(200).json(catalog);
     } catch (err) {
+        console.log(err);
         res.status(500).json(err);
     }
 });
@@ -143,30 +161,55 @@ router.post("/:id/category", verifyAdmin, async (req, res) => {
 
 //delete catalog
 router.delete("/:id", async (req, res) => {
-    // verifyAdmin
-    try {
-        const category = await Category.find(
-            { catalog: { $in: req.params.id } },
-            "products"
-        ).lean();
-        //get length of all products
-        const productsLength = category.reduce((acc, curr) => {
-            return acc + curr.products.length;
-        }, 0);
+    const id = req.params?.id;
 
-        if (productsLength > 0) {
-            return res.status(400).json("Catalog has products");
-        } else {
-            //delete category
-            console.log(Category);
-            await Category.deleteMany({ catalog: { $in: req.params.id } });
-            await Catalog.findByIdAndDelete(req.params.id);
-            return res.status(200).json(true);
-        }
-        // const catalog = await Catalog.findByIdAndDelete(req.params.id).lean();
+    // console.log(id);
+    // const catalog = await Catalog.deleteOne({ SKU: id }).lean();
+    try {
+        if (!id) throw new Error("No id");
+        const catalog = await Catalog.deleteOne({ _id: id }).lean();
+        // for variants
+        const products = await Product.find({ catalog: id }).lean();
+        const productsDeleted = await Product.deleteMany({
+            catalog: id,
+        }).lean();
+
+        res.status(200).json({
+            catalogs: catalog.deletedCount,
+            products: productsDeleted.deletedCount,
+        });
     } catch (err) {
-        res.status(500).json(err);
+        console.log(err);
+        res.status(500).json(false);
     }
 });
+
+//old delete
+// router.delete("/:id", async (req, res) => {
+//     // verifyAdmin
+//     try {
+//         const category = await Category.find(
+//             { catalog: { $in: req.params.id } },
+//             "products"
+//         ).lean();
+//         //get length of all products
+//         const productsLength = category.reduce((acc, curr) => {
+//             return acc + curr.products.length;
+//         }, 0);
+
+//         if (productsLength > 0) {
+//             return res.status(400).json("Catalog has products");
+//         } else {
+//             //delete category
+//             console.log(Category);
+//             await Category.deleteMany({ catalog: { $in: req.params.id } });
+//             await Catalog.findByIdAndDelete(req.params.id);
+//             return res.status(200).json(true);
+//         }
+//         // const catalog = await Catalog.findByIdAndDelete(req.params.id).lean();
+//     } catch (err) {
+//         res.status(500).json(err);
+//     }
+// });
 
 module.exports = router;

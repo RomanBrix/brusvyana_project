@@ -11,7 +11,7 @@ var productSchema = new Schema(
         quantity: { type: Number }, // NOT REQ
         quantity_tag: { type: String, default: "шт" }, // NOT REQ
         isAvailable: { type: Boolean, default: true }, // NOT REQ
-        SKU: { type: String, unique: true },
+        // SKU: { type: String, unique: true },
         variants: [{ type: Schema.Types.ObjectId, ref: "Variant" }],
         // catalog: { type: Schema.Types.ObjectId, ref: "Catalog" },
         catalog: { type: String },
@@ -28,7 +28,7 @@ var variantSchema = new Schema(
         price: { type: Number, required: true },
         image: { type: String, default: null },
         quantity: { type: Number, required: true },
-        SKU: { type: String, unique: true },
+        // SKU: { type: String, unique: true },
         isAvailable: { type: Boolean, default: true }, // NOT REQ
     },
     { timestamps: true }

@@ -14,7 +14,7 @@ var orderSchema = new Schema(
         status: { type: String, default: "bought" },
         paymanetMethod: { type: String, default: "cash" },
         deliveryMethod: { type: String, default: "self" },
-        // notes: [{ type: Schema.Types.Mixed, default: null, timestamps: true } ],
+        ttn: { type: String, default: null },
         notes: [
             {
                 text: { type: String, default: null },
