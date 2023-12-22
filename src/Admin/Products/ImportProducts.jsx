@@ -160,42 +160,20 @@ export default function ImportProducts({ setNewProductLayer }) {
                 formData
             );
             console.log(data);
-            setCsv(false);
-            setProductLoad(false);
-            setImportProductLayer(false);
+
+            alert(
+                `${data.msg}\n Продуктів:${data.otherData.loadLength} шт.\n Варіантів: ${data.otherData.variantLoadLength} шт.`
+            );
         } catch (err) {
-            setCsv(null);
-            setProductLoad(false);
-            setImportProductLayer(false);
             if (err?.response?.data?.msg) {
                 alert(err.response.data.msg);
             }
             console.log(err);
         }
-        // userRequestRetail
-        //     .post("/products/fileMagick", formData)
-        //     .then((res) => {
-        //         console.log(res.data);
-        //         if (res.data.status) {
-        //             const { addedProducts, addedVariants, addedCategories } =
-        //                 res.data;
-        //             alert(
-        //                 `Загружено ${addedProducts} продуктов, ${addedVariants} вариантов и созданно ${addedCategories} категорий. Теперь загрузите изображения для продуктов.`
-        //             );
-        //             setCsv(null);
-        //             setProductLoad(false);
-        //             setImportProductLayer(false);
-        //         }
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //         setCsv(null);
-        //         setProductLoad(false);
-        //         setImportProductLayer(false);
-        //         if (err.response.data?.message) {
-        //             alert(err.response.data?.message);
-        //         }
-        //     });
+
+        setCsv(false);
+        setProductLoad(false);
+        setImportProductLayer(false);
     }
 }
 

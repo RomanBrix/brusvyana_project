@@ -11,11 +11,14 @@ export default function PayForm({ totalPrice, products, user }) {
     const [payOption, setPayOption] = useState(user.payment || null);
     const [orderId] = useState(generateId());
 
+    const [loading, setLoading] = useState(false);
+
     const [novaPochtaSelected, setNovaPochtaSelected] = useState({
         city: null,
         warehouse: null,
     });
 
+    //
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -162,17 +165,23 @@ export default function PayForm({ totalPrice, products, user }) {
                 <div
                     className="btn btn-pay"
                     onClick={() => {
+                        if (loading) return;
+                        setLoading(true);
                         tryPay();
                     }}
                 >
-                    {payOption === "card" ? "Оплатити" : "Замовити"}
+                    {loading
+                        ? "Зачекайте"
+                        : payOption === "card"
+                        ? "Оплатити"
+                        : "Замовити"}
                 </div>
             )}
         </div>
     );
 
     function acceptOrder(status = "new") {
-        if (products.length < 1) return;
+        if (products.length < 1) return setLoading(false);
 
         const address = {
             town: null,
@@ -197,8 +206,8 @@ export default function PayForm({ totalPrice, products, user }) {
         // const variantsSKU = products.map((product) => product.variants);
         const productsBuyList = products.map((product) => ({
             prodId: product._id,
-            prodSkKU: product.SKU,
-            variantSKU: product.varSKU,
+            prodSkKU: product.SKU || "no sku",
+            variantSKU: product.varSKU || "no sku",
             variantId: product.varId,
             quantity: product.quantity,
         }));
@@ -212,7 +221,7 @@ export default function PayForm({ totalPrice, products, user }) {
                 ...address,
             },
             status,
-            productsWhenBuy: products,
+            productsWhenBuy: products.map((i) => ({ ...i, image: "removed" })),
             // products: productsIds,
             // variants: variantsIds,
             totalPrice: totalPrice,
@@ -224,29 +233,35 @@ export default function PayForm({ totalPrice, products, user }) {
         // return "";
         __AcceptOrder(dispatch, newOrder, (orderId) => {
             console.log(orderId);
-            sendAceptedOrder(
-                {
-                    ...newOrder,
-                    products: products,
-                },
-                (status) => {
-                    console.log(status);
-                    if (status && status.status !== "OK") {
-                        // alert('Ваше замовлення прийнято');
-                        navigate("../order-success/" + orderId);
-                        // history.push('/');
-                    } else if (status === "OK") {
-                        alert(
-                            "Помилка, замовлення прийнято, але не відправлено на модерацію"
-                        );
-                    } else {
-                        alert("Помилка, замовлення не прийнято");
+            setLoading(false);
+
+            if (orderId) {
+                sendAceptedOrder(
+                    {
+                        ...newOrder,
+                        products: products,
+                    },
+                    (status) => {
+                        console.log(status);
+                        if (status && status.status !== "OK") {
+                            // alert('Ваше замовлення прийнято');
+                            navigate("../order-success/" + orderId);
+                            // history.push('/');
+                        } else if (status === "OK") {
+                            alert(
+                                "Помилка, замовлення прийнято, але не відправлено на модерацію"
+                            );
+                        } else {
+                            alert("Помилка, замовлення не прийнято");
+                        }
                     }
-                }
-            );
+                );
+            } else {
+            }
         });
     }
     function goPayCard() {
+        setLoading(false);
         if (totalPrice < 1) return;
         alert(
             "Оплата замовлення поки не доступна, оплатіть замовлення готівкою при отриманні"
@@ -256,14 +271,20 @@ export default function PayForm({ totalPrice, products, user }) {
     }
     function tryPay() {
         //validate user fields
+
+        // console.log(deliveryOption);
+        // console.log(novaPochtaSelected);
+        // console.log(payOption);
         const useValidate = validateUserFields();
         if (!useValidate) {
             alert("Введіть коректні дані");
+            setLoading(false);
             return;
         }
         const deliveryValidate = validateDeliveryOption();
         if (!deliveryValidate) {
             alert("Виберіть спосіб доставки");
+            setLoading(false);
             return;
         }
 
@@ -276,6 +297,7 @@ export default function PayForm({ totalPrice, products, user }) {
                 break;
             default:
                 alert("Виберіть спосіб оплати");
+                setLoading(false);
                 break;
         }
     }
@@ -303,6 +325,7 @@ export default function PayForm({ totalPrice, products, user }) {
                 }
                 return true;
             case "ukrpochta":
+                console.log(ukrpochtaFields);
                 if (
                     !ukrpochtaFields.house ||
                     !ukrpochtaFields.postcode ||
@@ -313,7 +336,7 @@ export default function PayForm({ totalPrice, products, user }) {
                 if (
                     ukrpochtaFields.street.length < 3 ||
                     ukrpochtaFields.house.length < 1 ||
-                    ukrpochtaFields.postcode.length !== 5
+                    ukrpochtaFields.postcode.length < 5
                 ) {
                     return false;
                 }

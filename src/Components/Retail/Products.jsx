@@ -93,7 +93,8 @@ export default function ProductsContainer({
                                 {/* // <img src={'/src/products/'+item.image} alt={item.title} loading="lazy"/> */}
                                 <SuspenseImg
                                     alt=""
-                                    src={"/src/products/" + item.image}
+                                    // src={"/src/products/" + item.image}
+                                    src={item.image}
                                 />
                             </Suspense>
                         )}

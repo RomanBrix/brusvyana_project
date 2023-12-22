@@ -26,7 +26,10 @@ export default function Ukrpochta({ ukrpochtaFields, changeUkrpochtaData }) {
                     type="text"
                     id="postcode"
                     value={ukrpochtaFields.postcode}
-                    onChange={changeUkrpochtaData}
+                    onChange={(e) => {
+                        if (e.target.value.length > 5) return;
+                        changeUkrpochtaData(e);
+                    }}
                 />
             </div>
         </>
