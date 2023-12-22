@@ -1,6 +1,6 @@
 const Catalog = require("../models/Catalog");
 const Category = require("../models/Category");
-const { Product } = require("../models/Product");
+const { Product, Variant } = require("../models/Product");
 
 const { verifyUser, verifyAdmin } = require("./verifyToken");
 
@@ -23,10 +23,13 @@ router.get("/", async (req, res) => {
 
     try {
         const catalogs = await Catalog.aggregate([
+            { $addFields: { catalogId: { $toString: "$_id" } } },
             {
                 $lookup: {
                     from: "products",
-                    localField: "SKU",
+                    // localField: "SKU",
+                    localField: "catalogId",
+                    // localField: "catalog",
                     foreignField: "catalog",
                     as: "prodData",
                 },
@@ -41,15 +44,20 @@ router.get("/", async (req, res) => {
             },
             {
                 $sort: {
-                    SKU: -1,
+                    createdAt: -1,
                 },
             },
             {
                 $match: {
                     title: { $regex: "", $options: "i" },
+                    // $expr: {
+                    //     $eq: ["$catalog", { $toObjectId: "$Catalog._id" }],
+                    // },
                 },
             },
         ]);
+
+        console.log(catalogs);
 
         res.status(200).json(catalogs);
     } catch (err) {
@@ -170,9 +178,15 @@ router.delete("/:id", async (req, res) => {
         const catalog = await Catalog.deleteOne({ _id: id }).lean();
         // for variants
         const products = await Product.find({ catalog: id }).lean();
+        const variantsToDelete = products.map((i) => i.variants).flat();
         const productsDeleted = await Product.deleteMany({
             catalog: id,
         }).lean();
+        const deletedVariants = await Variant.deleteMany({
+            _id: { $in: variantsToDelete },
+        });
+        console.log(deletedVariants);
+        // console.log(variantsToDelete.length);
 
         res.status(200).json({
             catalogs: catalog.deletedCount,

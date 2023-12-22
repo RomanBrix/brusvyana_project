@@ -416,6 +416,7 @@ router.post(
 
         let status = 200;
         let msg = "";
+        const otherData = {};
         if (csv) {
             const path_to_csv = csv.path;
             console.log(path_to_csv);
@@ -448,11 +449,19 @@ router.post(
                     } else {
                         variantToReturn = [];
                         for (let i = 1; i <= variantsKeys.length; i++) {
-                            variantToReturn.push({
-                                title: item[`variant_${i}_title`],
-                                quantity: item[`variant_${i}_quantity`] || 1,
-                                price: item[`variant_${i}_price`] || 1,
-                            });
+                            if (
+                                item[`variant_${i}_title`] ||
+                                item[`variant_${i}_price`]
+                            ) {
+                                variantToReturn.push({
+                                    title: item[`variant_${i}_title`],
+                                    quantity:
+                                        item[`variant_${i}_quantity`] || 1,
+                                    price: item[`variant_${i}_price`] || 1,
+                                });
+                            } else {
+                                continue;
+                            }
                         }
                         return variantToReturn;
                     }
@@ -469,6 +478,7 @@ router.post(
                         return null;
                     }
                 });
+                let variantError = false;
                 let addedVariants = [];
                 let notAddedVariants = [];
                 for (let i = 0; i < variants.length; i++) {
@@ -477,12 +487,45 @@ router.post(
                             let ids = await Variant.insertMany(variants[i]);
                             addedVariants.push(ids.map((id) => id._id));
                         } catch (insertError) {
+                            status = 500;
+                            msg = `Невідома помилка при завантаженні варіанту товара`;
+
                             notAddedVariants.push(variants[i]);
-                            console.log(insertError);
+                            // console.log(insertError.errors.title.path);
+                            // // console.log(insertError._message);
+                            // console.log(Object.keys(insertError));
+                            // console.log(i);
+                            // console.log(variants[i]);
+                            if (
+                                insertError?._message ===
+                                "Variant validation failed"
+                            ) {
+                                msg = `У варіанта продукта (№${
+                                    i + 1
+                                }) не заповнене, або не правильно заповнене поле: ${
+                                    insertError.errors.title.path
+                                }`;
+                            }
+
+                            await Variant.deleteMany({
+                                _id: { $in: addedVariants },
+                            });
+                            variantError = true;
+                            break;
+                            // return;
                         }
                     } else {
                         addedVariants.push([]);
                     }
+                }
+
+                if (variantError) {
+                    fs.unlinkSync(path_to_csv);
+                    return res.status(status).json({
+                        status: status,
+                        msg: msg,
+                        otherData,
+                    });
                 }
                 // console.log(adedVariants); // MUST BE IDS ARRAYS OR EMPTY ARRAYS
                 // END ADD VARIANTS _______________________________________________________________
@@ -511,6 +554,12 @@ router.post(
                     const pr = await Product.insertMany(products);
                     console.log("pr:");
                     console.log(pr.length);
+
+                    status = 200;
+                    msg = `Все ок!`;
+                    otherData.loadLength = pr.length;
+                    // const toCalckLenth = addedVariants.map();
+                    otherData.variantLoadLength = addedVariants.flat().length;
                 } catch (insertError) {
                     // const notAddedProducts = products.filter(
                     //     (i, n) => n >= insertError.insertedDocs.length
@@ -523,9 +572,11 @@ router.post(
                         (i) => i._id
                     );
 
-                    // console.log(removeVariants);
+                    // console.log(addedVariants);
                     await Product.deleteMany({ _id: { $in: removeProducts } });
-                    await Variant.deleteMany({ _id: { $in: addedVariants } });
+                    await Variant.deleteMany({
+                        _id: { $in: addedVariants.flat() },
+                    });
 
                     if (insertError?.code === 11000) {
                         status = 500;
@@ -541,16 +592,21 @@ router.post(
                         // return;
                     } else {
                         status = 500;
-                        msg = `Невідома помилка при завантаженні товару`;
+                        msg = `Невідома помилка при завантаженні товару, скоріше за все не правильно заповнене якесь поле, перевірте товар під номером ${
+                            insertError.insertedDocs.length + 1
+                        }`;
+                        // return;
                     }
                 }
-                // // console.log(pr)
 
                 fs.unlinkSync(path_to_csv);
                 return res.status(status).json({
                     status: true,
                     msg: msg,
+                    otherData,
                 });
+                // // console.log(pr)
+
                 // // END MAKE PRODUCTS_______________________________________________________________
             });
 

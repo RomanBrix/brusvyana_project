@@ -9,18 +9,54 @@ router.post("/newOrder", async (req, res) => {
     try {
         // const { deliveryMethod } = req.body;
         let orderData = req.body;
+        const order = new Order(req.body);
+
         if (orderData.deliveryMethod === "ukrpochta") {
             // console.log(orderData.guestUser);
             const price =
                 orderData.paymanetMethod === "cash" ? orderData.totalPrice : 0;
             const ttn = await goUkrPochta(orderData.guestUser, price);
+            console.log("tth is: ", ttn);
+
+            if (!ttn || ttn === "ZIP") {
+                await order.save();
+                throw new Error(ttn || "UKRGOVNO");
+            }
+            order.ttn = ttn.barcode;
+            order.notes.push({
+                text: `Barcode: ${ttn.barcode} || Ship ID: ${ttn.shipId} || Доставка: ${ttn.deliveryPrice}UAH || Постоплата (ком): ${ttn.postPayDeliveryPrice} UAH`,
+                author: "UkrPochta_Bot",
+            });
         }
-        throw new Error("asdasd");
-        const order = new Order(req.body);
+
         await order.save();
-        res.status(201).send(order);
+        res.status(200).send(order);
     } catch (err) {
-        res.status(400).send(err);
+        if (!(err instanceof Error)) {
+            err = new Error(err);
+        }
+        // console.log(typeof err);
+        // console.log(err);
+        console.log(err);
+        if (err.message === "ZIP") {
+            return res
+                .status(500)
+                .send("Поштовий індекс вказано невірно, перевірте будь ласка");
+        } else if (err.message === "UKRGOVNO") {
+            return res
+                .status(500)
+                .send(
+                    "Вибачте, але УкрПочта має збої в системі, виберіть інший тип доставки"
+                );
+        } else if (err?.code === 11000) {
+            if (err.keyValue?.id) {
+                return res.status(200).send(err.keyValue?.id);
+            }
+        } else {
+            return res
+                .status(500)
+                .send("Помилка, будь ласка, дайте нам знати про неї");
+        }
     }
 });
 
@@ -93,8 +129,9 @@ async function goUkrPochta(userInfo, price = 0) {
     const ukrPostUrl = "https://dev.ukrposhta.ua/ecom/0.0.1/";
     const bearer = "Bearer 009df62f-17d9-392d-89d4-5f63d4ae8392";
     const token = "a0a2ff17-ebfb-4792-a85e-1bdf9b578ad3";
-    const senderAddressId = 5645121;
-    const senderId = "1b8946dd-b881-4e95-8222-409627fa9351"; //"uuid":
+    // const senderAddressId = 5645121;
+    // const senderId = "1b8946dd-b881-4e95-8222-409627fa9351"; //"uuid":
+    const senderId = "5849f2ed-34d2-45fd-98f1-0bab708da338"; //"uuid": from postman
 
     const api = axios.create({
         baseURL: ukrPostUrl,
@@ -112,6 +149,7 @@ async function goUkrPochta(userInfo, price = 0) {
         const newClientData = {
             firstName: userInfo.name,
             lastName: userInfo.secondName,
+            middleName: "Батькович",
             addressId: addressId,
             phoneNumber: userInfo.phone,
             type: "INDIVIDUAL",
@@ -137,6 +175,7 @@ async function goUkrPochta(userInfo, price = 0) {
             type: "STANDARD",
             parcels: [
                 {
+                    declaredPrice: price,
                     weight: 1000,
                     length: 70,
                 },
@@ -147,14 +186,35 @@ async function goUkrPochta(userInfo, price = 0) {
             `shipments?token=${token}`,
             shipData
         );
-        const { uuid: shipId, calculationDescription } = newShip;
-        console.log(newShip);
+        const {
+            uuid: shipId,
+            calculationDescription,
+            barcode,
+            deliveryPrice,
+            postPayDeliveryPrice,
+            returnDeliveryPrice,
+        } = newShip;
+
+        // console.log(newShip);
+        return {
+            shipId,
+            calculationDescription,
+            barcode,
+            deliveryPrice,
+            postPayDeliveryPrice,
+            returnDeliveryPrice,
+        };
     } catch (err) {
-        if (err.response.data.code === "UPE02002") {
+        console.log(err.response.data);
+        if (
+            err.response.data?.code === "UPE02002" ||
+            err.response.data?.code === "UPE01002"
+        ) {
             console.log("ZIP CODE ERROR");
             return "ZIP";
+        } else {
+            return "";
         }
-        console.log(err.response.data);
     }
 }
 

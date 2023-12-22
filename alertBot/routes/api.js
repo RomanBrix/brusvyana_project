@@ -145,6 +145,8 @@ function getDeliveryName(delivery) {
             return "Нова Пошта";
         case "self":
             return "Самовывоз";
+        case "ukrpochta":
+            return "Укра почта";
         default:
             return "Неизвестно";
     }
