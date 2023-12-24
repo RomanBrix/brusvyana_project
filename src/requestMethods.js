@@ -1,12 +1,12 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const BASE_URL_RETAIL = "http://localhost:1489/api";
-const BASE_URL_USER = "http://localhost:1489/user";
-const BASE_URL_BOT = "http://localhost:1489/bot";
-// const BASE_URL_BOT = "https://devserver.brusvyana.com.ua/bot"; //test server
-// const BASE_URL_RETAIL = "https://devserver.brusvyana.com.ua/api"; // test server
-// const BASE_URL_USER = "https://devserver.brusvyana.com.ua/user"; // test server
+// const BASE_URL_RETAIL = "http://localhost:1489/api";
+// const BASE_URL_USER = "http://localhost:1489/user";
+// const BASE_URL_BOT = "http://localhost:1489/bot";
+const BASE_URL_BOT = "https://devserver.brusvyana.com.ua/bot"; //test server
+const BASE_URL_RETAIL = "https://devserver.brusvyana.com.ua/api"; // test server
+const BASE_URL_USER = "https://devserver.brusvyana.com.ua/user"; // test server
 
 // const TOKEN =
 //   JSON.parse(JSON.parse(localStorage.getItem("persist:root")).user).currentUser

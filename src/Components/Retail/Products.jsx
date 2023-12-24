@@ -95,6 +95,10 @@ export default function ProductsContainer({
                                     alt=""
                                     // src={"/src/products/" + item.image}
                                     src={item.image}
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = "/src/no-image.svg";
+                                    }}
                                 />
                             </Suspense>
                         )}

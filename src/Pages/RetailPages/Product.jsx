@@ -48,7 +48,7 @@ export default function Product() {
         );
     }
     if (isError) return navigate("../", { replace: true });
-    console.log(product);
+    // console.log(product);
     return (
         <div className="product-page">
             <div className="content">
@@ -63,8 +63,13 @@ export default function Product() {
                 <div className="img-container">
                     <div className="img-main">
                         <img
-                            src={"/src/products/" + product.image}
+                            // src={"/src/products/" + product.image}
+                            src={product.image}
                             alt={product.name}
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = "/src/no-image.svg";
+                            }}
                         />
                     </div>
                 </div>
