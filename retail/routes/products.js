@@ -34,18 +34,15 @@ const router = require("express").Router();
 
 const LIMIT = 10; // FOR PAGINATION
 router.get("/adminRequest", verifyAdmin, async (req, res) => {
-    console.log("first");
-    console.log(req.query);
     const { options, limit } = req.query;
     const { page, search } = JSON.parse(options);
     const activeLimit = limit || LIMIT;
-    // console.log( page, activeLimit);
+
     let title = { $regex: "", $options: "i" };
     if (search) {
         title = { $regex: search, $options: "i" };
     }
 
-    console.log(title);
     const products = await Product.find(
         {
             title,
@@ -64,7 +61,7 @@ router.get("/adminRequest", verifyAdmin, async (req, res) => {
 //get all products
 router.get("/", async (req, res) => {
     const globTime = new Date();
-    // console.log('first')
+
     try {
         // const products = await Product.find().populate({path: 'variants', select: ['title', "price", "image", "quantity", "isAvailable"]}).sort({ price: 1 }).lean();
         const products = await Product.find()
@@ -84,8 +81,6 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/idsAdmin", verifyAdmin, async (req, res) => {
-    // console.log("req.query.ids: " + req.query.ids);
-    // console.log(req.query.ids)
     try {
         const products = await Product.find(
             { _id: { $in: req.query.ids } },
@@ -102,8 +97,6 @@ router.get("/idsAdmin", verifyAdmin, async (req, res) => {
 });
 
 router.get("/ids", async (req, res) => {
-    // console.log("req.query.ids: " + req.query.ids);
-    // console.log(req.query.ids)
     try {
         const products = await Product.find(
             { category: { $in: req.query.ids } },
@@ -122,7 +115,6 @@ router.get("/ids", async (req, res) => {
 
 router.get("/cart", async (req, res) => {
     const { ids } = req.query;
-    // console.log('first')
 
     try {
         const products = await Product.find(
@@ -140,12 +132,9 @@ router.get("/cart", async (req, res) => {
 
 //QUERY LOAD
 router.get("/query", async (req, res) => {
-    console.log("QUER____");
-    // console.log(req.query);
     const { options, limit } = req.query;
     const { category, catalog, page } = JSON.parse(options);
     const activeLimit = limit || LIMIT;
-    console.log(category, catalog, page, activeLimit);
 
     if (category) {
         try {
@@ -181,7 +170,6 @@ router.get("/query", async (req, res) => {
                 .skip((page - 1) * activeLimit)
                 .limit(activeLimit)
                 .lean();
-            // console.log(productsIds)
             return res.status(200).json(products);
         } catch (err) {
             console.log(err);
@@ -192,14 +180,8 @@ router.get("/query", async (req, res) => {
 
 //category LOAD
 router.get("/category", async (req, res) => {
-    console.log("params");
-    // console.log(req.params);
-    // console.log(req.query);
-
     const { category } = req.query;
 
-    // res.status(200).json(true);
-    // console.log(req.query.ids)
     try {
         //get products by catalog
         const count = await Product.countDocuments({ category: category });
@@ -222,7 +204,6 @@ router.get("/category", async (req, res) => {
 
 //get product by id
 router.get("/:id", async (req, res) => {
-    // console.log('object');
     try {
         const product = await Product.findById(req.params.id)
             .populate({
@@ -275,7 +256,7 @@ router.put("/:id", verifyAdmin, async (req, res) => {
     const productId = req.params.id;
     const categoryId = req.body.category;
     const { product } = req.body;
-    // console.log(product)
+
     const { variants } = product;
     const variantsToDelete = variants
         .filter((variant) => variant.flag === "delete")
@@ -314,10 +295,6 @@ router.put("/:id", verifyAdmin, async (req, res) => {
         isAvailable: product.quantity > 0,
     };
 
-    // console.log('variantsToDelete', variantsToDelete);
-    // console.log('variantsToUpdate', variantsToUpdate);
-    // console.log('variantsToAdd', variantsToAdd);
-    console.log("mainProduct", mainProduct);
     if (variantsToDelete.length > 0) {
         deleteVariantsPerUpdate(variantsToDelete);
     }
@@ -365,16 +342,14 @@ router.put("/:id", verifyAdmin, async (req, res) => {
         });
     }
 
-    // console.log(ok)
     res.status(200).json(true);
 });
 // try {
 
 router.post("/", verifyAdmin, async (req, res) => {
-    // console.log(req.body)
     try {
         const added = await addProduct(req.body.product, req.body.category);
-        console.log(added);
+
         res.status(200).json(added);
     } catch (err) {
         res.status(500).json(err);
@@ -384,19 +359,17 @@ router.post("/", verifyAdmin, async (req, res) => {
 router.post("/new", verifyAdmin, async (req, res) => {
     const { image } = req.files;
     let { product } = req.body;
-    // console.log();
+
     if (image) {
         product = JSON.parse(product);
         if (!/^image/.test(image.mimetype)) return res.sendStatus(400);
         // try
-        console.log("MOOOOOOVE");
-        console.log(pathToPublicProducts + "/" + image.name);
+
         image.mv(pathToPublicProducts + "/" + image.name);
 
         product.image = image.name;
     }
 
-    // console.log(product);
     const prod = await addProduct(product);
 
     res.status(200).json(prod);
@@ -408,10 +381,6 @@ router.post(
     verifyAdmin,
     upload.single("csv"),
     async (req, res) => {
-        console.log("GO LOAD");
-        console.log(req.file);
-
-        // console.log(req.body);
         const csv = req.file || false;
 
         let status = 200;
@@ -419,7 +388,6 @@ router.post(
         const otherData = {};
         if (csv) {
             const path_to_csv = csv.path;
-            console.log(path_to_csv);
 
             doFileMagick(path_to_csv, async (err, parsData) => {
                 if (err) {
@@ -428,15 +396,11 @@ router.post(
                     return;
                 }
 
-                // console.log(parsData);
-
                 const catalog = req.body.catalogId;
-                console.log(catalog);
 
                 //get list of original and all categories___________
                 const allCategories = parsData.map((item) => item.category);
                 const originalCategories = [...new Set(allCategories)];
-                // console.log(allCategories, originalCategories)
 
                 // GET VARIANTS FOR PRODUCT_______________________________________________________________
                 let variants = parsData.map((item) => {
@@ -466,7 +430,6 @@ router.post(
                         return variantToReturn;
                     }
                 });
-                // console.log(vatiants);
 
                 // ADD VARIANTS _______________________________________________________________
                 let minPrice = variants.map((item) => {
@@ -491,11 +454,7 @@ router.post(
                             msg = `Невідома помилка при завантаженні варіанту товара`;
 
                             notAddedVariants.push(variants[i]);
-                            // console.log(insertError.errors.title.path);
-                            // // console.log(insertError._message);
-                            // console.log(Object.keys(insertError));
-                            // console.log(i);
-                            // console.log(variants[i]);
+
                             if (
                                 insertError?._message ===
                                 "Variant validation failed"
@@ -527,7 +486,7 @@ router.post(
                         otherData,
                     });
                 }
-                // console.log(adedVariants); // MUST BE IDS ARRAYS OR EMPTY ARRAYS
+
                 // END ADD VARIANTS _______________________________________________________________
 
                 //  // MAKE PRODUCTS_______________________________________________________________
@@ -548,12 +507,9 @@ router.post(
                 });
 
                 // // products = pro
-                // console.log(products);
 
                 try {
                     const pr = await Product.insertMany(products);
-                    console.log("pr:");
-                    console.log(pr.length);
 
                     status = 200;
                     msg = `Все ок!`;
@@ -572,7 +528,6 @@ router.post(
                         (i) => i._id
                     );
 
-                    // console.log(addedVariants);
                     await Product.deleteMany({ _id: { $in: removeProducts } });
                     await Variant.deleteMany({
                         _id: { $in: addedVariants.flat() },
@@ -605,7 +560,6 @@ router.post(
                     msg: msg,
                     otherData,
                 });
-                // // console.log(pr)
 
                 // // END MAKE PRODUCTS_______________________________________________________________
             });
@@ -635,7 +589,6 @@ router.post(
         if (file_path_zip) {
             // const path = pathToPublicProducts + "/";
             const pathtoUnload = path.resolve("uploads/tempImg");
-            // console.log(directoryPath);
 
             let extracting = await extracFile(file_path_zip, pathtoUnload);
             const files = await fs.readdirSync(pathtoUnload);
@@ -648,13 +601,9 @@ router.post(
                 const img = files[i];
                 const imgBlob = await compressToPng(pathtoUnload + "/" + img);
                 sharp.cache({ files: 0 });
-                // console.log(imgBlob);
+
                 imgToBlob[img] = imgBlob;
             }
-
-            // const toUpd = await Product.updateMany({ img: { $in: files } });
-            // console.log(toUpd);
-            // console.log(toUpd.length);
 
             for (let i = 0; i < files.length; i++) {
                 const img = files[i];
@@ -673,22 +622,8 @@ router.post(
                 }
             }
             otherData.loadLength = files.length;
-            // console.log(files);
 
             deleteFolderRecursive(pathtoUnload);
-
-            // zip.mv(path + zip.name, async (err) => {
-            //     if (err) {
-            //         return res.status(500).json(err);
-            //     }
-            //     let extracting = await extracFile(path + zip.name, path);
-            //     console.log(extracting);
-            //     if (extracting) {
-            //         return res.status(200).json(true);
-            //     } else {
-            //         return res.status(200).json(false);
-            //     }
-            // });
         }
         return res.status(status).json({
             msg: msg,
@@ -742,7 +677,7 @@ async function addProduct(product) {
 
     try {
         let added = await newProduct.save();
-        console.log(added);
+
         const searchedCategory = await Category.findById(product.category);
         searchedCategory.products.push(added._id);
         await searchedCategory.save();
@@ -757,9 +692,8 @@ module.exports = router;
 
 async function compressToPng(filePath) {
     if (!filePath) return false;
-    // console.log(this.addOptions);
+
     const { addOptions } = this;
-    // console.log(filePath);
 
     const options = {
         quality: 70, // Качество изображения (0-100)
@@ -767,7 +701,6 @@ async function compressToPng(filePath) {
         trellisQuantisation: true, // Оптимизация квантования
     };
     try {
-        // console.log(filePath);
         let shrp = sharp(filePath).png(options);
         if (addOptions) {
             shrp = __addOptions(shrp, addOptions);
@@ -805,232 +738,3 @@ function deleteFolderRecursive(path) {
         console.log("Folder deleted successfully");
     }
 }
-
-/*
-OLD ADD PRODUCT FROM FILE
-
-
-const path = __dirname + "/../../" + csv.name;
-            console.log(path);
-            csv.mv(path, (err) => {
-                if (err) {
-                    return res.status(500).json(err);
-                }
-
-                doFileMagick(path, async (err, out) => {
-                    console.log(err);
-                    deleteFile(path);
-
-                    console.log(out);
-
-                    try {
-                        const catalog = req.body.catalogId;
-                        console.log(catalog);
-
-                        let allCategories = out.map((item) => item.category);
-                        let originalCategories = [];
-
-                        for (let i = 0; i < allCategories.length; i++) {
-                            if (
-                                !originalCategories.includes(allCategories[i])
-                            ) {
-                                originalCategories.push(allCategories[i]);
-                            }
-                        }
-
-                        // GET VARIANTS FOR PRODUCT_______________________________________________________________
-
-                        let vatiants = out.map((item) => {
-                            let variantsCount = 0;
-                            for (key in item) {
-                                if (
-                                    key.includes("variant") &&
-                                    key.includes("title")
-                                ) {
-                                    if (item[key].length > 0) {
-                                        variantsCount++;
-                                    }
-                                }
-                            }
-
-                            if (variantsCount.length === 0) {
-                                return [];
-                            } else {
-                                variantToReturn = [];
-                                for (let i = 1; i <= variantsCount; i++) {
-                                    variantToReturn.push({
-                                        title: item[`variant_${i}_title`],
-                                        quantity: item[`variant_${i}_quantity`],
-                                        price: item[`variant_${i}_price`],
-                                    });
-                                }
-                                return variantToReturn;
-                            }
-                        });
-
-                        //END GET VARIANTS FOR PRODUCT_______________________________________________
-
-                        // ADD VARIANTS _______________________________________________________________
-                        let minPrice = vatiants.map((item) => {
-                            if (item.length > 0) {
-                                return item
-                                    .map((variant) => variant.price)
-                                    .sort((a, b) => a - b)[0];
-                            } else {
-                                return null;
-                            }
-                        });
-                        let adedVariants = [];
-                        for (let i = 0; i < vatiants.length; i++) {
-                            if (vatiants[i].length > 0) {
-                                let ids = await Variant.insertMany(vatiants[i]);
-                                adedVariants.push(ids.map((id) => id._id));
-                            } else {
-                                adedVariants.push([]);
-                            }
-                        }
-                        console.log("insert Variants");
-                        // console.log(adedVariants); // MUST BE IDS ARRAYS OR EMPTY ARRAYS
-                        // END ADD VARIANTS _______________________________________________________________
-
-                        // ADD NEW CATEGORIES_________________________________________________________
-
-                        const mongoCategories = await Category.find({
-                            title: { $in: originalCategories },
-                        });
-                        originalCategories = originalCategories.filter(
-                            (category) =>
-                                !mongoCategories.find(
-                                    (mongoCategory) =>
-                                        mongoCategory.title === category
-                                )
-                        );
-                        allCategories = allCategories.map((item) => {
-                            let inCat = mongoCategories.find(
-                                (mongoCategory) => mongoCategory.title === item
-                            );
-                            if (inCat && item === inCat.title) {
-                                return inCat._id;
-                            } else {
-                                return item;
-                            }
-                        });
-
-                        let categoriesToAddToCatalog = [];
-
-                        if (originalCategories.length > 0) {
-                            categoriesToAddToCatalog =
-                                await Category.insertMany(
-                                    originalCategories.map((item) => {
-                                        return {
-                                            title: item,
-                                            catalog: catalog,
-                                        };
-                                    })
-                                );
-                            console.log("insert Category");
-                            originalCategories = originalCategories.filter(
-                                (category) =>
-                                    !categoriesToAddToCatalog.find(
-                                        (mongoCategory) =>
-                                            mongoCategory.title === category
-                                    )
-                            );
-                            allCategories = allCategories.map((item) => {
-                                let inCat = categoriesToAddToCatalog.find(
-                                    (mongoCategory) =>
-                                        mongoCategory.title === item
-                                );
-                                if (inCat && item === inCat.title) {
-                                    return inCat._id;
-                                } else {
-                                    return item;
-                                }
-                            });
-                        }
-
-                        categoriesToAddToCatalog = categoriesToAddToCatalog.map(
-                            (item) => item._id
-                        );
-
-                        // console.log(allCategories) // TO INSERT INTO PRODUCTS
-                        // console.log(originalCategories)  // MUST BE EMPTY AT THIS POINT
-                        // console.log(categoriesToAddToCatalog) // TO INSERT INTO CATALOG (NEW CATEGORIES)
-
-                        // END ADD NEW CATEGORIES_________________________________________________________
-
-                        // MAKE PRODUCTS_______________________________________________________________
-
-                        let products = out.map((item, index) => {
-                            return {
-                                title: item.title,
-                                description: item.description,
-                                image: item.image,
-                                price:
-                                    minPrice[index] === null
-                                        ? +item.price
-                                        : minPrice[index],
-                                quantity: +item.quantity,
-                                category: allCategories[index],
-                                variants: adedVariants[index],
-                            };
-                        });
-
-                        // products = pro
-                        // console.log(products);
-
-                        const pr = await Product.insertMany(products);
-                        // console.log(pr)
-
-                        // END MAKE PRODUCTS_______________________________________________________________
-
-                        // ADD PRODUCTS TO CATEGORIES_______________________________________________________________
-                        for (let i = 0; i < pr.length; i++) {
-                            await Category.findByIdAndUpdate(allCategories[i], {
-                                $push: { products: pr[i]._id },
-                            });
-                        }
-                        // END ADD PRODUCTS TO CATEGORIES_______________________________________________________________
-                        let addedProducts = pr.length;
-                        let addedVariants = adedVariants.reduce(
-                            (acc, curr) => acc + curr.length,
-                            0
-                        );
-                        let addedCategories = categoriesToAddToCatalog.length;
-                        // console.log(`Added ${addedProducts} products, ${addedVariants} variants, ${addedCategories} categories`)
-
-                        // ADD CATEGORIES TO CATALOG_______________________________________________________________
-
-                        await Catalog.findByIdAndUpdate(catalog, {
-                            $push: {
-                                categories: { $each: categoriesToAddToCatalog },
-                            },
-                        });
-
-                        // END ADD CATEGORIES TO CATALOG_______________________________________________________________
-
-                        //remove file
-
-                        res.status(200).json({
-                            status: true,
-                            addedProducts,
-                            addedVariants,
-                            addedCategories,
-                        });
-                    } catch (err) {
-                        console.log("err");
-                        console.log(err);
-                        switch (err.code) {
-                            case 11000:
-                                res.status(400).json({
-                                    message: "Product already exists",
-                                });
-                                break;
-                            default:
-                                res.status(500).json(err);
-                                break;
-                        }
-                    }
-                });
-            });
-*/

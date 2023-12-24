@@ -72,9 +72,9 @@ router.get("/products", async (req, res) => {
 
 router.get("/catalog-prod", async (req, res) => {
     const { catalog, category = "", page = 1 } = req.query;
-    console.log("category: ", category);
-    console.log("catalog: ", catalog);
-    console.log("page: ", page);
+    // console.log("category: ", category);
+    // console.log("catalog: ", catalog);
+    // console.log("page: ", page);
     const limit = 20;
     const skipAmount = (page - 1) * limit;
 
@@ -93,7 +93,7 @@ router.get("/catalog-prod", async (req, res) => {
                 $limit: limit,
             },
         ]);
-        console.log(products);
+
         res.status(200).json(products);
     } catch (err) {
         console.log(err);
@@ -117,7 +117,6 @@ router.get("/catalogs-category", async (req, res) => {
 });
 
 router.get("/product/:id", async (req, res) => {
-    console.log(req.params);
     const { id } = req.params;
     try {
         if (!id) throw new Error("no id");

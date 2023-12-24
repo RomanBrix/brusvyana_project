@@ -25,12 +25,28 @@ router.get("/", async (req, res) => {
         const catalogs = await Catalog.aggregate([
             { $addFields: { catalogId: { $toString: "$_id" } } },
             {
+                // $lookup: {
+                //     from: "products",
+                //     localField: "catalogId",
+                //     foreignField: "catalog",
+                //     as: "prodData",
+                // },
                 $lookup: {
                     from: "products",
-                    // localField: "SKU",
-                    localField: "catalogId",
-                    // localField: "catalog",
-                    foreignField: "catalog",
+                    let: { catalogId: "$catalogId" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $eq: ["$catalog", "$$catalogId"] },
+                            },
+                        },
+                        {
+                            $project: {
+                                title: 1,
+                                _id: 1,
+                            },
+                        },
+                    ],
                     as: "prodData",
                 },
             },
@@ -50,14 +66,11 @@ router.get("/", async (req, res) => {
             {
                 $match: {
                     title: { $regex: "", $options: "i" },
-                    // $expr: {
-                    //     $eq: ["$catalog", { $toObjectId: "$Catalog._id" }],
-                    // },
                 },
             },
         ]);
 
-        console.log(catalogs);
+        // console.log(catalogs);
 
         res.status(200).json(catalogs);
     } catch (err) {
